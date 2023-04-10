@@ -4,7 +4,7 @@
         <!-- Classy Menu -->
         <nav class="classy-navbar" id="essenceNav">
             <!-- Logo -->
-            <a class="nav-brand" href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+            <a class="nav-brand" href="index.asp"><img src="img/core-img/logo.png" alt=""></a>
             <!-- Navbar Toggler -->
             <div class="classy-navbar-toggler">
                 <span class="navbarToggler"><span></span><span></span><span></span></span>
@@ -22,27 +22,27 @@
                             <div class="megamenu">
                                 <ul class="single-mega cn-col-4">
                                     <li class="title">Women's Collection</li>
-                                    <li><a href="shop.html">Dresses</a></li>
-                                    <li><a href="shop.html">Blouses &amp; Shirts</a></li>
-                                    <li><a href="shop.html">T-shirts</a></li>
-                                    <li><a href="shop.html">Rompers</a></li>
-                                    <li><a href="shop.html">Bras &amp; Panties</a></li>
+                                    <li><a href="womenShop.asp">Dresses</a></li>
+                                    <li><a href="womenShop.asp">Blouses &amp; Shirts</a></li>
+                                    <li><a href="womenShop.asp">T-shirts</a></li>
+                                    <li><a href="womenShop.asp">Rompers</a></li>
+                                    <li><a href="womenShop.asp">Bras &amp; Panties</a></li>
                                 </ul>
                                 <ul class="single-mega cn-col-4">
                                     <li class="title">Men's Collection</li>
-                                    <li><a href="shop.html">T-Shirts</a></li>
-                                    <li><a href="shop.html">Polo</a></li>
-                                    <li><a href="shop.html">Shirts</a></li>
-                                    <li><a href="shop.html">Jackets</a></li>
-                                    <li><a href="shop.html">Trench</a></li>
+                                    <li><a href="menShop.asp">T-Shirts</a></li>
+                                    <li><a href="menShop.asp">Polo</a></li>
+                                    <li><a href="menShop.asp">Shirts</a></li>
+                                    <li><a href="menShop.asp">Jackets</a></li>
+                                    <li><a href="menShop.asp">Trench</a></li>
                                 </ul>
                                 <ul class="single-mega cn-col-4">
                                     <li class="title">Kid's Collection</li>
-                                    <li><a href="shop.html">Dresses</a></li>
-                                    <li><a href="shop.html">Shirts</a></li>
-                                    <li><a href="shop.html">T-shirts</a></li>
-                                    <li><a href="shop.html">Jackets</a></li>
-                                    <li><a href="shop.html">Trench</a></li>
+                                    <li><a href="kidShop.asp">Dresses</a></li>
+                                    <li><a href="kidShop.asp">Shirts</a></li>
+                                    <li><a href="kidShop.asp">T-shirts</a></li>
+                                    <li><a href="kidShop.asp">Jackets</a></li>
+                                    <li><a href="kidShop.asp">Trench</a></li>
                                 </ul>
                                 <div class="single-mega cn-col-4">
                                     <img src="img/bg-img/bg-6.jpg" alt="">
@@ -51,7 +51,7 @@
                         </li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
-                                <li><a href="index.html">Home</a></li>
+                                <li><a href="index.asp">Home</a></li>
                                 <li><a href="shop.asp">Shop</a></li>
                                 <li><a href="single-product-details.html">Product Details</a></li>
                                 <li><a href="checkout.html">Checkout</a></li>
@@ -84,7 +84,7 @@
             </div>
             <!-- User Login Info -->
             <div class="user-login-info">
-                <a href="#"><img src="img/core-img/user.svg" alt=""></a>
+                <a href="login.asp"><img src="img/core-img/user.svg" alt=""></a>
             </div>
             <!-- Cart Area -->
             <div class="cart-area">

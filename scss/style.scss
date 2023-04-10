@@ -872,6 +872,7 @@ img {
         }
         .product-badge {
             height: 25px;
+            min-width: 4em;
             background-color: $dark-color;
             color: $white-color;
             font-family: $font-ubuntu;
@@ -889,6 +890,7 @@ img {
             }
             &.new-badge {
                 background-color: $bg-default;
+                margin-top: 3em;
             }
         }
         .product-favourite {
