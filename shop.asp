@@ -343,7 +343,7 @@
                                     <!-- Product Image -->
                                     <div class="product-img">
                                         <img src="<%=Result("link1")%>" alt="">
-                                        <input id="id_product" style="display: none;" value="<%=Result("ID_product")%>" >
+                                        <input class="id_product" style="display: none;" value="<%=Result("ID_product")%>" >
                                         <!-- Hover Thumb -->
                                         <img class="hover-img" src="<%=Result("link2")%>" alt="">
 
@@ -369,9 +369,9 @@
                                         <!-- Favourite -->
                                         <div class="product-favourite">
                                         <% if (Result("favorite_note")) then %>
-                                            <a id="favorite_btn" href="#" class="favme fa fa-heart active"></a>
+                                            <a href="#" class="favorite_btn favme fa fa-heart active"></a>
                                         <% else %>
-                                            <a id="favorite_btn" href="#" class="favme fa fa-heart"></a>
+                                            <a href="#" class="favorite_btn favme fa fa-heart"></a>
                                         <% end if %>
                                         </div>
                                     </div>
@@ -439,20 +439,22 @@
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="js/jquery/jquery-2.2.4.min.js"></script>
     <script>
-        var favoriteBtn = document.getElementById("favorite_btn");
-        var ID_product = document.getElementById("id_product").value;
-        favoriteBtn.addEventListener('click', function() {
-            var xmlhttp = new XMLHttpRequest();
-            if (favoriteBtn.classList.contains("active")) {
-                const favorite = 0
-                xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
-                xmlhttp.send();
-            } else {
-                const favorite = 1
-                xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
-                xmlhttp.send();
-            }
-        })
+        var favoriteBtns = document.querySelectorAll(".favorite_btn");
+        
+        favoriteBtns.forEach((favoriteBtn, index) => {
+            favoriteBtn.addEventListener('click', function() {
+                var xmlhttp = new XMLHttpRequest();
+                if (favoriteBtn.classList.contains("active")) {
+                    const favorite = 0
+                    xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
+                    xmlhttp.send();
+                } else {
+                    const favorite = 1
+                    xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
+                    xmlhttp.send();
+                }
+            })
+        });
     </script>
     <!-- Popper js -->
     <script src="js/popper.min.js"></script>

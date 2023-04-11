@@ -241,10 +241,12 @@ Set Result = cmdPrep.execute
             if (favoriteBtn.classList.contains("active")) {
                 const favorite = 0
                 xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
+                console.log(ID_product)
                 xmlhttp.send();
             } else {
                 const favorite = 1
                 xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
+                console.log(ID_product)
                 xmlhttp.send();
             }
         })
