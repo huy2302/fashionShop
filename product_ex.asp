@@ -17,7 +17,7 @@ cmdPrep.ActiveConnection = connDB
 cmdPrep.CommandType = 1
 cmdPrep.Prepared = True
 
-cmdPrep.CommandText = "select product.ID_product, name, description, brand, sale_percent, favorite_note, size, color, price from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color inner join brand on product.ID_product = brand.ID_product where psc.ID_product = "&ID_product
+cmdPrep.CommandText = "select product.ID_product, product.name, description, brand, sale_percent, favorite_note, size, color, price from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color inner join brand on product.ID_product = brand.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = 1 where psc.ID_product = "&ID_product
 
 Set Result = cmdPrep.execute
 
@@ -60,7 +60,7 @@ Set Result = cmdPrep.execute
     <!-- ##### Header Area End ##### -->
 
     <!-- ##### Right Side Cart Area ##### -->
-    
+    <input id="ID_product" type="text" value="<%=ID_product%>" style="display: none;">
     <div class="cart-bg-overlay"></div>
 
     <div class="right-side-cart-area">
@@ -200,7 +200,11 @@ Set Result = cmdPrep.execute
                     <button type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
                     <!-- Favourite -->
                     <div class="product-favourite ml-4">
-                        <a href="#" class="favme fa fa-heart"></a>
+                        <% if Result("favorite_note") then%>
+                            <a id="favorite_btn" href="#" class="favorite_btn active favme fa fa-heart"></a>
+                        <% else %>
+                            <a id="favorite_btn" href="#" class="favorite_btn favme fa fa-heart"></a>
+                        <% end if %>
                     </div>
                 </div>
             </form>
@@ -215,19 +219,35 @@ Set Result = cmdPrep.execute
 
     <!-- call AJAX to get the color and quantity corresponding to the size -->
     <script>
+        // get color, quantity when select size
         function getColors() {
-        var size = document.getElementById("size").value;
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("color").innerHTML = this.responseText;
-            // document.querySelecter(".list").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "getcolor.asp?size=" + size, true);
-        xmlhttp.send();
+            var size = document.getElementById("size").value;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("color").innerHTML = this.responseText;
+                // document.querySelecter(".list").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "getcolor.asp?size=" + size, true);
+            xmlhttp.send();
         }
 
+        // update favorite
+        var favoriteBtn = document.getElementById("favorite_btn");
+        var ID_product = document.getElementById("ID_product").value;
+        favoriteBtn.addEventListener('click', function() {
+            var xmlhttp = new XMLHttpRequest();
+            if (favoriteBtn.classList.contains("active")) {
+                const favorite = 0
+                xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
+                xmlhttp.send();
+            } else {
+                const favorite = 1
+                xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
+                xmlhttp.send();
+            }
+        })
     </script>
     <!-- Popper js -->
     <script src="js/popper.min.js"></script>

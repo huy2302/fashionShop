@@ -56,7 +56,11 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="./css/add.css">
     
-
+    <style>
+        .nice-select {
+            display: block !importan;
+        }
+    </style>
 </head>
 
 <body>
@@ -293,7 +297,7 @@
                 cmdPrep.Prepared = True
                 ' cmdPrep.CommandText = "SELECT * FROM PRODUCT INNER JOIN IMAGEPRODUCT ON PRODUCT.ID_PRODUCT = IMAGEPRODUCT.ID_PRODUCT ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
 
-                cmdPrep.CommandText = "SELECT name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product GROUP BY name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = 1 where users.ID_user = 1 GROUP BY product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 cmdPrep.parameters.Append cmdPrep.createParameter("offset",3,1, ,offset)
                 cmdPrep.parameters.Append cmdPrep.createParameter("limit",3,1, , limit)
 
@@ -339,7 +343,7 @@
                                     <!-- Product Image -->
                                     <div class="product-img">
                                         <img src="<%=Result("link1")%>" alt="">
-
+                                        <input id="id_product" style="display: none;" value="<%=Result("ID_product")%>" >
                                         <!-- Hover Thumb -->
                                         <img class="hover-img" src="<%=Result("link2")%>" alt="">
 
@@ -365,9 +369,9 @@
                                         <!-- Favourite -->
                                         <div class="product-favourite">
                                         <% if (Result("favorite_note")) then %>
-                                            <a href="#" class="favme fa fa-heart active"></a>
+                                            <a id="favorite_btn" href="#" class="favme fa fa-heart active"></a>
                                         <% else %>
-                                            <a href="#" class="favme fa fa-heart"></a>
+                                            <a id="favorite_btn" href="#" class="favme fa fa-heart"></a>
                                         <% end if %>
                                         </div>
                                     </div>
@@ -434,6 +438,22 @@
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="js/jquery/jquery-2.2.4.min.js"></script>
+    <script>
+        var favoriteBtn = document.getElementById("favorite_btn");
+        var ID_product = document.getElementById("id_product").value;
+        favoriteBtn.addEventListener('click', function() {
+            var xmlhttp = new XMLHttpRequest();
+            if (favoriteBtn.classList.contains("active")) {
+                const favorite = 0
+                xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
+                xmlhttp.send();
+            } else {
+                const favorite = 1
+                xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
+                xmlhttp.send();
+            }
+        })
+    </script>
     <!-- Popper js -->
     <script src="js/popper.min.js"></script>
     <!-- Bootstrap js -->

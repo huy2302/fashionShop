@@ -29,7 +29,7 @@
     letter-spacing: 1.5px;
     font-weight: 600;
 }
-.nice-select {
+.select-box > .nice-select {
     display: none !important;
 }
 .selectColor {
@@ -54,4 +54,15 @@
     color: #787878;
     /* margin-bottom: 10px; */
     /* display: block; */
+}
+.selectColor>option{
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+    color: #555;
+    background-color: rgb(247, 247, 247);
+    background-image: none;
+    font-size: 18px;
+    height: 50px;
+    padding: 15px;
+    border: 1px solid rgb(41, 18, 18);
 }

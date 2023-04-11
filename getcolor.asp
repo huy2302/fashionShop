@@ -19,7 +19,11 @@ rs.Open sql, conn
 
 Response.ContentType = "text/html"
 Do While Not rs.EOF
-  Response.Write "<option value='" & rs("color") & "'>" & rs("color") & "</option>"
+  if rs("quantity") > 0 then
+    Response.Write "<option value='" & rs("color") & "'>" & rs("color") & "</option>"
+  else 
+    Response.Write "<option disabled value='" & rs("color") & "'>" & rs("color") & "</option>"
+  end if
   rs.MoveNext
 Loop
 rs.Close
