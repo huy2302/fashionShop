@@ -1,4 +1,7 @@
-<div class="right-side-cart-area">
+    <!-- ##### Right Side Cart Area ##### -->
+    <div class="cart-bg-overlay"></div>
+
+    <div class="right-side-cart-area">
 
         <!-- Cart Button -->
         <div class="cart-button">
@@ -74,3 +77,4 @@
             </div>
         </div>
     </div>
+    <!-- ##### Right Side Cart End ##### -->

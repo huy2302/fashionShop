@@ -12,11 +12,11 @@ favorite_note = Request.QueryString("q")
 id_product = Request.QueryString("id")
 
 if (CInt(favorite_note) = 1) then 
-    sql = "update favorite set favorite_note = 'true' where favorite.ID_product = "&id_product&" and favorite.ID_user = 1"
+    sql = "update favorite set favorite_note = 'true' where favorite.ID_product = "&id_product&" and favorite.ID_user = "&Session("ID_user")
     response.write("favorite "&favorite_note)
     Conn.Execute sql
 elseif (CInt(favorite_note) = 0) then 
-    sql = "update favorite set favorite_note = 'false' where favorite.ID_product = "&id_product&" and favorite.ID_user = 1"
+    sql = "update favorite set favorite_note = 'false' where favorite.ID_product = "&id_product&" and favorite.ID_user = "&Session("ID_user")
     response.write("favorite "&favorite_note)
     Conn.Execute sql
 end if

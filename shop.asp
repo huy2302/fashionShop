@@ -46,7 +46,7 @@
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title  -->
-    <title>Essence - Fashion Ecommerce Template</title>
+    <title>Essence -<%=Session("ID_user")%> Fashion Ecommerce Template</title>
 
     <!-- Favicon  -->
     <link rel="icon" href="img/core-img/favicon.ico">
@@ -70,86 +70,7 @@
 
     <!-- ##### Header Area End ##### -->
 
-    <!-- ##### Right Side Cart Area ##### -->
-    <div class="cart-bg-overlay"></div>
-
-    <div class="right-side-cart-area">
-
-        <!-- Cart Button -->
-        <div class="cart-button">
-            <a href="#" id="rightSideCart"><img src="img/core-img/bag.svg" alt=""> <span>3</span></a>
-        </div>
-
-        <div class="cart-content d-flex">
-
-            <!-- Cart List Area -->
-            <div class="cart-list">
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="img/product-img/product-1.jpg" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="img/product-img/product-2.jpg" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Single Cart Item -->
-                <div class="single-cart-item">
-                    <a href="#" class="product-image">
-                        <img src="img/product-img/product-3.jpg" class="cart-thumb" alt="">
-                        <!-- Cart Item Desc -->
-                        <div class="cart-item-desc">
-                          <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                            <span class="badge">Mango</span>
-                            <h6>Button Through Strap Mini Dress</h6>
-                            <p class="size">Size: S</p>
-                            <p class="color">Color: Red</p>
-                            <p class="price">$45.00</p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Cart Summary -->
-            <div class="cart-amount-summary">
-
-                <h2>Summary</h2>
-                <ul class="summary-table">
-                    <li><span>subtotal:</span> <span>$274.00</span></li>
-                    <li><span>delivery:</span> <span>Free</span></li>
-                    <li><span>discount:</span> <span>-15%</span></li>
-                    <li><span>total:</span> <span>$232.00</span></li>
-                </ul>
-                <div class="checkout-btn mt-100">
-                    <a href="checkout.html" class="btn essence-btn">check out</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ##### Right Side Cart End ##### -->
+    <!-- #include file="cart.asp" -->
 
     <!-- ##### Breadcumb Area Start ##### -->
     <div class="breadcumb_area bg-img" style="background-image: url(img/bg-img/breadcumb.jpg);">
@@ -296,8 +217,11 @@
                 cmdPrep.CommandType = 1
                 cmdPrep.Prepared = True
                 ' cmdPrep.CommandText = "SELECT * FROM PRODUCT INNER JOIN IMAGEPRODUCT ON PRODUCT.ID_PRODUCT = IMAGEPRODUCT.ID_PRODUCT ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
-
-                cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = 1 where users.ID_user = 1 GROUP BY product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                if (NOT IsEmpty(Session("ID_user"))) then
+                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = "&Session("ID_user")&" where favorite.ID_user = "&Session("ID_user")&" GROUP BY product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                else 
+                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product GROUP BY product.name, product.ID_product, new, sale_percent, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                end if
                 cmdPrep.parameters.Append cmdPrep.createParameter("offset",3,1, ,offset)
                 cmdPrep.parameters.Append cmdPrep.createParameter("limit",3,1, , limit)
 
@@ -333,8 +257,7 @@
                         </div>
 
                         <div class="row">
-                        <%
-                            
+                        <% 
                             do while not Result.EOF
                         %>
                             <!-- Single Product -->
@@ -367,13 +290,19 @@
                                         <% end if %>
 
                                         <!-- Favourite -->
+                                        <% if (NOT IsEmpty(Session("ID_user"))) then %>
                                         <div class="product-favourite">
-                                        <% if (Result("favorite_note")) then %>
-                                            <a href="#" class="favorite_btn favme fa fa-heart active"></a>
-                                        <% else %>
-                                            <a href="#" class="favorite_btn favme fa fa-heart"></a>
-                                        <% end if %>
+                                            <% if (Result("favorite_note")) then %>
+                                                <a href="#" class="favorite_btn favme fa fa-heart active"></a>
+                                            <% else %>
+                                                <a href="#" class="favorite_btn favme fa fa-heart"></a>
+                                            <% end if %>
                                         </div>
+                                        <% else %>
+                                        <div class="product-favourite">
+                                            <a href="#" class="favorite_btn favme fa fa-heart"></a>
+                                        </div>
+                                        <% end if %>
                                     </div>
 
                                     <!-- Product Description -->
@@ -398,7 +327,7 @@
                                         <div class="hover-content">
                                             <!-- Add to Cart -->
                                             <div class="add-to-cart-btn">
-                                                <a href="#" class="btn essence-btn">Add to Cart</a>
+                                                <a href="product_ex.asp?product=<%=CInt(Result("ID_product"))%>" class="btn essence-btn">Shop now</a>
                                             </div>
                                         </div>
                                     </div>
@@ -420,7 +349,7 @@
                                 for i = 1 to pages
 
                             %>
-                                    <li class="page-item <%=checkPage(Clng(i)=Clng(page),"active-page")%>"><a class="page-link" href="shop.asp?page=<%=i%>"><%=i%></a></li>
+                                <li class="page-item <%=checkPage(Clng(i)=Clng(page),"active-page")%>"><a class="page-link" href="shop.asp?page=<%=i%>"><%=i%></a></li>
                             <%
                                 next
                                 end if

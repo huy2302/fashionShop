@@ -6,7 +6,8 @@ password = Request.Form("password")
 If (NOT isnull(email) AND NOT isnull(password) AND TRIM(email)<>"" AND TRIM(password)<>"" ) Then
     ' true
     Dim sql
-    sql = "select * from account where email= ? and password= ?"
+    ' sql = "select * from account where email= ? and password= ?"
+    sql = "select acc.ID_account, ID_user, name, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ?"
     Dim cmdPrep
     set cmdPrep = Server.CreateObject("ADODB.Command")
     connDB.Open()
@@ -23,7 +24,7 @@ If (NOT isnull(email) AND NOT isnull(password) AND TRIM(email)<>"" AND TRIM(pass
         ' dang nhap thanh cong
         Session("ID_user")=result("ID_user")
         Session("Success")="Login Successfully"
-        Response.redirect("index.asp")
+        Response.redirect("./index.asp")
     Else
         ' dang nhap ko thanh cong
         Session("Error") = "Wrong email or password"

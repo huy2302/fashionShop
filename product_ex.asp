@@ -197,7 +197,7 @@ Set Result = cmdPrep.execute
                 <!-- Cart & Favourite Box -->
                 <div class="cart-fav-box d-flex align-items-center">
                     <!-- Cart -->
-                    <button type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
+                    <button id="add_btn" type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
                     <!-- Favourite -->
                     <div class="product-favourite ml-4">
                         <% if Result("favorite_note") then%>
@@ -219,6 +219,9 @@ Set Result = cmdPrep.execute
 
     <!-- call AJAX to get the color and quantity corresponding to the size -->
     <script>
+        window.addEventListener('load', getColors);
+        var ID_product = document.getElementById("ID_product").value;
+
         // get color, quantity when select size
         function getColors() {
             var size = document.getElementById("size").value;
@@ -229,13 +232,12 @@ Set Result = cmdPrep.execute
                 // document.querySelecter(".list").innerHTML = this.responseText;
                 }
             };
-            xmlhttp.open("GET", "getcolor.asp?size=" + size, true);
+            xmlhttp.open("GET", "getcolor.asp?id=" + ID_product + "&size=" + size, true);
             xmlhttp.send();
         }
 
         // update favorite
         var favoriteBtn = document.getElementById("favorite_btn");
-        var ID_product = document.getElementById("ID_product").value;
         favoriteBtn.addEventListener('click', function() {
             var xmlhttp = new XMLHttpRequest();
             if (favoriteBtn.classList.contains("active")) {
@@ -250,6 +252,22 @@ Set Result = cmdPrep.execute
                 xmlhttp.send();
             }
         })
+
+        // add to cart
+        var addCartBtn = document.querySelector("#add_btn");
+        var sizeProduct = document.querySelector("#size");
+        var colorProduct = document.querySelector("#color");
+
+        const addToCart = function(e) {
+            e.preventDefault();
+            console.log("addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value)
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value, true);
+            // console.log(ID_product)
+            xmlhttp.send();
+        }
+        addCartBtn.addEventListener("click", addToCart)
+
     </script>
     <!-- Popper js -->
     <script src="js/popper.min.js"></script>
