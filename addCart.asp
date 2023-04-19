@@ -10,114 +10,79 @@
     Response.Write "<br/>"
 
     ' Do Something...
-    If (NOT IsNull(ID_product) and ID_product <> "") Then
+    If (NOT IsNull(ID_product) and NOT IsEmpty(Session("ID_user"))) Then
         Dim cmdPrep, Result
         Set cmdPrep = Server.CreateObject("ADODB.Command")
             connDB.Open()
             cmdPrep.ActiveConnection = connDB
             cmdPrep.CommandType = 1
-            cmdPrep.CommandText = "select product.name, size.ID_size, size, color.ID_color, color, quantity from product_size_color p inner join product on product.ID_product = p.ID_product inner join size on size.ID_size = p.ID_size inner join color on color.ID_color = p.ID_color where product.ID_product = "&ID_product&" and size.ID_size = "&ID_size&" and color.ID_color = "&ID_color&""
+            cmdPrep.CommandText = "select product.ID_product, product.name, size.ID_size, size, color.ID_color, color, cart.quantity from cart inner join product_size_color p on p.ID_product = cart.ID_product inner join product on product.ID_product = cart.ID_product inner join size on size.ID_size = cart.ID_size inner join color on color.ID_color = cart.ID_color where product.ID_product = "&ID_product&" and size.ID_size = "&ID_size&" and color.ID_color = "&ID_color&" group by product.ID_product, product.name, size.ID_size, size, color.ID_color, color, cart.quantity"
             Set Result = cmdPrep.execute 
-            Response.Write "ID_product: "&ID_product&" ID_size:"&ID_size&" ID_color:"&ID_color
-                Response.write "<br>"
+            Response.write "<br>"
 
-            If not Result.EOF then
-                ' Response.Write "ID_product: "&ID_product&" ID_size:"&ID_size&" ID_color:"&ID_color
-                ' Response.write "<br>"
-                
-                ' Set dog = Server.CreateObject("Scripting.Dictionary")
-                ' sizeColor = Array("cat1", "dog1", 1)
-                ' Response.write dog.Exists(1)
-                ' dog.Add 1, sizeColor
-                ' Response.write dog.Exists(1)
-                ' sizeColor = Array("cat2", "dog2", 1)
-                ' dog.Add 2, sizeColor
-                ' ' ' 'creating a session for my cart
-                ' Set Session("dog") = dog
-                ' set cat = session("dog")
+            Set Conn = Server.CreateObject("ADODB.Connection")
+            Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+            
+            If Result.EOF then
+                sql = "insert into cart (ID_user, ID_product, ID_size, ID_color, quantity) values ("&Session("ID_user")&", "&ID_product&", "&ID_size&", "&ID_color&", 1)"
+                Conn.Execute sql
+            end if
 
-                ' Response.write "cat: "&cat.Item(1)(2)
-                ' Response.write "<br>"
-
-                ' myarrays = cat.Item(1)
-                ' myarrays(2) = myarrays(2) + 1
-                ' myarrays(2) = myarrays(2) + 1
-                ' cat.Item(1) = myarrays
-                ' Response.write cat.Item(1)(2)
-                ' Response.write cat.Item(2)(2)
-
-                ' ' dim x
-                ' ' x = cat.Item(1)(2)+1
-                ' ' cat.Item(1)(2) = x
-                ' set session("dog") = cat
-
-                ' set shark = session("dog")
-
-                ' Response.write "shark: "&shark.Item(1)(2)
-                ' Response.write "<br>"
-        
+            Do While Not Result.EOF
+                IF (CInt(ID_product) = CInt(Result("ID_product")) and CInt(ID_size) = CInt(Result("ID_size")) and CInt(ID_color) = CInt(Result("ID_color")) ) then
+                    sql = "update cart set quantity = ((select quantity from cart where cart.ID_product = "&Result("ID_product")&" and cart.ID_size = "&Result("ID_size")&" and cart.ID_color = "&Result("ID_color")&") + 1) where cart.ID_product = "&Result("ID_product")&" and cart.ID_size = "&Result("ID_size")&" and cart.ID_color = "&Result("ID_color")&""
+                    Conn.Execute sql
+                    Session("Success") = "The Product has bean added to your cart."
+                END IF
+                Result.MoveNext
+            Loop
+            Conn.close()
+                ' if (ID_product = Result("ID_product"))
                 'ID exits
+                ' Response.Write "ID_product: "&Result("ID_product")&" ID_size:"&Result("ID_size")&" ID_color:"&Result("ID_color")&", Quantity: "&Result("quantity")
+
                 'check session exists
-                Dim currentCarts, arrays, cc, mycarts, List, sizeColor
-                If (NOT IsEmpty(Session("mycarts"))) Then 'neu mycarts ton tai
-                    ' true
-                    Set currentCarts = Session("mycarts")      
-                    ' for i = 0 to 5     
-                    ' Response.write currentCarts.Exists(1)
+                ' Dim currentCarts, arrays, cc, mycarts, List, sizeColor
+                ' If (NOT IsEmpty(Session("mycarts"))) Then 'neu mycarts ton tai
 
-                    ' next
-                    dim a
-                    a = 0
-                    if currentCarts.Exists(ID_product) = true then 'neu ID_product ton tai trong mycarts
-                        ' Response.Write("Hien tai: "&currentCarts.Item(ID_product)(2))         
-                        ' Response.write "<br>"
-                        Dim arrayColor 
-                        arrayColor = currentCarts.Item(ID_product)
+                ' Response.Write "ID_product: "&CInt(Result("ID_product"))&" ID_size:"&CInt(Result("ID_size"))&" ID_color:"&CInt(Result("ID_color"))
+                ' Response.write "<br>"
+ 
 
-                        Response.Write "ID_product: "&currentCarts.Exists(ID_product)&", ID_size: "&arrayColor(0)&", ID_color: "&arrayColor(1)&", quantity: "&arrayColor(2)
-                        Response.Write "<br>"
+                ' sql = "update cart set quantity = ((select quantity from cart where cart.ID_product = 1 and cart.ID_size = 1 and cart.ID_color = 1) + 1) where cart.ID_product = 1 and cart.ID_size = 1 and cart.ID_color = 1"
 
-                        arrayColor(2) = arrayColor(2) + 1 ' tăng số lượng sản phẩm thêm 1
-                        ' Response.Write arrayColor(2)
-                        Response.Write "ID_product: "&currentCarts.Exists(ID_product)&", ID_size: "&arrayColor(0)&", ID_color: "&arrayColor(1)&", quantity: "&arrayColor(2)
 
-                        Response.Write "<br>"
+                
+                ' true
+                ' Set currentCarts = Session("mycarts")      
+                ' if currentCarts.Exists(ID_product) = true then 'neu ID_product ton tai trong mycarts
+                '     Dim arrayColor 
+                '     arrayColor = currentCarts.Item(ID_product)
 
-                        currentCarts.Item(ID_product) = arrayColor
-                  
-                        Response.Write("So luong hien tai: "&currentCarts.Item(ID_product)(2))
-                        Response.write "<br>"
-                    else ' nếu ID_product chưa tồn tại trong Session("mycarts")
+                '     Response.Write "ID_product: "&currentCarts.Exists(ID_product)&", ID_size: "&arrayColor(0)&", ID_color: "&arrayColor(1)&", quantity: "&arrayColor(2)
+                '     Response.Write "<br>"
 
-                        sizeColor = Array(CInt(Result("ID_size")), CInt(Result("ID_color")), 1)
-                        currentCarts.Add ID_product, sizeColor
-                        Response.Write "Created product ID = "&ID_product
+                '     arrayColor(2) = arrayColor(2) + 1 ' tăng số lượng sản phẩm thêm 1
+                '     Response.Write "ID_product: "&currentCarts.Exists(ID_product)&", ID_size: "&arrayColor(0)&", ID_color: "&arrayColor(1)&", quantity: "&arrayColor(2)
 
-                    end if 
-                    'saving new session value
-                    Set Session("mycarts") = currentCarts
-                    Response.Write("The Session is exists.")                                      
-                Else
-                    'lưu Dictionary gồm 4 thuộc tính: 
-                    'carts = Server.CreateObject("Scripting.Dictionary")
-                    'sizeColor = Array(size, color, quantity)
-                    'carts.Add ID_product, sizeColor                 
-                    Set mycarts = Server.CreateObject("Scripting.Dictionary")
-                    ID_sizee = CInt(Result("ID_size"))
-                    ID_colorr = CInt(Result("ID_color"))
-                    
-                    sizeColor = Array(ID_sizee, ID_colorr, 1)
-                    mycarts.Add ID_product, sizeColor
-                    'creating a session for my cart
-                    Set Session("mycarts") = mycarts
-                    Set mycarts = Nothing
-                    Response.Write "Created product ID = "&ID_product&"<br>"
-                    Response.Write("Session created!")
-                End if
-                Session("Success") = "The Product has bean added to your cart."
-            Else
-                Session("Error") = "The Product is not exists, please try again."
-            End If
+                '     Response.Write "<br>"
+
+                '     currentCarts.Item(ID_product) = arrayColor
+            
+                '     Response.Write("So luong hien tai: "&currentCarts.Item(ID_product)(2))
+                '     Response.write "<br>"
+                ' else ' nếu ID_product chưa tồn tại trong Session("mycarts")
+
+                '     sizeColor = Array(CInt(Result("ID_size")), CInt(Result("ID_color")), 1)
+                '     currentCarts.Add ID_product, sizeColor
+                '     Response.Write "Created product ID = "&ID_product
+
+                ' end if 
+                'saving new session value
+                ' Set Session("mycarts") = currentCarts
+                Response.Write("The Session is exists.")   
+            '     result.MoveNext
+            ' Loop
 
             ' Set Result = Nothing
             Result.Close()
