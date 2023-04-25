@@ -1,3 +1,11 @@
+<!-- #include file="connect.asp" -->
+
+<%
+    if (IsEmpty(session("ID_employee"))) then
+        Response.redirect("./login.asp")
+    end if
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -7,7 +7,7 @@ If (NOT isnull(email) AND NOT isnull(password) AND TRIM(email)<>"" AND TRIM(pass
     ' true
     Dim sql
     ' sql = "select * from account where email= ? and password= ?"
-    sql = "select acc.ID_account, ID_user, name, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ?"
+    sql = "select ID_user, name, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 1"
     Dim cmdPrep
     set cmdPrep = Server.CreateObject("ADODB.Command")
     connDB.Open()
@@ -58,7 +58,7 @@ End if
             <form method="post" action="login.asp">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email" value="<%=email%>">
+                    <input type="text" class="form-control" id="email" name="email">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
