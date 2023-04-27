@@ -8,7 +8,7 @@
     ' true
     Dim sql
     ' sql = "select * from account where email= ? and password= ?"
-    sql = "select ID_user, name, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
+    sql = "select ID_user, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
     Dim cmdPrep
     set cmdPrep = Server.CreateObject("ADODB.Command")
     connDB.Open()
