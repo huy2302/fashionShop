@@ -8,7 +8,7 @@
     ' true
     Dim sql
     ' sql = "select * from account where email= ? and password= ?"
-    sql = "select ID_user, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
+    sql = "select ID_user, firstName, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
     Dim cmdPrep
     set cmdPrep = Server.CreateObject("ADODB.Command")
     connDB.Open()
@@ -24,6 +24,7 @@
     If not result.EOF Then
         ' dang nhap thanh cong
         Session("ID_employee")=result("ID_user")
+        Session("employee_name")=result("firstName")
         Session("Success")="Login Successfully"
         Response.redirect("../../index.asp")
     Else

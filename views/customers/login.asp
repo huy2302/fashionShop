@@ -7,7 +7,7 @@ If (NOT isnull(email) AND NOT isnull(password) AND TRIM(email)<>"" AND TRIM(pass
     ' true
     Dim sql
     ' sql = "select * from account where email= ? and password= ?"
-    sql = "select ID_user, name, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 1"
+    sql = "select ID_user, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 1"
     Dim cmdPrep
     set cmdPrep = Server.CreateObject("ADODB.Command")
     connDB.Open()

@@ -47,7 +47,7 @@
         <div class="cart-list">
         <%
             if NOT IsEmpty(Session("ID_user")) then
-                Dim size, sql, RScolorSize
+                ' Dim size, sql, RScolorSize
                 ' sql = "SELECT quantity FROM Product WHERE size='" & size & "'"
                 Set RScolorSize = Server.CreateObject("ADODB.Recordset")
                 sql = "select cart.ID_product, product.name, cart.ID_size, size.size, cart.ID_color, color.color, brand, product.price, cart.quantity, link1, sale_percent from cart inner join product_size_color p on cart.ID_product = p.ID_product inner join size on cart.ID_size = size.ID_size inner join color on cart.ID_color = color.ID_color inner join product on product.ID_product = cart.ID_product inner join brand on brand.ID_product = cart.ID_product inner join imageProduct on imageProduct.ID_product = cart.ID_product inner join discount on discount.ID_product = cart.ID_product where cart.ID_user = "&Session("ID_user")&" group by cart.ID_product, product.name, cart.ID_size, size.size, cart.ID_color, color.color, brand, product.price, cart.quantity, link1, sale_percent"

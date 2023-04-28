@@ -6,10 +6,10 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="./index.asp">
+          <a class="navbar-brand brand-logo" href="/fashionshop/views/admin/index.asp">
             <img src="/fashionshop/views/admin/images/logo.svg" alt="logo" />
           </a>
-          <a class="navbar-brand brand-logo-mini" href="./index.asp">
+          <a class="navbar-brand brand-logo-mini" href="/fashionshop/views/admin/index.asp">
             <img src="/fashionshop/views/admin/images/logo-mini.svg" alt="logo" />
           </a>
         </div>

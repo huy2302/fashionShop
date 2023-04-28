@@ -91,6 +91,5 @@
                 <a href="#" id="essenceCartBtn"><img src="img/core-img/bag.svg" alt=""> <span>3</span></a>
             </div>
         </div>
-
     </div>
 </header>
