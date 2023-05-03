@@ -1,16 +1,13 @@
 {
 	"folders": [
 		{
-			"path": "../essence-master"
-		},
-		{
 			"path": "."
 		},
 		{
-			"path": "D:/Đồ án ASP/grains-master"
+			"path": "../aspuploader"
 		}
 	],
 	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "grains-master"
+		"liveServer.settings.multiRootWorkspaceName": "fashionShop"
 	}
 }
