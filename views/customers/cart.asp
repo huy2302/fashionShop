@@ -20,7 +20,7 @@
 '     Dim idList, mycarts, totalProduct, subtotal, statusViews, statusButtons, rs
 
     Set Conn = Server.CreateObject("ADODB.Connection")
-    Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+    Conn.Open "Provider=SQLOLEDB.1;Data Source=THUY092\THUYDEV;Database=shop;User Id=sa;Password=123"
 
     totalProduct = 0
     totalSale = 0

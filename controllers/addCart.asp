@@ -21,7 +21,7 @@
             Response.write "<br>"
 
             Set Conn = Server.CreateObject("ADODB.Connection")
-            Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+            Conn.Open "Provider=SQLOLEDB.1;Data Source=THUY092\THUYDEV;Database=shop;User Id=sa;Password=123"
             
             If Result.EOF then
                 sql = "insert into cart (ID_user, ID_product, ID_size, ID_color, quantity) values ("&Session("ID_user")&", "&ID_product&", "&ID_size&", "&ID_color&", 1)"
