@@ -120,7 +120,7 @@ End if
                   <p class="card-description">
                     Enter information for new products
                   </p>
-                  <form class="forms-sample">
+                  <form class="forms-sample" method="POST" >
                     <div class="form-group">
                         <label for="exampleInputName1">Name product</label>
                         <input name="nameProduct" type="text" class="form-control" id="exampleInputName1" placeholder="Name product" required>
@@ -237,6 +237,7 @@ End if
       var handlerurl='ajax-multiplefiles-handler.asp'
     </script>
     <script type="text/javascript">
+    var listImage = []
     function CuteWebUI_AjaxUploader_OnPostback()
     {
       var uploader = document.getElementById("myuploader");
@@ -262,6 +263,8 @@ End if
         setTimeout(function() { document.write(xh.responseText); }, 10);
         return;
       }
+
+      
   
       var filelist = document.getElementById("filelist");
   
@@ -275,8 +278,23 @@ End if
         var li = document.createElement("li");
         li.innerHTML = msg;
         filelist.appendChild(li);
+        listImage.push("C:/inetpub/wwwroot/fashionShop/views/admin/pages/product/savefiles/" + list[i].FileName);
       }
     }
+    var objListImage = []
+    
+    const createListImage = () => {
+      if (listImage.length == 4) {
+        objListImage.push({
+          id_product: <%=totalRows + 1%>,
+          link1: listImage[0],
+          link2: listImage[1],
+          link3: listImage[2],
+          link4: listImage[3]
+        })
+      }
+    }
+
     </script>
     <!-- End AJAX uploader -->
 
@@ -374,6 +392,7 @@ End if
             })
           }
         }
+
         var nameProduct = ''
         var brandProduct = ''
         var description = ''
@@ -384,6 +403,7 @@ End if
             alert('Please enter enough information!');
           }
         }
+        // check rỗng và add vào bảng product
         const checkEmptyForm = () => {
           nameProduct = document.querySelector('input[name="nameProduct"]').value;
           brandProduct = document.querySelector('input[name="brandProduct"]').value;
@@ -396,14 +416,31 @@ End if
           alertEmptyForm(description)
           alertEmptyForm(price)
 
+          nameProduct = nameProduct.replace(/ /g, "_");
+          description = description.replace(/ /g, "_");
+          brandProduct = brandProduct.replace(/ /g, "_");
+          selectSprecies = selectSprecies.replace(/ /g, "_");
+          selectSprecies = selectSprecies.replace(/&/g, "<>");
+          price = price.replace(/ /g, "_");
+
           var xmlhttp = new XMLHttpRequest();
-          xmlhttp.open("GET", "/fashionShop/controllers/admin/addProduct.asp?id=" + <%=totalRows + 1%> +"&brand="+brandProduct+"&desc="+description, true);
+          xmlhttp.open("GET", "/fashionShop/controllers/admin/addProduct.asp?id=" + <%=totalRows + 1%> + "&name=" + nameProduct + "&brand="+brandProduct+"&desc="+description + "&species="+selectSprecies+"&price=" + price, true);
           // console.log(ID_product)
           xmlhttp.send();
+        }
+        // add size & color & quantity
+        const addSizeColorQuantity = () => {
+          arrayProduct.forEach((product) => {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "/fashionShop/controllers/admin/addQuantity.asp?id_product=" + <%=totalRows + 1%> + "&id_size=" + product.id_size + "&id_color=" + product.id_color + "&quantity=" + product.quantity, true);
+            // console.log(ID_product)
+            xmlhttp.send();
+          })
         }
         // click add số lượng vào mảng số lượng
         const submitBtn = document.querySelector('.submitAdd');
         submitBtn.addEventListener('click', () => {
+          createListImage()
           checkEmptyForm()
           idColor.forEach((e, index) => {
             const quantityS = document.querySelector(`.quantityColor${e.value}[name="quantityS"]`).value;
@@ -422,6 +459,7 @@ End if
             id_size = 5
             checkQuantity(quantityXXL, e, id_size)
           })
+          addSizeColorQuantity()
         })
     </script>
 
