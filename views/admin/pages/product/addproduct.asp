@@ -206,6 +206,21 @@ End if
                     
                     <ol id="filelist">
                     </ol>	
+
+                    <div class="form-group">
+                        <label for="exampleInputName1">Sale Percent</label>
+                        <input name="salePercent" type="number" class="form-control" id="exampleInputName1" placeholder="Enter sale percent" required>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-6">
+                          <label for="exampleInputName1">Start Day</label>
+                          <input name="startDay" type="date" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
+                      </div>
+                      <div class="form-group col-md-6">
+                          <label for="exampleInputName1">End Day</label>
+                          <input name="endDay" type="date" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
+                      </div>
+                    </div>
                     
                     <a class="submitAdd btn btn-primary me-2">Add</a>
                   </form>
@@ -262,10 +277,8 @@ End if
         alert("http error " + xh.status);
         setTimeout(function() { document.write(xh.responseText); }, 10);
         return;
-      }
+      } 
 
-      
-  
       var filelist = document.getElementById("filelist");
   
       var list = eval(xh.responseText); //get JSON objects
@@ -284,7 +297,7 @@ End if
     var objListImage = []
     
     const createListImage = () => {
-      if (listImage.length == 4) {
+      if (listImage.length >= 4) {
         objListImage.push({
           id_product: <%=totalRows + 1%>,
           link1: listImage[0],
@@ -292,6 +305,11 @@ End if
           link3: listImage[2],
           link4: listImage[3]
         })
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "/fashionShop/controllers/admin/addImageProduct.asp?id=" + objListImage[0].id_product + "&link1=" + objListImage[0].link1 + "&link2="+objListImage[0].link2+"&link3="+ objListImage[0].link3 + "&link4=" + objListImage[0].link4, true);
+        // console.log(ID_product)
+        xmlhttp.send();
       }
     }
 
@@ -437,10 +455,33 @@ End if
             xmlhttp.send();
           })
         }
+        // add salePercent
+        const addSalePercent = () => {
+            const postSalePercent = (id, start, end, sale) => {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("GET", "/fashionShop/controllers/admin/addSalePercent.asp?id_product=" + id + "&start=" + start + "&end=" + end + "&sale=" + sale, true);
+                // console.log(ID_product)
+                xmlhttp.send();
+            }
+            const salePercent = document.querySelector('input[name="salePercent"]').value;
+            const startDay = document.querySelector('input[name="startDay"]').value;
+            const endDay = document.querySelector('input[name="endDay"]').value;
+
+            if (salePercent == '') {
+                const salePercentValue = 0;
+                postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+            } else {
+                salePercentValue = salePercent;
+                if (startDay != '' & endDay != '') {
+                    alert('Please select a discount start and end date');
+                } else {
+                    postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                }
+            }
+        }
         // click add số lượng vào mảng số lượng
         const submitBtn = document.querySelector('.submitAdd');
         submitBtn.addEventListener('click', () => {
-          createListImage()
           checkEmptyForm()
           idColor.forEach((e, index) => {
             const quantityS = document.querySelector(`.quantityColor${e.value}[name="quantityS"]`).value;
@@ -460,6 +501,7 @@ End if
             checkQuantity(quantityXXL, e, id_size)
           })
           addSizeColorQuantity()
+          createListImage()
         })
     </script>
 
