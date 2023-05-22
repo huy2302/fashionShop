@@ -1,3 +1,4 @@
+
 <!--#include file="connect.asp"-->
 <%
 Dim email, password
@@ -46,48 +47,41 @@ End if
 
 'Neu dang nhap ko thanh cong, thi thong bao loi.
 %>
-<!-- <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-        <title>Essence - Login</title>
-        <link rel="icon" href="./img/core-img/favicon.ico"> 
+<div class="ERROR">
+    <%  
+        If (NOT IsEmpty(Session("Error")) AND NOT isnull(Session("Error"))) AND (TRIM(Session("Error"))<>"") Then
+    %>
+            <div class="notify-error alert alert-danger mt-2" role="alert">
+                <%=Session("Error")%>
+            </div>
+    <%
+            Session.Contents.Remove("Error")
+        End If
+    %>    
+</div>
 
-    </head>
-    <body>        
-        <div class="container">
-            <form method="post" action="login.asp">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="text" class="form-control" id="email" name="email">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                </div> 
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
-        </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>        
-    </body>
-</html> -->
-
-    
-<!-- Form-->
 <html>     
 <head>
     <link rel="stylesheet" href="css/login.css">
     <title>Essence - Login</title>
-    <link rel="icon" href="./img/core-img/favicon.ico"> 
-    <link rel="stylesheet" href="js/loginnew.js">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="./img/core-img/favicon.ico">
+
+    <!--<link rel="stylesheet" href="js/loginnew.js">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        window.setTimeout(function() {
+          $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+          });
+        }, 2000);
+    </script>
 </head>
 
-<body>
 
+<body>
 <div class="form">
-  <div class="form-toggle"></div>
   <div class="form-panel one">
     <div class="form-header">
       <h1>Account Login</h1>
@@ -105,7 +99,10 @@ End if
             <div class="form-group">
                 <label class="form-remember">
                 <input type="checkbox"/>Remember Me
-            </label><a class="form-recovery" href="#">Forgot Password?</a>
+            
+                </label>
+            <a href="register.asp" class="form-recovery">Create Account</a>
+            <a class="form-recovery" href="#">Forgot Password?</a>
             </div>
             <div class="form-group">
                 <button type="submit">Log In</button>
@@ -114,39 +111,9 @@ End if
     </div>
   </div>
 
-  <!--Register-->
-  <div class="form-panel two">
-    <div class="form-header">
-      <h1>Register Account</h1>
-    </div>
-    <div class="form-content">
-      <form>
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input id="username" type="text" name="username" required="required"/>
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input id="password" type="password" name="password" required="required"/>
-        </div>
-        <div class="form-group">
-          <label for="cpassword">Confirm Password</label>
-          <input id="cpassword" type="password" name="cpassword" required="required"/>
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input id="email" type="email" name="email" required="required"/>
-        </div>
-        <div class="form-group">
-          <button type="submit">Register</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<div class="pen-footer"><a href="https://www.behance.net/gallery/30478397/Login-Form-UI-Library" target="_blank"><i class="material-icons">arrow_backward</i>View on Behance</a><a href="https://github.com/andyhqtran/UI-Library/tree/master/Login%20Form" target="_blank">View on Github<i class="material-icons">arrow_forward</i></a></div>
+ 
 </body>
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>         -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>         
 
 </html>
 
