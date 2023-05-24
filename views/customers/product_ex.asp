@@ -17,9 +17,9 @@ cmdPrep.ActiveConnection = connDB
 cmdPrep.CommandType = 1
 cmdPrep.Prepared = True
 if (NOT IsEmpty(Session("ID_user"))) then
-    cmdPrep.CommandText = "select product.ID_product, product.name, description, brand, sale_percent, favorite_note, size, color, price from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color inner join brand on product.ID_product = brand.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = "&Session("ID_user")&" where psc.ID_product = "&ID_product
+    cmdPrep.CommandText = "select product.ID_product, product.name, description, brand, sale_percent, favorite_note, size, color, price, imageProduct.* from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color join imageProduct on imageProduct.ID_product = psc.ID_product inner join brand on product.ID_product = brand.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = "&Session("ID_user")&" where psc.ID_product = "&ID_product
     else 
-    cmdPrep.CommandText = "select product.ID_product, product.name, description, brand, sale_percent, size, color, price from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color inner join brand on product.ID_product = brand.ID_product where psc.ID_product = "&ID_product
+    cmdPrep.CommandText = "select product.ID_product, product.name, description, brand, sale_percent, size, color, price, imageProduct.* from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color join imageProduct on imageProduct.ID_product = psc.ID_product inner join brand on product.ID_product = brand.ID_product where psc.ID_product = "&ID_product
 end if
 
 Set Result = cmdPrep.execute
@@ -64,16 +64,17 @@ Set Result = cmdPrep.execute
     <input id="ID_product" type="text" value="<%=ID_product%>" style="display: none;">
 
     <!-- #include file="cart.asp" -->
-
+    
     <!-- ##### Single Product Details Area Start ##### -->
     <section class="single_product_details_area d-flex align-items-center">
 
         <!-- Single Product Thumb -->
         <div class="single_product_thumb clearfix">
             <div class="product_thumbnail_slides owl-carousel">
-                <img src="img/product-img/product-big-1.jpg" alt="">
-                <img src="img/product-img/product-big-2.jpg" alt="">
-                <img src="img/product-img/product-big-3.jpg" alt="">
+                <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="">
+                <img src="/fashionShop/resources/imgProduct/<%=Result("link2")%>" alt="">
+                <img src="/fashionShop/resources/imgProduct/<%=Result("link3")%>" alt="">
+                <img src="/fashionShop/resources/imgProduct/<%=Result("link4")%>" alt="">
             </div>
         </div>
 
@@ -187,7 +188,7 @@ Set Result = cmdPrep.execute
         var addCartBtn = document.querySelector("#add_btn");
         var sizeProduct = document.querySelector("#size");
         var colorProduct = document.querySelector("#color");
-
+        // var quantity_number = 0;
         const addToCart = function(e) {
             e.preventDefault();
             console.log("addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value)
@@ -195,6 +196,26 @@ Set Result = cmdPrep.execute
             xmlhttp.open("GET", "/fashionShop/controllers/addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value, true);
             // console.log(ID_product)
             xmlhttp.send();
+
+            setTimeout(() => {
+                 var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/fashionShop/controllers/getQuantityCart.asp", true);
+                
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        var status = xhr.status;
+                        if (status === 0 || (status >= 200 && status < 400)) {
+                            console.log("Success" + xhr.responseText);
+                            spanQuantityCart.innerHTML = xhr.responseText;
+                            cartQuantity.innerHTML = xhr.responseText;
+                        } else {
+                            console.log("Error" + xhr.responseText);
+                        }
+                    }
+                };
+                xhr.send();
+            }, 300);
+           
         }
         addCartBtn.addEventListener("click", addToCart)
 

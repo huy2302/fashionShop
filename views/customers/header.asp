@@ -1,4 +1,8 @@
 <!-- ##### Header Area Start ##### -->
+<%
+Set Conn = Server.CreateObject("ADODB.Connection")
+Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+%>
 <header class="header_area">
     <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
         <!-- Classy Menu -->
@@ -88,7 +92,20 @@
             </div>
             <!-- Cart Area -->
             <div class="cart-area">
-                <a href="#" id="essenceCartBtn"><img src="img/core-img/bag.svg" alt=""> <span>3</span></a>
+                <% 
+                if NOT IsEmpty(Session("ID_user")) then
+                Set RScart = Server.CreateObject("ADODB.Recordset")
+                sql = "select COUNT(cart.ID_cart) as id from cart join users on users.ID_user = cart.ID_user where cart.ID_user = "&Session("ID_user")
+            
+                RScart.Open sql, conn
+                %>
+                <a href="#" id="essenceCartBtn"><img src="img/core-img/bag.svg" alt=""> <span id="span-quantity"><%=RScart("id")%></span></a>
+                <%
+                else 
+                %>
+                <a href="#" id="essenceCartBtn"><img src="img/core-img/bag.svg" alt=""> <span id="span-quantity">0</span></a>
+                <% end if %>
+
             </div>
         </div>
     </div>

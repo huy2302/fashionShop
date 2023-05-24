@@ -263,10 +263,10 @@
                                 <div class="single-product-wrapper">
                                     <!-- Product Image -->
                                     <div class="product-img">
-                                        <img src="<%=Result("link1")%>" alt="">
+                                        <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="">
                                         <input class="id_product" style="display: none;" value="<%=Result("ID_product")%>" >
                                         <!-- Hover Thumb -->
-                                        <img class="hover-img" src="<%=Result("link2")%>" alt="">
+                                        <img class="hover-img" src="/fashionShop/resources/imgProduct/<%=Result("link2")%>" alt="">
 
                                         <!-- Product Badge -->
                                         <% if (CInt(Result("sale_percent")) > 0) then%>
@@ -373,11 +373,11 @@
                 var xmlhttp = new XMLHttpRequest();
                 if (favoriteBtn.classList.contains("active")) {
                     const favorite = 0
-                    xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
+                    xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
                     xmlhttp.send();
                 } else {
                     const favorite = 1
-                    xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
+                    xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
                     xmlhttp.send();
                 }
             })

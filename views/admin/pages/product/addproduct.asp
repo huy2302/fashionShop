@@ -18,45 +18,6 @@ totalRows = CLng(CountResult("count"))
 Set CountResult = Nothing
 ' lay ve tong so trang
 %>
-<%
-    Dim name, description, brand, species, price, color, size, quantity, link1, link2, link3, link4
-
-    email = Request.Form("email")
-    password = Request.Form("password")
-    If (NOT isnull(email) AND NOT isnull(password) AND TRIM(email)<>"" AND TRIM(password)<>"" ) Then
-    ' true
-    Dim sql
-    ' sql = "select * from account where email= ? and password= ?"
-    sql = "select ID_user, firstName, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
-    Dim cmdPrep
-    set cmdPrep = Server.CreateObject("ADODB.Command")
-    connDB.Open()
-    cmdPrep.ActiveConnection = connDB
-    cmdPrep.CommandType=1
-    cmdPrep.Prepared=true
-    cmdPrep.CommandText = sql
-    cmdPrep.Parameters(0)=email
-    cmdPrep.Parameters(1)=password
-    Dim result
-    set result = cmdPrep.execute()
-    'kiem tra ket qua result o day
-    If not result.EOF Then
-        ' dang nhap thanh cong
-        Session("ID_employee")=result("ID_user")
-        Session("employee_name")=result("firstName")
-        Session("Success")="Login Successfully"
-        Response.redirect("../../index.asp")
-    Else
-        ' dang nhap ko thanh cong
-        Session("Error") = "Wrong email or password"
-    End if
-    result.Close()
-    connDB.Close()
-Else
-    ' false
-    Session("Error")="Please input email and password."
-End if
-%>
 
   <!DOCTYPE html>
   <html lang="en">
@@ -195,7 +156,7 @@ End if
                             uploader.Name = "myuploader"
                             uploader.MultipleFilesUpload = true
                             uploader.AllowedFileExtensions = "*.jpg,*.png"
-                            uploader.SaveDirectory = "savefiles"
+                            uploader.SaveDirectory = "/fashionShop/resources/imgProduct"
                             uploader.InsertText = "Upload" 
                             %>
                             
@@ -291,7 +252,7 @@ End if
         var li = document.createElement("li");
         li.innerHTML = msg;
         filelist.appendChild(li);
-        listImage.push("C:/inetpub/wwwroot/fashionShop/views/admin/pages/product/savefiles/" + list[i].FileName);
+        listImage.push("/fashionShop/resources/imgProduct/" + list[i].FileName);
       }
     }
     var objListImage = []

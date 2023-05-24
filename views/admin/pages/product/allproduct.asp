@@ -117,6 +117,9 @@ if Ceil<>Number Then
                             <th>
                               Price
                             </th>
+                            <th>
+                              Action
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -134,7 +137,7 @@ if Ceil<>Number Then
                           %>
                           <tr>
                             <td class="py-1">
-                              <img src="<%=Result("link1")%>" alt="image"/>
+                              <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="image"/>
                             </td>
                             <td>
                               <%=Result("name")%>
@@ -150,6 +153,10 @@ if Ceil<>Number Then
                             </td>
                             <td>
                               $<%=Result("price")%>
+                            </td>
+                            <td>
+                                <a href="editproduct.asp?id=<%=Result("id_product")%>" class="btn btn-secondary">Edit</a>
+                                <a data-href="delete.asp?id=<?asp echo $se_room['id_phong'] ?>" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm-delete" title="Delete">Delete</a>
                             </td>
                           </tr>
                           <%
