@@ -50,7 +50,7 @@ connDB.Open()
     <!-- ##### Checkout Area Start ##### -->
     <div class="checkout_area section-padding-80">
         <div class="container">
-            <form>
+            <form action="../../controllers/submit_checkout.asp" method="POST">
                 <div class="row">
 
                 <div class="col-12 col-md-6">
@@ -60,61 +60,61 @@ connDB.Open()
                             <h5>Billing Address</h5>
                         </div>
 
-                        <form action="#" method="post">
+                        <div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="first_name">First Name <span>*</span></label>
-                                    <input type="text" class="form-control" id="first_name" value="" required>
+                                    <input name="first_name" type="text" class="form-control" id="first_name" value="" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="last_name">Last Name <span>*</span></label>
-                                    <input type="text" class="form-control" id="last_name" value="" required>
+                                    <input name="last_name" type="text" class="form-control" id="last_name" value="" required>
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label for="company">City <span>*</span></label>
-                                    <input type="text" class="form-control" id="company" value="" required>
+                                    <input name="city" type="text" class="form-control" id="company" value="" required>
                                 </div>
                                 
                                 <div class="col-12 mb-3">
                                     <label for="company">Province <span>*</span></label>
-                                    <input type="text" class="form-control" id="company" value="" required>
+                                    <input name="province" type="text" class="form-control" id="company" value="" required>
                                 </div>
                                 
                                 <div class="col-12 mb-3">
                                     <label for="company">District <span>*</span></label>
-                                    <input type="text" class="form-control" id="company" value="" required>
+                                    <input name="district" type="text" class="form-control" id="company" value="" required>
                                 </div>
                                 
                                 <div class="col-12 mb-3">
                                     <label for="company">Address details <span>*</span></label>
-                                    <input type="text" class="form-control" id="company" value="" required>
+                                    <input name="address" type="text" class="form-control" id="company" value="" required>
                                 </div>
                                 
                                 <div class="col-12 mb-3">
                                     <label for="phone_number">Phone No <span>*</span></label>
-                                    <input type="number" class="form-control" id="phone_number" min="0" value="" required>
+                                    <input name="phone_number" type="number" class="form-control" id="phone_number" min="0" value="" required>
                                 </div>
                                 <div class="col-12 mb-4">
                                     <label for="email_address">Email Address <span>*</span></label>
-                                    <input type="email" class="form-control" id="email_address" value="" required>
+                                    <input name="email" type="email" class="form-control" id="email_address" value="" required>
                                 </div>
 
                                 <div class="col-12">
                                     <div class="custom-control custom-checkbox d-block mb-2">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1" required>
+                                        <input name="terms" type="checkbox" class="custom-control-input" id="customCheck1" required>
                                         <label class="custom-control-label" for="customCheck1">Terms and conitions <span>*</span></label>
                                     </div>
                                     <div class="custom-control custom-checkbox d-block mb-2">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2">
+                                        <input name="create_acc" type="checkbox" class="custom-control-input" id="customCheck2">
                                         <label class="custom-control-label" for="customCheck2">Create an account</label>
                                     </div>
                                     <div class="custom-control custom-checkbox d-block">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3">
+                                        <input name="subs" type="checkbox" class="custom-control-input" id="customCheck3">
                                         <label class="custom-control-label" for="customCheck3">Subscribe to our newsletter</label>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
@@ -129,6 +129,7 @@ connDB.Open()
                         <ul class="order-details-form mb-4">
                             <li><span>Product</span> <div style="display: flex; width: 12em; justify-content: space-between;"><span>Quantity</span> <span>Total</span></div></li>
                         <%
+                        
                         Set cmdPrep = Server.CreateObject("ADODB.Command")
                         cmdPrep.ActiveConnection = connDB
                         cmdPrep.CommandType = 1
@@ -162,17 +163,21 @@ connDB.Open()
                             subtotal = price * quantity
                             total = total + subtotal
                             total_sale = total_sale + subtotal_sale
+
+                            
                         %>
                             <li><span><%=Result("name")%></span> <div style="display: flex; width: 10em; justify-content: space-between;"><span><%=Result("quantity")%></span> <span>$<%=subtotal%>.00</span></div></li>
                         <%
                         Result.MoveNext
                         loop
+                        
                         %>
                             <!--<li><span>Subtotal</span> <span>$59.90</span></li>-->
                             <li><span>Shipping</span> <span>Free</span></li>
                             <li><span>Subtotal</span> <span>$<%=total%>.00</span></li>
                             <li><span>Sale off</span> <span>$<%=total - total_sale%>.00</span></li>
                             <li><span>Total</span> <span>$<%=total_sale%>.00</span></li>
+                            <input type="hidden" id="custId" name="total_price" value="<%=total_sale%>">
                         </ul>
 
                         <div id="accordion" role="tablist" class="mb-4">

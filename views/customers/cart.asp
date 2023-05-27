@@ -307,7 +307,7 @@
                 }
             )},
             error: function (response){
-                alert('Lỗi AJAX');
+                // alert('Lỗi AJAX');
             }
         });
     }

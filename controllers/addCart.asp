@@ -13,12 +13,12 @@
     If (NOT IsNull(ID_product) and NOT IsEmpty(Session("ID_user"))) Then
         Dim cmdPrep, Result
         Set cmdPrep = Server.CreateObject("ADODB.Command")
-            connDB.Open()
-            cmdPrep.ActiveConnection = connDB
-            cmdPrep.CommandType = 1
-            cmdPrep.CommandText = "select product.ID_product, product.name, size.ID_size, size, color.ID_color, color, cart.quantity from cart inner join product_size_color p on p.ID_product = cart.ID_product inner join product on product.ID_product = cart.ID_product inner join size on size.ID_size = cart.ID_size inner join color on color.ID_color = cart.ID_color where product.ID_product = "&ID_product&" and size.ID_size = "&ID_size&" and color.ID_color = "&ID_color&" group by product.ID_product, product.name, size.ID_size, size, color.ID_color, color, cart.quantity"
-            Set Result = cmdPrep.execute 
-            Response.write "<br>"
+        connDB.Open()
+        cmdPrep.ActiveConnection = connDB
+        cmdPrep.CommandType = 1
+        cmdPrep.CommandText = "select product.ID_product, product.name, size.ID_size, size, color.ID_color, color, cart.quantity from cart inner join product_size_color p on p.ID_product = cart.ID_product inner join product on product.ID_product = cart.ID_product inner join size on size.ID_size = cart.ID_size inner join color on color.ID_color = cart.ID_color where product.ID_product = "&ID_product&" and size.ID_size = "&ID_size&" and color.ID_color = "&ID_color&" group by product.ID_product, product.name, size.ID_size, size, color.ID_color, color, cart.quantity"
+        Set Result = cmdPrep.execute 
+        Response.write "<br>"
 
             Set Conn = Server.CreateObject("ADODB.Connection")
             Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
@@ -34,7 +34,7 @@
                     Conn.Execute sql
                     Session("Success") = "The Product has bean added to your cart."
                 END IF
-                Result.MoveNext
+            Result.MoveNext
             Loop
             Conn.close()
                 Response.Write("The Session is exists.")   
