@@ -1,6 +1,17 @@
 
 <!--#include file="connect.asp"-->
+<%
+Dim email, pass
+email = Request.Form("email")
+pass = Request.Form("pass")
 
+Dim sql
+sql = "INSERT INTO account (email, password) VALUES('" & email & "', '" & password & "')"
+connDB.Open()
+connDB.Execute sql
+sql.Close()
+connDB.Close()
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,38 +34,35 @@
          <h1>Register Account</h1>
        </div>
        <div class="form-content">
-         <form>
-           <!-- name -->
-           <div class="form-group">
-             <label for="name">Name</label>
-             <input id="name" type="text" name="name" placeholder="Your Full Name" required="required" required minlength="3" required maxlength="100"/>
-           </div>
+         <form id="form" action="" method="get">
            <!-- email -->
            <div class="form-group">
              <label for="email">Email</label>
              <input id="email" type="email" name="email" placeholder="Your Email" required="required"/>
            </div>
+
            <!-- password -->
            <div class="form-group">
-             <label for="password1">Password</label>
-             <input id="password1" type="password" required="required" placeholder="Create Password (Min. 8 Characters)" 
+             <label for="pass">Password</label>
+             <input id="pass" type="password" name="pass" required placeholder="Create Password (Min. 8 Characters)" 
              required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" 
              title="Please include at least 1 uppercase character, 1 lowercase character, and 1 number."/>
            </div>
            <!-- comfirm pass -->
            <div class="form-group">
-             <label for="password2">Confirm Password</label>
-             <input id="password2" type="password" name="password" required="required" placeholder="Confirm Password"
-             required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" />
+             <label for="c_pass">Confirm Password</label>
+             <input id="c_pass" type="password" name="c_pass" onchange="confirmPass()" required placeholder="Confirm Password" />
            </div>
-
+           <!-- <span id="error" style="color:#F00;"> </span> -->
+           
            <div class="form-group">
-             <button type="submit">Register</button>
+             <button type="submit" onclick="confirmPass()">Register</button>
             </div>
+          </form>
             <div class="form-group">
             <a href="login.asp" class="form-recovery">Did you have an Account?</a>
             </div>
-         </form>
+
        </div>
      </div>
     </div>
