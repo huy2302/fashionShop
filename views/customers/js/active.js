@@ -62,10 +62,14 @@
     cartOverlay.on('click', function () {
         $(this).removeClass(cartOverlayOn);
         cartWrapper.removeClass(cartOn);
+        document.getElementById('cart-list').innerHTML = "";
+        
     });
     cartbtn2.on('click', function () {
         cartOverlay.removeClass(cartOverlayOn);
         cartWrapper.removeClass(cartOn);
+        document.getElementById('cart-list').innerHTML = "";
+        
     });
 
     // :: ScrollUp Active Code

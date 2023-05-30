@@ -26,6 +26,9 @@ Conn.Execute sql
 sql = "insert into brand values ("&id&", "&id&", '"&brand&"')"
 Conn.Execute sql 
 
+sql = "insert into discount values ("&id&", "&id&", '', '', 0)"
+Conn.Execute sql
+
 Response.ContentType = "text/html"
 %>
 

@@ -1,4 +1,7 @@
 <!-- #include file="connect.asp" -->
+<%
+connDB.Open()
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,8 +17,9 @@
     <title>Essence - Fashion Ecommerce Template</title>
 
     <!-- Favicon  -->
-    <link rel="icon" href="img/core-img/favicon.ico">
-
+    <link rel="icon" href="./img/core-img/favicon.ico">
+    <link rel="stylesheet" href="./css/add.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="css/core-style.css">
     <link rel="stylesheet" href="style.css">
@@ -42,12 +46,12 @@
             </div>
         </div>
     </div>
-    <!-- ##### Breadcumb Area End ##### -->
 
     <!-- ##### Checkout Area Start ##### -->
     <div class="checkout_area section-padding-80">
         <div class="container">
-            <div class="row">
+            <form action="../../controllers/submit_checkout.asp" method="POST">
+                <div class="row">
 
                 <div class="col-12 col-md-6">
                     <div class="checkout_details_area mt-50 clearfix">
@@ -56,79 +60,65 @@
                             <h5>Billing Address</h5>
                         </div>
 
-                        <form action="#" method="post">
+                        <div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="first_name">First Name <span>*</span></label>
-                                    <input type="text" class="form-control" id="first_name" value="" required>
+                                    <input name="first_name" type="text" class="form-control" id="first_name" value="" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="last_name">Last Name <span>*</span></label>
-                                    <input type="text" class="form-control" id="last_name" value="" required>
+                                    <input name="last_name" type="text" class="form-control" id="last_name" value="" required>
                                 </div>
                                 <div class="col-12 mb-3">
-                                    <label for="company">Company Name</label>
-                                    <input type="text" class="form-control" id="company" value="">
+                                    <label for="company">City <span>*</span></label>
+                                    <input name="city" type="text" class="form-control" id="company" value="" required>
                                 </div>
+                                
                                 <div class="col-12 mb-3">
-                                    <label for="country">Country <span>*</span></label>
-                                    <select class="w-100" id="country">
-                                        <option value="usa">United States</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="ger">Germany</option>
-                                        <option value="fra">France</option>
-                                        <option value="ind">India</option>
-                                        <option value="aus">Australia</option>
-                                        <option value="bra">Brazil</option>
-                                        <option value="cana">Canada</option>
-                                    </select>
+                                    <label for="company">Province <span>*</span></label>
+                                    <input name="province" type="text" class="form-control" id="company" value="" required>
                                 </div>
+                                
                                 <div class="col-12 mb-3">
-                                    <label for="street_address">Address <span>*</span></label>
-                                    <input type="text" class="form-control mb-3" id="street_address" value="">
-                                    <input type="text" class="form-control" id="street_address2" value="">
+                                    <label for="company">District <span>*</span></label>
+                                    <input name="district" type="text" class="form-control" id="company" value="" required>
                                 </div>
+                                
                                 <div class="col-12 mb-3">
-                                    <label for="postcode">Postcode <span>*</span></label>
-                                    <input type="text" class="form-control" id="postcode" value="">
+                                    <label for="company">Address details <span>*</span></label>
+                                    <input name="address" type="text" class="form-control" id="company" value="" required>
                                 </div>
-                                <div class="col-12 mb-3">
-                                    <label for="city">Town/City <span>*</span></label>
-                                    <input type="text" class="form-control" id="city" value="">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="state">Province <span>*</span></label>
-                                    <input type="text" class="form-control" id="state" value="">
-                                </div>
+                                
                                 <div class="col-12 mb-3">
                                     <label for="phone_number">Phone No <span>*</span></label>
-                                    <input type="number" class="form-control" id="phone_number" min="0" value="">
+                                    <input name="phone_number" type="number" class="form-control" id="phone_number" min="0" value="" required>
                                 </div>
                                 <div class="col-12 mb-4">
                                     <label for="email_address">Email Address <span>*</span></label>
-                                    <input type="email" class="form-control" id="email_address" value="">
+                                    <input name="email" type="email" class="form-control" id="email_address" value="" required>
                                 </div>
 
                                 <div class="col-12">
                                     <div class="custom-control custom-checkbox d-block mb-2">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Terms and conitions</label>
+                                        <input name="terms" type="checkbox" class="custom-control-input" id="customCheck1" required>
+                                        <label class="custom-control-label" for="customCheck1">Terms and conitions <span>*</span></label>
                                     </div>
                                     <div class="custom-control custom-checkbox d-block mb-2">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2">
-                                        <label class="custom-control-label" for="customCheck2">Create an accout</label>
+                                        <input name="create_acc" type="checkbox" class="custom-control-input" id="customCheck2">
+                                        <label class="custom-control-label" for="customCheck2">Create an account</label>
                                     </div>
                                     <div class="custom-control custom-checkbox d-block">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3">
+                                        <input name="subs" type="checkbox" class="custom-control-input" id="customCheck3">
                                         <label class="custom-control-label" for="customCheck3">Subscribe to our newsletter</label>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
+                <div class="col-12 col-md-6">
                     <div class="order-details-confirmation">
 
                         <div class="cart-page-heading">
@@ -137,11 +127,57 @@
                         </div>
 
                         <ul class="order-details-form mb-4">
-                            <li><span>Product</span> <span>Total</span></li>
-                            <li><span>Cocktail Yellow dress</span> <span>$59.90</span></li>
-                            <li><span>Subtotal</span> <span>$59.90</span></li>
+                            <li><span>Product</span> <div style="display: flex; width: 12em; justify-content: space-between;"><span>Quantity</span> <span>Total</span></div></li>
+                        <%
+                        
+                        Set cmdPrep = Server.CreateObject("ADODB.Command")
+                        cmdPrep.ActiveConnection = connDB
+                        cmdPrep.CommandType = 1
+                        cmdPrep.Prepared = True
+
+                        cmdPrep.CommandText = "select cart.*, product.name, discount.sale_percent, discount.end_day from cart inner join product on product.ID_product = cart.ID_product inner join discount on discount.ID_product = cart.ID_product where cart.ID_user = "&Session("ID_user")
+                        Set Result = cmdPrep.execute
+                        Dim total
+                        total_sale = 0
+                        total = 0
+                        do while not Result.EOF
+                            ' lấy ra giá, số lượng, phần trăm sale
+                            price = CInt(Result("price"))
+                            quantity = CInt(Result("quantity"))
+                            percent = CInt(Result("sale_percent"))
+
+                            ' tạo biến currentDate lấy ra ngày hiện tại
+                            ' so sánh với ngày hết hạn sale để tính giá tiền
+                            Dim currentDate
+                            currentDate = Date()
+
+                            Dim datee
+                            datee = FormatDateTime(Result("end_day"),2)
+
+                            if (CStr(datee) < CStr(currentDate)) then
+                                percent = 0
+                            end if
+
+                            ' tính giá tổng đơn hàng
+                            subtotal_sale = (price * (100 - percent))/100 * quantity
+                            subtotal = price * quantity
+                            total = total + subtotal
+                            total_sale = total_sale + subtotal_sale
+
+                            
+                        %>
+                            <li><span><%=Result("name")%></span> <div style="display: flex; width: 10em; justify-content: space-between;"><span><%=Result("quantity")%></span> <span>$<%=subtotal%>.00</span></div></li>
+                        <%
+                        Result.MoveNext
+                        loop
+                        
+                        %>
+                            <!--<li><span>Subtotal</span> <span>$59.90</span></li>-->
                             <li><span>Shipping</span> <span>Free</span></li>
-                            <li><span>Total</span> <span>$59.90</span></li>
+                            <li><span>Subtotal</span> <span>$<%=total%>.00</span></li>
+                            <li><span>Sale off</span> <span>$<%=total - total_sale%>.00</span></li>
+                            <li><span>Total</span> <span>$<%=total_sale%>.00</span></li>
+                            <input type="hidden" id="custId" name="total_price" value="<%=total_sale%>">
                         </ul>
 
                         <div id="accordion" role="tablist" class="mb-4">
@@ -196,13 +232,15 @@
                             </div>
                         </div>
 
-                        <a href="#" class="btn essence-btn">Place Order</a>
+                        <button type="submit" class="btn essence-btn">Place Order</button>
                     </div>
                 </div>
             </div>
+            </form>
         </div>
     </div>
     <!-- ##### Checkout Area End ##### -->
+    <!-- ##### Breadcumb Area End ##### -->
 
     <!-- #include file="footer.asp" -->
 
@@ -219,7 +257,17 @@
     <script src="js/classy-nav.min.js"></script>
     <!-- Active js -->
     <script src="js/active.js"></script>
+    <script>
+        const postSalePercent = (id, start, end, sale) => {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "/fashionShop/controllers/admin/addSalePercent.asp?id_product=" + id + "&start=" + start + "&end=" + end + "&sale=" + sale, true);
+            // console.log(ID_product)
+            xmlhttp.send();
+        }
 
-</body>
+        postSalePercent();
+    </script>
+
+</body> 
 
 </html>

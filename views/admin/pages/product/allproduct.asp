@@ -68,9 +68,12 @@ if Ceil<>Number Then
   </head>
   <style>
     .swal2-confirm.swal2-styled {
-      background-color: rgb(48, 133, 214) !important;
-      color: #fff !important;
-      font-weight: 400 !important;
+        background-color: rgb(48, 133, 214) !important;
+        color: #fff !important;
+        font-weight: 400 !important;
+    }
+    .table td img {
+        object-fit: contain;
     }
   </style>
 
@@ -117,6 +120,9 @@ if Ceil<>Number Then
                             <th>
                               Price
                             </th>
+                            <th>
+                              Action
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -134,7 +140,7 @@ if Ceil<>Number Then
                           %>
                           <tr>
                             <td class="py-1">
-                              <img src="<%=Result("link1")%>" alt="image"/>
+                              <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="image"/>
                             </td>
                             <td>
                               <%=Result("name")%>
@@ -149,7 +155,11 @@ if Ceil<>Number Then
                               <%=Result("sale_percent")%>%
                             </td>
                             <td>
-                              $<%=Result("price")%>
+                              $<%=Result("price")%>.00
+                            </td>
+                            <td>
+                                <a href="editproduct.asp?id=<%=Result("id_product")%>" class="btn btn-secondary">Edit</a>
+                                <a href="#" class="btn btn-danger">Delete</a>
                             </td>
                           </tr>
                           <%

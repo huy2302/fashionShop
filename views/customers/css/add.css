@@ -121,3 +121,18 @@
     color: #aaaaaa !important;
     text-decoration: line-through;
 }
+.single-product-wrapper .product-img img {
+    width: 20em !important;
+    -webkit-transition-duration: 500ms;
+    transition-duration: 500ms;
+    height: 26em;
+    object-fit: cover;
+}
+.single_product_details_area {
+    position: unset !important;
+    z-index: 100;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}

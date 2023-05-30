@@ -18,45 +18,6 @@ totalRows = CLng(CountResult("count"))
 Set CountResult = Nothing
 ' lay ve tong so trang
 %>
-<%
-    Dim name, description, brand, species, price, color, size, quantity, link1, link2, link3, link4
-
-    email = Request.Form("email")
-    password = Request.Form("password")
-    If (NOT isnull(email) AND NOT isnull(password) AND TRIM(email)<>"" AND TRIM(password)<>"" ) Then
-    ' true
-    Dim sql
-    ' sql = "select * from account where email= ? and password= ?"
-    sql = "select ID_user, firstName, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
-    Dim cmdPrep
-    set cmdPrep = Server.CreateObject("ADODB.Command")
-    connDB.Open()
-    cmdPrep.ActiveConnection = connDB
-    cmdPrep.CommandType=1
-    cmdPrep.Prepared=true
-    cmdPrep.CommandText = sql
-    cmdPrep.Parameters(0)=email
-    cmdPrep.Parameters(1)=password
-    Dim result
-    set result = cmdPrep.execute()
-    'kiem tra ket qua result o day
-    If not result.EOF Then
-        ' dang nhap thanh cong
-        Session("ID_employee")=result("ID_user")
-        Session("employee_name")=result("firstName")
-        Session("Success")="Login Successfully"
-        Response.redirect("../../index.asp")
-    Else
-        ' dang nhap ko thanh cong
-        Session("Error") = "Wrong email or password"
-    End if
-    result.Close()
-    connDB.Close()
-Else
-    ' false
-    Session("Error")="Please input email and password."
-End if
-%>
 
   <!DOCTYPE html>
   <html lang="en">
@@ -195,7 +156,7 @@ End if
                             uploader.Name = "myuploader"
                             uploader.MultipleFilesUpload = true
                             uploader.AllowedFileExtensions = "*.jpg,*.png"
-                            uploader.SaveDirectory = "savefiles"
+                            uploader.SaveDirectory = "/fashionShop/resources/imgProduct"
                             uploader.InsertText = "Upload" 
                             %>
                             
@@ -206,6 +167,21 @@ End if
                     
                     <ol id="filelist">
                     </ol>	
+
+                    <div class="form-group">
+                        <label for="exampleInputName1">Sale Percent</label>
+                        <input name="salePercent" type="number" class="form-control" id="exampleInputName1" placeholder="Enter sale percent" required>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-6">
+                          <label for="exampleInputName1">Start Day</label>
+                          <input name="startDay" type="date" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
+                      </div>
+                      <div class="form-group col-md-6">
+                          <label for="exampleInputName1">End Day</label>
+                          <input name="endDay" type="date" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
+                      </div>
+                    </div>
                     
                     <a class="submitAdd btn btn-primary me-2">Add</a>
                   </form>
@@ -262,10 +238,8 @@ End if
         alert("http error " + xh.status);
         setTimeout(function() { document.write(xh.responseText); }, 10);
         return;
-      }
+      } 
 
-      
-  
       var filelist = document.getElementById("filelist");
   
       var list = eval(xh.responseText); //get JSON objects
@@ -278,13 +252,13 @@ End if
         var li = document.createElement("li");
         li.innerHTML = msg;
         filelist.appendChild(li);
-        listImage.push("C:/inetpub/wwwroot/fashionShop/views/admin/pages/product/savefiles/" + list[i].FileName);
+        listImage.push("/fashionShop/resources/imgProduct/" + list[i].FileName);
       }
     }
     var objListImage = []
     
     const createListImage = () => {
-      if (listImage.length == 4) {
+      if (listImage.length >= 4) {
         objListImage.push({
           id_product: <%=totalRows + 1%>,
           link1: listImage[0],
@@ -292,6 +266,11 @@ End if
           link3: listImage[2],
           link4: listImage[3]
         })
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "/fashionShop/controllers/admin/addImageProduct.asp?id=" + objListImage[0].id_product + "&link1=" + objListImage[0].link1 + "&link2="+objListImage[0].link2+"&link3="+ objListImage[0].link3 + "&link4=" + objListImage[0].link4, true);
+        // console.log(ID_product)
+        xmlhttp.send();
       }
     }
 
@@ -437,10 +416,33 @@ End if
             xmlhttp.send();
           })
         }
+        // add salePercent
+        const addSalePercent = () => {
+            const postSalePercent = (id, start, end, sale) => {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("GET", "/fashionShop/controllers/admin/addSalePercent.asp?id_product=" + id + "&start=" + start + "&end=" + end + "&sale=" + sale, true);
+                // console.log(ID_product)
+                xmlhttp.send();
+            }
+            const salePercent = document.querySelector('input[name="salePercent"]').value;
+            const startDay = document.querySelector('input[name="startDay"]').value;
+            const endDay = document.querySelector('input[name="endDay"]').value;
+
+            if (salePercent == '') {
+                const salePercentValue = 0;
+                postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+            } else {
+                salePercentValue = salePercent;
+                if (startDay != '' & endDay != '') {
+                    alert('Please select a discount start and end date');
+                } else {
+                    postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                }
+            }
+        }
         // click add số lượng vào mảng số lượng
         const submitBtn = document.querySelector('.submitAdd');
         submitBtn.addEventListener('click', () => {
-          createListImage()
           checkEmptyForm()
           idColor.forEach((e, index) => {
             const quantityS = document.querySelector(`.quantityColor${e.value}[name="quantityS"]`).value;
@@ -460,6 +462,7 @@ End if
             checkQuantity(quantityXXL, e, id_size)
           })
           addSizeColorQuantity()
+          createListImage()
         })
     </script>
 

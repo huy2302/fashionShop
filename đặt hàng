@@ -1,0 +1,6 @@
+if (tồn tại session("ID_user")) {
+    insert into bill với id_user = session(id_user)
+
+    insert into address với id_user = session(id_user)
+    
+}

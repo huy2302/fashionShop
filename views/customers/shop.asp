@@ -76,7 +76,7 @@
             <div class="row h-100 align-items-center">
                 <div class="col-12">
                     <div class="page-title text-center">
-                        <h2>dresses</h2>
+                        <h2>Shop</h2>
                     </div>
                 </div>
             </div>
@@ -199,11 +199,20 @@
                             <p class="widget-title2 mb-30">Brands</p>
                             <div class="widget-desc">
                                 <ul>
-                                    <li><a href="#">Asos</a></li>
-                                    <li><a href="#">Mango</a></li>
-                                    <li><a href="#">River Island</a></li>
-                                    <li><a href="#">Topshop</a></li>
-                                    <li><a href="#">Zara</a></li>
+                                <%
+                                Set Conn = Server.CreateObject("ADODB.Connection")
+                                Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+
+                                sql = "SELECT MAX(ID_brand) AS ID_brand, brand FROM brand group by brand"
+
+                                Set result_brand = Conn.execute(sql)
+                                do while not result_brand.EOF
+                                %>
+                                    <li><a href="shop_brand.asp?brand=<%=result_brand("ID_brand")%>"><%=result_brand("brand")%></a></li>
+                                <%
+                                result_brand.MoveNext
+                                loop
+                                %>
                                 </ul>
                             </div>
                         </div>
@@ -216,9 +225,9 @@
                 cmdPrep.Prepared = True
                 ' cmdPrep.CommandText = "SELECT * FROM PRODUCT INNER JOIN IMAGEPRODUCT ON PRODUCT.ID_PRODUCT = IMAGEPRODUCT.ID_PRODUCT ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 if (NOT IsEmpty(Session("ID_user"))) then
-                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = "&Session("ID_user")&" where favorite.ID_user = "&Session("ID_user")&" GROUP BY product.name, product.ID_product, new, sale_percent, brand, favorite_note, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                    cmdPrep.CommandText = "SELECT users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product join users on users.ID_user = "&Session("ID_user")&" GROUP BY users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 else 
-                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product GROUP BY product.name, product.ID_product, new, sale_percent, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 end if
                 cmdPrep.parameters.Append cmdPrep.createParameter("offset",3,1, ,offset)
                 cmdPrep.parameters.Append cmdPrep.createParameter("limit",3,1, , limit)
@@ -263,20 +272,33 @@
                                 <div class="single-product-wrapper">
                                     <!-- Product Image -->
                                     <div class="product-img">
-                                        <img src="<%=Result("link1")%>" alt="">
+                                        <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="">
                                         <input class="id_product" style="display: none;" value="<%=Result("ID_product")%>" >
                                         <!-- Hover Thumb -->
-                                        <img class="hover-img" src="<%=Result("link2")%>" alt="">
+                                        <img class="hover-img" src="/fashionShop/resources/imgProduct/<%=Result("link2")%>" alt="">
 
                                         <!-- Product Badge -->
-                                        <% if (CInt(Result("sale_percent")) > 0) then%>
+                                        <%
+                                        percent = CInt(Result("sale_percent"))
+
+                                        Dim currentDate
+                                        currentDate = Date()
+
+                                        Dim datee
+                                        datee = FormatDateTime(Result("end_day"),2)
+
+                                        if (CStr(datee) < CStr(currentDate)) then
+                                            percent = 0
+                                        end if
+                                        if (percent > 0) then
+                                        %>
                                         <div class="product-badge offer-badge">
-                                            <span>-<%=Result("sale_percent")%>%</span>
+                                            <span>-<%=percent%>%</span>
                                         </div>
                                         <% end if %>
 
                                         <% if (Result("new")) then%>
-                                            <% if (CInt(Result("sale_percent")) > 0) then %>
+                                            <% if (percent > 0) then %>
                                                 <div class="product-badge new-badge" style="margin-top: 3em;">
                                                     <span>New</span>
                                                 </div>
@@ -290,17 +312,27 @@
                                         <!-- Favourite -->
                                         <% if (NOT IsEmpty(Session("ID_user"))) then %>
                                         <div class="product-favourite">
-                                            <% if (Result("favorite_note")) then %>
-                                                <a href="#" class="favorite_btn favme fa fa-heart active"></a>
-                                            <% else %>
-                                                <a href="#" class="favorite_btn favme fa fa-heart"></a>
-                                            <% end if %>
+                                        <%
+                                            Set Conn = Server.CreateObject("ADODB.Connection")
+                                            Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+                                            Dim sql 
+                                            sql = "select * from favorite where ID_user = "&Result("ID_user")&" and ID_product = "&Result("ID_product")
+                                            set rs = Conn.Execute(sql)
+
+                                            if not rs.EOF then %>
+                                                <a id="favo_<%=Result("ID_product")%>" href="#" class="favorite_btn favme fa fa-heart active "></a>
+                                        <%  else   %>
+                                                <a id="favo_<%=Result("ID_product")%>" href="#" class="favorite_btn favme fa fa-heart "></a>
+                                        <%
+                                            end if
+                                        %>
                                         </div>
                                         <% else %>
                                         <div class="product-favourite">
                                             <a href="#" class="favorite_btn favme fa fa-heart"></a>
                                         </div>
                                         <% end if %>
+                                        
                                     </div>
 
                                     <!-- Product Description -->
@@ -312,8 +344,8 @@
 
                                         <%
                                         dim priceSale
-                                        if (CInt(Result("sale_percent")) > 0) then 
-                                            priceSale = CInt(Result("price")) - CInt(Result("price")) * CInt(Result("sale_percent")) / 100
+                                        if (percent > 0) then 
+                                            priceSale = CInt(Result("price")) - CInt(Result("price")) * percent / 100
                                         %>
 
                                         <p class="product-price"><span class="old-price">$<%=Result("price")%>.00</span> $<%=Ceil(priceSale)%>.00</p>
@@ -370,14 +402,17 @@
         
         favoriteBtns.forEach((favoriteBtn, index) => {
             favoriteBtn.addEventListener('click', function() {
+                var stringID = favoriteBtn.id    
+                var id = stringID.charAt(stringID.length - 1)
+                console.log(id)
                 var xmlhttp = new XMLHttpRequest();
                 if (favoriteBtn.classList.contains("active")) {
                     const favorite = 0
-                    xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
+                    xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+id, true);
                     xmlhttp.send();
                 } else {
                     const favorite = 1
-                    xmlhttp.open("GET", "updateFavorite.asp?q=" + favorite +"&id="+(index+1), true);
+                    xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+id, true);
                     xmlhttp.send();
                 }
             })
