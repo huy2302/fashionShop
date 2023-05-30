@@ -1,25 +1,5 @@
 
 <%
-'     Set id = Request.QueryString("id")
-'     set mycarts = Server.CreateObject("Scripting.Dictionary")
-'     mycarts.add "cart1", 1
-'     mycarts.add "cart2", 2
-'     mycarts.add "cart3", 3
-'     Response.ContentType = "application/json"
-'     ' Response.Write "{""messenger"": ""Product is not exists your cart."", "
-'     ' Response.Write """totalProduct"": ""total"&id&"""}"
-
-'     Response.Write "["
-'     for i = 1 to 5
-'     Response.Write    "{ ""id"": "&i&", ""value"": "&i&"},"
-'     ' Response.Write    "{ ""id"": 2, ""value"": 2 },"
-'     next
-'     Response.Write    "{ ""id"": 6, ""value"": 6 }"
-'     Response.Write "]"
-
-%>
-
-<%
 if (not IsEmpty(Session("ID_user"))) then
 Set Conn = Server.CreateObject("ADODB.Connection")
 Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"

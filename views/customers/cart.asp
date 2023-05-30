@@ -163,40 +163,66 @@
                     var quantity = item.quantity;
                     var sale_percent = item.sale_percent;
                     var link1 = item.link1;
-                    
-                    // // Xử lý thông tin từng phần tử trong mảng
-                    // console.log("id: " + id + ", name: " + name);
-                    // console.log("size: " + size + ", brand: " + brand);
-                    // console.log("price: " + price + ", quantity: " + quantity);
-                    // console.log("sale_percent: " + sale_percent + ", link1: " + link1);
-                    // var string = "123"
-                    // // $('#cart-list').html()
-                    document.getElementById('cart-list').innerHTML += `
-                    <div class="single-cart-item">
-                        <a href="#" class="product-image">
-                            <img src="/fashionShop/resources/imgProduct/${link1}" class="cart-thumb" alt="">
-                            <div class="cart-item-desc">
-                                <input class="id_product_cart" style="display: none;" value="${id}">
-                                <input class="id_size_cart" style="display: none;" value="${id_size}">
-                                <input class="id_color_cart" style="display: none;" value="${id_color}">
+                    var price = item.price;
+                    var price_sale = item.price - item.price*item.sale_percent/100;
+                    if (price != price_sale) {
+                        document.getElementById('cart-list').innerHTML += `
+                        <div class="single-cart-item">
+                            <a href="#" class="product-image">
+                                <img src="/fashionShop/resources/imgProduct/${link1}" class="cart-thumb" alt="">
+                                <div class="cart-item-desc">
+                                    <input class="id_product_cart" style="display: none;" value="${id}">
+                                    <input class="id_size_cart" style="display: none;" value="${id_size}">
+                                    <input class="id_color_cart" style="display: none;" value="${id_color}">
 
-                                <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
-                                <span class="badge">${brand}</span>
-                                <h6>${name}</h6>    
-                                <p class="size">Size: ${size}</p>
-                                <p class="color">Color: ${color}</p>
-                                <div class="quantity">
-                                    <button class="sub_product-btn"><i class="fa-solid fa-minus"></i></button>
-                                    <input class="quantity_product" type="number" placeholder="0" value="${quantity}">
-                                    <button class="plus_product-btn"><i class="fa-solid fa-plus"></i></button>
+                                    <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                                    <span class="badge">${brand}</span>
+                                    <h6>${name}</h6>    
+                                    <p class="size">Size: ${size}</p>
+                                    <p class="color">Color: ${color}</p>
+                                    <div class="quantity">
+                                        <button class="sub_product-btn"><i class="fa-solid fa-minus"></i></button>
+                                        <input class="quantity_product" type="number" placeholder="0" value="${quantity}">
+                                        <button class="plus_product-btn"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                    <div class="price-block">
+                                        <p class="price price-disable">$${price}.00</p>
+                                        <p class="price price-sale">$${price_sale}.00</p>
+                                    </div>
                                 </div>
-                                <div class="price-block">
-                                
+                            </a>
+                        </div>
+                        `;
+                    } else {
+                        document.getElementById('cart-list').innerHTML += `
+                        <div class="single-cart-item">
+                            <a href="#" class="product-image">
+                                <img src="/fashionShop/resources/imgProduct/${link1}" class="cart-thumb" alt="">
+                                <div class="cart-item-desc">
+                                    <input class="id_product_cart" style="display: none;" value="${id}">
+                                    <input class="id_size_cart" style="display: none;" value="${id_size}">
+                                    <input class="id_color_cart" style="display: none;" value="${id_color}">
+
+                                    <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                                    <span class="badge">${brand}</span>
+                                    <h6>${name}</h6>    
+                                    <p class="size">Size: ${size}</p>
+                                    <p class="color">Color: ${color}</p>
+                                    <div class="quantity">
+                                        <button class="sub_product-btn"><i class="fa-solid fa-minus"></i></button>
+                                        <input class="quantity_product" type="number" placeholder="0" value="${quantity}">
+                                        <button class="plus_product-btn"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                    <div class="price-block">
+                                        <p class="price">$${price}.00</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    `;
+                            </a>
+                        </div>
+                        `;
+                    }
+                    // // Xử lý thông tin từng phần tử trong mảng
+                    
                     var idProducts = document.querySelectorAll(".id_product_cart");
                     var idSizes = document.querySelectorAll(".id_size_cart");
                     var idColors = document.querySelectorAll(".id_color_cart");

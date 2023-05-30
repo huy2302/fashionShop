@@ -17,7 +17,7 @@ cmdPrep.ActiveConnection = connDB
 cmdPrep.CommandType = 1
 cmdPrep.Prepared = True
 if (NOT IsEmpty(Session("ID_user"))) then
-    cmdPrep.CommandText = "select product.ID_product, product.name, description, brand, sale_percent, favorite_note, size, color, price, imageProduct.* from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color join imageProduct on imageProduct.ID_product = psc.ID_product inner join brand on product.ID_product = brand.ID_product inner join favorite on product.ID_product = favorite.ID_product join users on users.ID_user = "&Session("ID_user")&" where psc.ID_product = "&ID_product
+    cmdPrep.CommandText = "select users.ID_user, product.ID_product, product.name, description, brand, sale_percent, size, color, price, imageProduct.* from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color join imageProduct on imageProduct.ID_product = psc.ID_product inner join brand on product.ID_product = brand.ID_product join users on users.ID_user = "&Session("ID_user")&" where psc.ID_product = "&ID_product
     else 
     cmdPrep.CommandText = "select product.ID_product, product.name, description, brand, sale_percent, size, color, price, imageProduct.* from product_size_color psc join product on product.ID_product = psc.ID_product inner join discount on product.ID_product = discount.ID_product join size on size.ID_size = psc.ID_size join color on color.ID_color = psc.ID_color join imageProduct on imageProduct.ID_product = psc.ID_product inner join brand on product.ID_product = brand.ID_product where psc.ID_product = "&ID_product
 end if
@@ -102,7 +102,8 @@ Set Result = cmdPrep.execute
                 <div class="select-box d-flex mt-50 mb-30">
                     <select id="size" name="size" class="selectColor mr-5" onclick="getColors()">
                     <%
-                        Set RS_Size = connDB.Execute("select product.ID_product, size, size.ID_size from product_size_color p inner join product on product.ID_product = p.ID_product inner join size on size.ID_size = p.ID_size where product.ID_product = "&ID_product&" group by product.ID_product, size, size.ID_size")
+                        sql = "select product.ID_product, size, size.ID_size from product_size_color p inner join product on product.ID_product = p.ID_product inner join size on size.ID_size = p.ID_size where product.ID_product = "&ID_product&" group by product.ID_product, size, size.ID_size"
+                        Set RS_Size = connDB.Execute(sql)
                         do while not RS_Size.EOF
                     %>
                         <!--<option value="<%=RS_Size("ID_size")%>">Size: <%=RS_Size("size")%></option>-->
@@ -123,20 +124,31 @@ Set Result = cmdPrep.execute
                 <div class="cart-fav-box d-flex align-items-center">
                     <!-- Cart -->
                     <button id="add_btn" type="submit" name="addtocart" value="5" class="btn essence-btn">Add to cart</button>
+
                     <!-- Favourite -->
-                    <% if NOT IsEmpty(Session("ID_user")) then %>
-                        <div class="product-favourite ml-4">
-                            <% if Result("favorite_note") then%>
-                                <a id="favorite_btn" href="#" class="favorite_btn active favme fa fa-heart"></a>
-                            <% else %>
-                                <a id="favorite_btn" href="#" class="favorite_btn favme fa fa-heart"></a>
-                            <% end if %>
-                        </div>
+                    <% if (NOT IsEmpty(Session("ID_user"))) then %>
+                    <div class="product-favourite ml-4">
+                    <%
+                        Set Conn = Server.CreateObject("ADODB.Connection")
+                        Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+                        
+                        sql = "select * from favorite where ID_user = "&Result("ID_user")&" and ID_product = "&Result("ID_product")
+                        set rs = Conn.Execute(sql)
+
+                        if not rs.EOF then %>
+                            <a id="favo_<%=Result("ID_product")%>" href="#" class="favorite_btn favme fa fa-heart active "></a>
+                    <%  else   %>
+                            <a id="favo_<%=Result("ID_product")%>" href="#" class="favorite_btn favme fa fa-heart "></a>
+                    <%
+                        end if
+                    %>
+                    </div>
                     <% else %>
-                        <div class="product-favourite ml-4">
-                            <a id="favorite_btn" href="#" class="favorite_btn favme fa fa-heart"></a>
-                        </div>
+                    <div class="product-favourite ml-4">
+                        <a id="favorite_btn" href="#" class="favorite_btn favme fa fa-heart"></a>
+                    </div>
                     <% end if %>
+
                 </div>
             </form>
         </div>
@@ -168,17 +180,20 @@ Set Result = cmdPrep.execute
         }
 
         // update favorite
-        var favoriteBtn = document.getElementById("favorite_btn");
+        var favoriteBtn = document.querySelector(".favorite_btn");
         favoriteBtn.addEventListener('click', function() {
+            var stringID = favoriteBtn.id    
+            var id = stringID.charAt(stringID.length - 1)
+            console.log(id)
             var xmlhttp = new XMLHttpRequest();
             if (favoriteBtn.classList.contains("active")) {
                 const favorite = 0
-                xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
-                console.log(ID_product)
+                xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+id, true);
+                console.log(id)
                 xmlhttp.send();
             } else {
                 const favorite = 1
-                xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+ID_product, true);
+                xmlhttp.open("GET", "/fashionShop/controllers/updateFavorite.asp?q=" + favorite +"&id="+id, true);
                 console.log(ID_product)
                 xmlhttp.send();
             }

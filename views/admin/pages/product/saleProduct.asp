@@ -75,6 +75,10 @@ if Ceil<>Number Then
     .table td img {
         object-fit: contain;
     }
+    .end_btn {
+        color: #ffffff !important;
+        background: #ff8100 !important;
+    }
   </style>
 
   <body>
@@ -121,6 +125,9 @@ if Ceil<>Number Then
                               Price
                             </th>
                             <th>
+                              End sale
+                            </th>
+                            <th>
                               Action
                             </th>
                           </tr>
@@ -131,7 +138,7 @@ if Ceil<>Number Then
                           cmdPrep.ActiveConnection = connDB
                           cmdPrep.CommandType = 1
                           cmdPrep.Prepared = True
-                          cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product GROUP BY product.name, product.ID_product, new, sale_percent, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                          cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product where sale_percent > 0 and end_day + 1 > CURRENT_TIMESTAMP GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                           cmdPrep.parameters.Append cmdPrep.createParameter("offset",3,1, ,offset)
                           cmdPrep.parameters.Append cmdPrep.createParameter("limit",3,1, , limit)
 
@@ -140,32 +147,43 @@ if Ceil<>Number Then
                           %>
                           <tr>
                             <td class="py-1">
-                              <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="image"/>
+                                <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="image"/>
                             </td>
                             <td>
-                              <%=Result("name")%>
+                                <%=Result("name")%>
                             </td>
                             <td>
-                              <!--<div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                              </div>-->
-                              <%=Result("brand")%>
+                                <!--<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>-->
+                                <%=Result("brand")%>
                             </td>
                             <td>
-                              <%=Result("sale_percent")%>%
+                                <%=Result("sale_percent")%>%
                             </td>
                             <td>
-                              $<%=Result("price")%>.00
+                                $<%=Result("price")%>.00
                             </td>
                             <td>
-                                <a href="editproduct.asp?id=<%=Result("id_product")%>" class="btn btn-secondary">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <%
+                                dim endDate
+                                endDate = Result("end_day")
+                                Dim day, month, year
+                                day = DatePart("d", endDate)
+                                month = DatePart("m", endDate)
+                                year = DatePart("yyyy", endDate)
+
+                                response.write day&"/"&month&"/"&year
+                                %>
                             </td>
-                          </tr>
-                          <%
-                              Result.MoveNext
-                              loop
-                          %>
+                            <td>
+                                <a href="/fashionShop/controllers/admin/endSale.asp?id=<%=Result("id_product")%>" class="btn btn-secondary end_btn">End Sale</a>
+                            </td>
+                            </tr>
+                            <%
+                                Result.MoveNext
+                                loop
+                            %>
                         </tbody>
                       </table>
                     </div>

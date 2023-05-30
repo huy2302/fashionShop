@@ -68,10 +68,12 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
         else 
             response.write "create_acc false"
         end if
+
+        ' tạo 1 tài khoản cho khách hàng nếu khách hàng tick chọn
+        ' sql_insert = "insert into "
     END IF
-    ' Response.write "<script>alert(""Your order is successful, you will be redirected to the product page"")</script>"
-    ' Response.write "<script>window.location.href = '/fashionShop/views/customers/shop.asp'</script>"
-    ' Response.Redirect "/fashionShop/views/customers/shop.asp"
+    Response.write "<script>alert(""Your order is successful, you will be redirected to the product page"")</script>"
+    Response.write "<script>window.location.href = '/fashionShop/views/customers/shop.asp'</script>"
 End If
 %>
 
