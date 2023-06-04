@@ -159,7 +159,7 @@ if Ceil<>Number Then
                             </td>
                             <td>
                                 <a href="editproduct.asp?id=<%=Result("id_product")%>" class="btn btn-secondary">Edit</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <a id='<%=Result("id_product")%>' class="btn btn-danger btn-delete">Delete</a>
                             </td>
                           </tr>
                           <%
@@ -191,7 +191,17 @@ if Ceil<>Number Then
   </div>
     <!-- container-scroller -->
     <!-- #include file="../../js/mainJs.asp" -->
-
+  <script>
+    var deleteBtns = document.querySelectorAll('.btn-delete');
+    deleteBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        let text = "Confirm deletion of this product?";
+        if (confirm(text) == true) {
+            window.location.href=`/fashionShop/controllers/admin/deleteProduct.asp?id=${btn.id}`
+        }
+      })
+    })
+  </script>
 </body>
 
 </html>

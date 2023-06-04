@@ -52,7 +52,7 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
         dim sale_percent
         do while not Result_cart.EOF 
         
-            sql_details = "insert into billDetails values((SELECT MAX(ID_bill) AS id FROM bill), "&Result_cart("ID_product")&", "&Result_cart("quantity")&", '"&Result_cart("price")&"', (select species from product where ID_product = "&Result_cart("ID_product")&"),(select sale_percent from discount where ID_product = "&Result_cart("ID_product")&" and end_day > GETDATE()), '',"&Result_cart("ID_color")&","&Result_cart("ID_size")&")"
+            sql_details = "insert into billDetails values((SELECT MAX(ID_bill) AS id FROM bill), "&Result_cart("ID_product")&", "&Result_cart("quantity")&", '"&Result_cart("price")&"', (select species from product where ID_product = "&Result_cart("ID_product")&"),(select sale_percent from discount where ID_product = "&Result_cart("ID_product")&" and end_day > GETDATE()), '',"&Result_cart("ID_color")&","&Result_cart("ID_size")&", (select name from product where ID_product = "&Result_cart("ID_product")&"))"
 
             Conn.Execute sql_details
 

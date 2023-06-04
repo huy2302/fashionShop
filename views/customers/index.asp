@@ -93,7 +93,7 @@
                             <div class="cta--text">
                                 <h6>-60%</h6>
                                 <h2>Global Sale</h2>
-                                <a href="#" class="btn essence-btn">Buy Now</a>
+                                <a href="shop_sale.asp" class="btn essence-btn">Buy Now</a>
                             </div>
                         </div>
                     </div>

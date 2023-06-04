@@ -40,6 +40,8 @@
 }
 .product-search figure div img{
     width: 22em;
+    height: 23em;
+    object-fit: cover;
 }
 .product-search figure figcaption{
 
