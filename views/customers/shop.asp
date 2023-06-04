@@ -272,7 +272,7 @@
                                 <div class="single-product-wrapper">
                                     <!-- Product Image -->
                                     <div class="product-img">
-                                        <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="">
+                                        <img src="../../resources/imgProduct/<%=Result("link1")%>" alt="">
                                         <input class="id_product" style="display: none;" value="<%=Result("ID_product")%>" >
                                         <!-- Hover Thumb -->
                                         <img class="hover-img" src="/fashionShop/resources/imgProduct/<%=Result("link2")%>" alt="">

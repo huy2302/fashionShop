@@ -75,6 +75,9 @@ if Ceil<>Number Then
     .table td img {
         object-fit: contain;
     }
+    .btn-select {
+        min-width: 7em;
+    }
   </style>
 
   <body>
@@ -101,13 +104,28 @@ if Ceil<>Number Then
                         <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
                         
                         <input id="select_day" type="date" class="form-control">
+                        
                         </div>
                     </li>
-                    <div class="col-lg-8 grid-margin stretch-card">
+                    <li style="margin-bottom: 2em;" class="col-lg-4 nav-item d-none d-lg-block">
+                        <div id="datepicker-popup" class="">
+                          <button type="button" id = "btn-prev" class="btn-select btn btn-outline-success btn-fw">Pre</button>
+                          <button type="button" id ="btn-next" class="btn-select btn btn-outline-success btn-fw">Next</button>
+                        </div>
+                    </li>
+                    <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                            <h4 class="card-title">Area chart</h4>
+                            <h4 class="card-title">Number of Orders</h4>
                             <canvas id="areaChart" width="381" height="190" style="display: block; height: 152px; width: 305px;" class="chartjs-render-monitor"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                            <h4 class="card-title">Revenue</h4>
+                            <canvas id="areaChartTotal" width="381" height="190" style="display: block; height: 152px; width: 305px;" class="chartjs-render-monitor"></canvas>
                             </div>
                         </div>
                     </div>

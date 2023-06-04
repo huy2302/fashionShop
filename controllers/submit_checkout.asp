@@ -39,19 +39,20 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
         ' insert vào bảng bill
         ' nếu chưa có bill thì insert bill đầu tiên, ngược lại insert với ID_bill = select MAX
         if (countBill = "0") then
-            sql_bill = "insert into bill values (1, "&Session("ID_user")&", GETDATE(), null, '"&total_price&"', '"&first_name&"', '"&last_name&"', '"&phone_number&"', '"&phone_number&"')"
+            sql_bill = "insert into bill values (1, "&Session("ID_user")&", GETDATE(), null, '"&total_price&"', '"&first_name&"', '"&last_name&"', '"&phone_number&"', '"&email&"')"
             Conn.Execute sql_bill
         else 
-            sql_bill = "insert into bill values ((SELECT MAX(ID_bill) + 1 AS id FROM bill), "&Session("ID_user")&", GETDATE(), null, '"&total_price&"', '"&first_name&"', '"&last_name&"', '"&phone_number&"', '"&phone_number&"')"
+            sql_bill = "insert into bill values ((SELECT MAX(ID_bill) + 1 AS id FROM bill), "&Session("ID_user")&", GETDATE(), null, '"&total_price&"', '"&first_name&"', '"&last_name&"', '"&phone_number&"', '"&email&"')"
             Conn.Execute sql_bill
         end if
 
         ' insert vào bảng bill_details
         sql_cart = "select * from cart"
         Set Result_cart = Conn.execute(sql_cart)
+        dim sale_percent
         do while not Result_cart.EOF 
-
-            sql_details = "insert into billDetails values((SELECT MAX(ID_bill) AS id FROM bill), "&Result_cart("ID_product")&", "&Result_cart("quantity")&", '"&Result_cart("price")&"', '','','',"&Result_cart("ID_color")&","&Result_cart("ID_size")&")"
+        
+            sql_details = "insert into billDetails values((SELECT MAX(ID_bill) AS id FROM bill), "&Result_cart("ID_product")&", "&Result_cart("quantity")&", '"&Result_cart("price")&"', (select species from product where ID_product = "&Result_cart("ID_product")&"),(select sale_percent from discount where ID_product = "&Result_cart("ID_product")&" and end_day > GETDATE()), '',"&Result_cart("ID_color")&","&Result_cart("ID_size")&")"
 
             Conn.Execute sql_details
 

@@ -67,7 +67,7 @@
                             <div class="row">
                                 <div class="col-12 mb-3">
                                     <label for="first_name">User Name</label>
-                                    <input type="text" readonly class="form-control" id="first_name" value="" required>
+                                    <input type="text" class="form-control" id="first_name" value="" required>
                                 </div>
                                 <div class="col-12 mb-3">
                                     <label for="last_name">Full Name</label>
@@ -93,25 +93,24 @@
                                     <label for="company">Phone No</label>
                                     <input type="number" class="form-control" id="company" value="">
                                 </div>
-                                <div class="col-12 mb-3">
-                                    <label for="street_address">Address</label>
-                                    <input type="text" class="form-control mb-3" id="street_address" value="">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="city">Town/City</label>
-                                    <input type="text" class="form-control" id="city" value="">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label for="state">Province</label>
-                                    <input type="text" class="form-control" id="state" value="">
-                                </div>
+                                
                             </div>
 
                             <button class="submit-btn" type="submit">Update</button>
+                            <button class="submit-btn" onclick="funcCancel()">Cancel</button>
                         </form>
                     </div>
                 </div>
-
+                <script>
+                    function funcCancel() {
+                        let text = "You want to go back to the previous page?";
+                        if (confirm(text) == true) {
+                            window.location.href = './user.asp';
+                        } else {
+                            
+                        }
+                    }
+                </script>
                 <div class="col-12 col-md-6 col-lg-5 ml-lg-auto">
                     <div class="order-details-confirmation">
 

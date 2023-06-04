@@ -10,7 +10,11 @@
     height: 35em;
     background: #fff;
     padding: 0 15px;
-    /* margin: 0 auto; */
+    -webkit-animation: showLoginModal .4s linear;
+    animation: showLoginModal .2s linear;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    transition: showLoginModal 0.3s cubic-bezier(0.71, 0.12, 1, 1);
 }
 .list_search {
     width: 85%;
@@ -83,6 +87,11 @@
     background: #0000008c;
     z-index: 100;
     opacity: 1;
+    -webkit-animation: showLoginModal .4s linear;
+    animation: showLoginModal .4s linear;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    transition: showLoginModal 0.3s cubic-bezier(0.71, 0.12, 1, 1);
     visibility: visible;
     transition: showLoginModal .8s ease,visibility 0s;
 }

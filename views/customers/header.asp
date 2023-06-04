@@ -90,7 +90,7 @@ Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id
                 </div>
                 <!-- User Login Info -->
                 <div class="user-login-info">
-                    <a href="login.asp"><img src="img/core-img/user.svg" alt=""></a>
+                    <a href="user.asp"><img src="img/core-img/user.svg" alt=""></a>
                 </div>
                 <!-- Cart Area -->
                 <div class="cart-area">

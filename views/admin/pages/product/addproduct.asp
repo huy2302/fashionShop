@@ -252,7 +252,7 @@ Set CountResult = Nothing
         var li = document.createElement("li");
         li.innerHTML = msg;
         filelist.appendChild(li);
-        listImage.push("/fashionShop/resources/imgProduct/" + list[i].FileName);
+        listImage.push(list[i].FileName);
       }
     }
     var objListImage = []
@@ -430,13 +430,13 @@ Set CountResult = Nothing
 
             if (salePercent == '') {
                 const salePercentValue = 0;
-                postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                postSalePercent("1", startDay, endDay, salePercentValue);
             } else {
                 salePercentValue = salePercent;
                 if (startDay != '' & endDay != '') {
-                    alert('Please select a discount start and end date');
+                    postSalePercent("1", startDay, endDay, salePercentValue);
                 } else {
-                    postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                    alert('Please select a discount start and end date');
                 }
             }
         }
@@ -463,6 +463,7 @@ Set CountResult = Nothing
           })
           addSizeColorQuantity()
           createListImage()
+          addSalePercent()
         })
     </script>
 

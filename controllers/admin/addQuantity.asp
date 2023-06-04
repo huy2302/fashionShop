@@ -12,7 +12,7 @@ quantity = Request.QueryString("quantity")
 
 Response.write "id_product="&id_product&" id_size="&id_size&" id_color="&id_color&" quantity="&quantity
 
-sql = "insert into product_size_color values("&id_product&", "&id_size&", "&id_color&", "&quantity&")"
+sql = "insert into product_size_color values((select max(ID_product) as id from product), "&id_size&", "&id_color&", "&quantity&")"
 Conn.Execute sql 
 
 
