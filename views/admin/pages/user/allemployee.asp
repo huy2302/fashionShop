@@ -70,13 +70,13 @@ connDB.Open()
                             User
                           </th>
                           <th>
-                            First name
+                            ID 
+                          </th>
+                          <th>
+                            Full name
                           </th>
                           <th>
                             Birthday
-                          </th>
-                          <th>
-                            Amount
                           </th>
                           <th>
                             Join on
@@ -89,7 +89,7 @@ connDB.Open()
                         cmdPrep.ActiveConnection = connDB
                         cmdPrep.CommandType = 1
                         cmdPrep.Prepared = True
-                        cmdPrep.CommandText = "select CONCAT(users.firstName, ' ', users.lastName) as fullName, birthday, joindate from users"
+                        cmdPrep.CommandText = "select CONCAT(users.firstName, ' ', users.lastName) as fullName, birthday, ID_user, joindate from users"
 
                         Set Result = cmdPrep.execute
                         do while not Result.EOF
@@ -99,6 +99,9 @@ connDB.Open()
                             <img src="../../images/faces/face1.jpg" alt="image"/>
                           </td>
                           <td>
+                            <%=Result("ID_user")%>
+                          </td>
+                          <td>
                             <%=Result("fullName")%>
                           </td>
                           <td>
@@ -106,9 +109,6 @@ connDB.Open()
                               <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>-->
                             <%=Result("birthday")%>
-                          </td>
-                          <td>
-                            23$
                           </td>
                           <td>
                             <%=Result("joindate")%>

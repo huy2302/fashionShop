@@ -71,7 +71,7 @@ Set ID_product = Request.QueryString("id")
                         cmdPrep.ActiveConnection = connDB
                         cmdPrep.CommandType = 1
                         cmdPrep.Prepared = True
-                        cmdPrep.CommandText = "select product.*, sale_percent, brand from product join discount on product.ID_product = discount.ID_product join brand on product.ID_product = brand.ID_product where product.ID_product = "&ID_product
+                        cmdPrep.CommandText = "select product.*, sale_percent, start_day, end_day, brand from product join discount on product.ID_product = discount.ID_product join brand on product.ID_product = brand.ID_product where product.ID_product = "&ID_product
 
                         Set Result = cmdPrep.execute
                         do while not Result.EOF
@@ -102,6 +102,7 @@ Set ID_product = Request.QueryString("id")
                                 <option>Shirts & Blouses</option>
                                 <option>Shirts</option>
                                 <option>Sweaters & Knits</option>
+                                <option>Bras & Panties</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -136,7 +137,6 @@ Set ID_product = Request.QueryString("id")
                         
                         <div id="add-size">
                             <%
-                            ' cmdPrep.CommandText = "select color.color, color.ID_color from color join product_size_color p on p.ID_color = color.ID_color where p.ID_product = "&ID_product&" group by color.color, color.ID_color"
                             cmdPrep.CommandText = "select p.ID_product, color.color, color.ID_color from color join product_size_color p on p.ID_color = color.ID_color where p.ID_product = "&ID_product&" group by p.ID_product, color.color, color.ID_color"
 
                             Set ResultColor = cmdPrep.execute
@@ -288,15 +288,16 @@ Set ID_product = Request.QueryString("id")
                                 uploader.AllowedFileExtensions = "*.jpg,*.png"
                                 uploader.SaveDirectory = "/fashionShop/resources/imgProduct"
                                 uploader.InsertText = "Upload" 
+
+                                ' response.write (uploader.GetString())   
+
                                 %>
                                 
-                                <%=uploader.GetString() %>
                             </span>
                         </div>
                         </div>
                         
                         <ol id="filelist">
-                            
                         </ol>	
 
                         <div class="form-group">
@@ -307,10 +308,12 @@ Set ID_product = Request.QueryString("id")
                         <div class="form-group col-md-6">
                             <label for="exampleInputName1">Start Day</label>
                             <input name="startDay" type="date" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
+                            <input name="startDayOld" type="text" value="<%=Result("start_day")%>" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="exampleInputName1">End Day</label>
                             <input name="endDay" type="date" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
+                            <input name="endDayOld" type="text" value="<%=Result("end_day")%>" class="form-control" id="exampleInputName1" placeholder="Brand product" required>
                         </div>
                         </div>
                         
@@ -344,95 +347,109 @@ Set ID_product = Request.QueryString("id")
     <!-- #include file="../../js/mainJs.asp" -->
 
     <!-- AJAX uploader -->
-    
-    <!--<script type="text/javascript">
+    <script type="text/javascript">
       var handlerurl='ajax-multiplefiles-handler.asp'
     </script>
     <script type="text/javascript">
-        var listImage = []
-        function CuteWebUI_AjaxUploader_OnPostback()
-        {
-            var uploader = document.getElementById("myuploader");
-            var guidlist = uploader.value;
+    var listImage = []
+    // function CuteWebUI_AjaxUploader_OnPostback()
+    // {
+    //     var uploader = document.getElementById("myuploader");
+    //     var guidlist = uploader.value;
+    
+    //     //Send Request
+    //     var xh;
+    //     if (window.XMLHttpRequest)
+    //         xh = new window.XMLHttpRequest();
+    //     else
+    //         xh = new ActiveXObject("Microsoft.XMLHTTP");
         
-            //Send Request
-            var xh;
-            if (window.XMLHttpRequest)
-                xh = new window.XMLHttpRequest();
-            else
-                xh = new ActiveXObject("Microsoft.XMLHTTP");
-            
-            xh.open("POST", handlerurl, false, null, null);
-            xh.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-            xh.send("guidlist=" + guidlist);
-        
-            //call uploader to clear the client state
-            uploader.reset();
-        
-            if (xh.status != 200)
-            {
-                alert("http error " + xh.status);
-                setTimeout(function() { document.write(xh.responseText); }, 10);
-                return;
-            } 
+    //     xh.open("POST", handlerurl, false, null, null);
+    //     xh.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+    //     xh.send("guidlist=" + guidlist);
+    
+    //     //call uploader to clear the client state
+    //     uploader.reset();
+    
+    //     if (xh.status != 200)
+    //     {
+    //         alert("http error " + xh.status);
+    //         setTimeout(function() { document.write(xh.responseText); }, 10);
+    //         return;
+    //     } 
 
-            var filelist = document.getElementById("filelist");
+    //     var filelist = document.getElementById("filelist");
+    
+    //     var list = eval(xh.responseText); //get JSON objects
+    //     //Process Result:
+    //     for (var i = 0; i < list.length; i++)
+    //     {
+    //         console.log(list[i].FileName)
+    //         var item = list[i];
+    //         var msg = "Processed: " + list[i].FileName;
+    //         var li = document.createElement("li");
+    //         li.innerHTML = msg;
+    //         filelist.appendChild(li);
+    //         listImage.push(list[i].FileName);
+    //     }
+    //     }
+    //     var objListImage = []
         
-            var list = eval(xh.responseText); //get JSON objects
-            //Process Result:
-            for (var i = 0; i < list.length; i++)
-            {
-                console.log(list[i].FileName)
-                var item = list[i];
-                var msg = "Processed: " + list[i].FileName;
-                var li = document.createElement("li");
-                li.innerHTML = msg;
-                filelist.appendChild(li);
-                listImage.push(list[i].FileName);
-            }
-        }
-        var objListImage = []
-        
-        const createListImage = () => {
-        if (listImage.length >= 4) {
-            objListImage.push({
-            id_product: <%=totalRows + 1%>,
-            link1: listImage[0],
-            link2: listImage[1],
-            link3: listImage[2],
-            link4: listImage[3]
-            })
-
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/fashionShop/controllers/admin/addImageProduct.asp?id=" + objListImage[0].id_product + "&link1=" + objListImage[0].link1 + "&link2="+objListImage[0].link2+"&link3="+ objListImage[0].link3 + "&link4=" + objListImage[0].link4, true);
-            // console.log(ID_product)
-            xmlhttp.send();
-        }
-        }
+    //     const createListImage = () => {
+    //     if (listImage.length >= 4) {g
+    //         objListImage.push({
+    //         id_product: <%=ID_product%>,
+    //         link1: listImage[0],
+    //         link2: listImage[1],
+    //         link3: listImage[2],
+    //         link4: listImage[3]
+    //         })
+    //     } else if (listImage.length == 3){
+    //         objListImage.push({
+    //         id_product: <%=ID_product%>,
+    //         link1: listImage[0],
+    //         link2: listImage[1],
+    //         link3: listImage[2],
+    //         link4: ''
+    //         })
+    //     } else if (listImage.length == 2) {
+    //         objListImage.push({
+    //         id_product: <%=ID_product%>,
+    //         link1: listImage[0],
+    //         link2: listImage[1],
+    //         link3: '',
+    //         link4: ''
+    //         })
+    //     }
+    //     var xmlhttp = new XMLHttpRequest();
+    //     xmlhttp.open("GET", "/fashionShop/controllers/admin/editImageProduct.asp?id=" + objListImage[0].id_product + "&link1=" + objListImage[0].link1 + "&link2="+objListImage[0].link2+"&link3="+ objListImage[0].link3 + "&link4=" + objListImage[0].link4, true);
+    //     // console.log(ID_product)
+    //     xmlhttp.send();
+    // }
 
     </script>
-    -->
     <!-- End AJAX uploader -->
 
     <!-- Create block select color and quantity -->
-    <!--<script>
-        const addColorBtn = document.getElementById('add-color-btn');
-        const addColorInput = document.getElementById('add-color-input');
-        const addSize = document.getElementById('add-size');
-        const colorSizeName = document.querySelectorAll('.color-size-name');
+    <script>
+        var addColorBtn = document.getElementById('add-color-btn');
+        var addColorInput = document.getElementById('add-color-input');
+        var addSize = document.getElementById('add-size');
+        var colorSizeName = document.querySelectorAll('.color-size-name');
 
         var delColorBtns
         var colorBlock
         var idColor
         var arrayProduct = []
+        var colorExists = []
         
         // Click thêm color
         addColorBtn.addEventListener('click', () => {
             const selectedOption = addColorInput.options[addColorInput.selectedIndex];
+            if (!colorExists.includes(selectedOption.text)) {
+                colorExists.push(selectedOption.text);
+                console.log(true)
 
-            if (addColorInput.value == '') {
-                alert('Please enter the color of the product!');
-            } else {
                 const str = selectedOption.text
                 const strUpperCase = str.charAt(0).toUpperCase() + str.slice(1);
                 addSize.innerHTML += `
@@ -479,34 +496,51 @@ Set ID_product = Request.QueryString("id")
                             <input class="quantityColor${selectedOption.value}" name="quantityXXL" placeholder="Enter quantity"  type="number" class="form-control">
                         </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-                `
+                `;
+                // delColorBtns = document.querySelectorAll('.del-color-btn');
+                // colorBlock = document.querySelectorAll('.color-block');
+                // idColor = document.querySelectorAll('.input-id_color');
+                // delColorBtns.forEach((btn, index) => {
+                //     btn.addEventListener('click', () => {
+                //         colorBlock[index].remove();
+                //     })
+                // })
+                delFunc()
+            } else {
+                alert("Màu đã tồn tại")
             }
+            
+            
+        })
+        
+        const delFunc = () => {
             delColorBtns = document.querySelectorAll('.del-color-btn');
             colorBlock = document.querySelectorAll('.color-block');
             idColor = document.querySelectorAll('.input-id_color');
             delColorBtns.forEach((btn, index) => {
-              btn.addEventListener('click', () => {
-                colorBlock[index].remove();
-              })
+                btn.addEventListener('click', () => {
+                    colorBlock[index].remove();
+                    delFunc()
+                })
             })
-        })
-
-        const uploaderButton = document.querySelector('#myuploaderButton');
-        uploaderButton.classList.add('file-upload-browse')
-        uploaderButton.classList.add('btn')
-        uploaderButton.classList.add('btn-primary')
+        }
+        delFunc()
+        // const uploaderButton = document.querySelector('#myuploaderButton');
+        // uploaderButton.classList.add('file-upload-browse')
+        // uploaderButton.classList.add('btn')
+        // uploaderButton.classList.add('btn-primary')
 
         const checkQuantity = (quantity, element, id_size) => {
-          if (quantity > 0 && typeof(parseInt(quantity)) == 'number') {
-            arrayProduct.push({
-              id_product: <%=totalRows + 1%>,
-              id_color: parseInt(element.value),
-              id_size: id_size,
-              quantity: parseInt(quantity)
-            })
-          }
+            if (quantity > 0 && typeof(parseInt(quantity)) == 'number') {
+                arrayProduct.push({
+                id_product: <%=ID_product%>,
+                id_color: parseInt(element.value),
+                id_size: id_size,
+                quantity: parseInt(quantity)
+                })
+            }
         }
 
         var nameProduct = ''
@@ -532,6 +566,7 @@ Set ID_product = Request.QueryString("id")
           alertEmptyForm(description)
           alertEmptyForm(price)
 
+
           nameProduct = nameProduct.replace(/ /g, "_");
           description = description.replace(/ /g, "_");
           brandProduct = brandProduct.replace(/ /g, "_");
@@ -540,68 +575,97 @@ Set ID_product = Request.QueryString("id")
           price = price.replace(/ /g, "_");
 
           var xmlhttp = new XMLHttpRequest();
-          xmlhttp.open("GET", "/fashionShop/controllers/admin/addProduct.asp?id=" + <%=totalRows + 1%> + "&name=" + nameProduct + "&brand="+brandProduct+"&desc="+description + "&species="+selectSprecies+"&price=" + price, true);
+          xmlhttp.open("GET", "/fashionShop/controllers/admin/editProduct.asp?id=" + <%=ID_product%> + "&name=" + nameProduct + "&brand="+brandProduct+"&desc="+description + "&species="+selectSprecies+"&price=" + price, true);
           // console.log(ID_product)
           xmlhttp.send();
         }
         // add size & color & quantity
         const addSizeColorQuantity = () => {
-          arrayProduct.forEach((product) => {
+            var callSuccess
             var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/fashionShop/controllers/admin/addQuantity.asp?id_product=" + <%=totalRows + 1%> + "&id_size=" + product.id_size + "&id_color=" + product.id_color + "&quantity=" + product.quantity, true);
-            // console.log(ID_product)
+            // xmlhttp.onreadystatechange = function() {
+            //     if (xmlhttp.status == 200) {
+            //         callSuccess = true
+            //     } else {
+            //         callSuccess = false
+            //         alert("False")
+            //     }
+            // };
+            xmlhttp.open("GET", "/fashionShop/controllers/admin/delQuantity.asp?id_product=" + <%=ID_product%> + "&id_size=" + product.id_size + "&id_color=" + product.id_color, true);
             xmlhttp.send();
-          })
+
+            arrayProduct.forEach((product) => {
+                var xmlr = new XMLHttpRequest();
+                xmlr.open("GET", "/fashionShop/controllers/admin/editQuantity.asp?id_product=" + <%=ID_product%> + "&id_size=" + product.id_size + "&id_color=" + product.id_color + "&quantity=" + product.quantity, true);
+                
+                xmlr.send();
+            })
+
+            // if (callSuccess) {
+            //     arrayProduct.forEach((product) => {
+            //         var xmlhttp = new XMLHttpRequest();
+            //         xmlhttp.open("GET", "/fashionShop/controllers/admin/editQuantity.asp?id_product=" + <%=ID_product%> + "&id_size=" + product.id_size + "&id_color=" + product.id_color + "&quantity=" + product.quantity, true);
+                    
+            //         xmlhttp.send();
+            //     })
+            // } else {
+            //     alert("False")
+            // }
+            // arrayProduct = []
         }
         // add salePercent
         const addSalePercent = () => {
             const postSalePercent = (id, start, end, sale) => {
                 var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("GET", "/fashionShop/controllers/admin/addSalePercent.asp?id_product=" + id + "&start=" + start + "&end=" + end + "&sale=" + sale, true);
+                xmlhttp.open("GET", "/fashionShop/controllers/admin/editSalePercent.asp?id_product=" + id + "&start=" + start + "&end=" + end + "&sale=" + sale, true);
                 // console.log(ID_product)
                 xmlhttp.send();
             }
             const salePercent = document.querySelector('input[name="salePercent"]').value;
             const startDay = document.querySelector('input[name="startDay"]').value;
+            const startDayOld = document.querySelector('input[name="startDayOld"]').value;
             const endDay = document.querySelector('input[name="endDay"]').value;
+            const endDayOld = document.querySelector('input[name="endDayOld"]').value;
 
             if (salePercent == '') {
                 const salePercentValue = 0;
-                postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                postSalePercent(<%=ID_product%>, startDay, endDay, salePercentValue);
             } else {
                 salePercentValue = salePercent;
-                if (startDay != '' & endDay != '') {
-                    alert('Please select a discount start and end date');
+                if (startDay == '' & endDay == '') {
+                    postSalePercent(<%=ID_product%>, startDayOld, endDayOld, salePercentValue);
                 } else {
-                    postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                    postSalePercent(<%=ID_product%>, startDay, endDay, salePercentValue);
                 }
             }
         }
         // click add số lượng vào mảng số lượng
         const submitBtn = document.querySelector('.submitAdd');
         submitBtn.addEventListener('click', () => {
-          checkEmptyForm()
-          idColor.forEach((e, index) => {
-            const quantityS = document.querySelector(`.quantityColor${e.value}[name="quantityS"]`).value;
-            id_size = 1
-            checkQuantity(quantityS, e, id_size)
-            const quantityM = document.querySelector(`.quantityColor${e.value}[name="quantityM"]`).value;
-            id_size = 2
-            checkQuantity(quantityM, e, id_size)
-            const quantityL = document.querySelector(`.quantityColor${e.value}[name="quantityL"]`).value;
-            id_size = 3
-            checkQuantity(quantityL, e, id_size)
-            const quantityXL = document.querySelector(`.quantityColor${e.value}[name="quantityXL"]`).value;
-            id_size = 4
-            checkQuantity(quantityXL, e, id_size)
-            const quantityXXL = document.querySelector(`.quantityColor${e.value}[name="quantityXXL"]`).value;
-            id_size = 5
-            checkQuantity(quantityXXL, e, id_size)
-          })
-          addSizeColorQuantity()
-          createListImage()
+            checkEmptyForm()
+            idColor.forEach((e, index) => {
+                const quantityS = document.querySelector(`.quantityColor${e.value}[name="quantityS"]`).value;
+                id_size = 1
+                checkQuantity(quantityS, e, id_size)
+                const quantityM = document.querySelector(`.quantityColor${e.value}[name="quantityM"]`).value;
+                id_size = 2
+                checkQuantity(quantityM, e, id_size)
+                const quantityL = document.querySelector(`.quantityColor${e.value}[name="quantityL"]`).value;
+                id_size = 3
+                checkQuantity(quantityL, e, id_size)
+                const quantityXL = document.querySelector(`.quantityColor${e.value}[name="quantityXL"]`).value;
+                id_size = 4
+                checkQuantity(quantityXL, e, id_size)
+                const quantityXXL = document.querySelector(`.quantityColor${e.value}[name="quantityXXL"]`).value;
+                id_size = 5
+                checkQuantity(quantityXXL, e, id_size)
+            })
+            addSizeColorQuantity()
+            //   createListImage()
+            addSalePercent()
+            arrayProduct = []
         })
-    </script> -->
+    </script> 
 
     <!-- End Create block select color and quantity -->
 

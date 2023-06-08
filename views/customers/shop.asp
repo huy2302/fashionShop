@@ -1,5 +1,9 @@
 <!-- #include file="connect.asp" -->
 <%
+    Dim species
+    species = request.QueryString("species")
+    shop = request.QueryString("shop")
+
 ' ham lam tron so nguyen
     function Ceil(Number)
         Ceil = Int(Number)
@@ -24,8 +28,25 @@
     end if
 
     offset = (Clng(page) * Clng(limit)) - Clng(limit)
+    ' Kiểm tra kiểu quần áo
+    dim whereSpecies, titlePage
+    if (not IsEmpty(species)) then 
+        whereSpecies = "where product.species LIKE '%"&species&"%'"
+    else 
+        titlePage = "Fashion Essence"
+    end if
+    if (not IsEmpty(shop)) then 
+        if (shop = "Wommen") then 
+            titlePage = "Wommen's Collection"
+        end if
+        if (shop = "Men") then 
+            titlePage = "Men's Collection"
+        end if
+    else 
+        titlePage = "Fashion Essence"
+    end if
 
-    strSQL = "SELECT COUNT(ID_product) AS count FROM product"
+    strSQL = "SELECT COUNT(ID_product) AS count FROM product "&whereSpecies
     connDB.Open()
     Set CountResult = connDB.execute(strSQL)
 
@@ -35,6 +56,7 @@
 ' lay ve tong so trang
     pages = Ceil(totalRows/limit)
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,7 +67,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title  -->
-    <title>Essence -<%=Session("ID_user")%> Fashion Ecommerce Template</title>
+    <title>Essence - <%=titlePage%></title>
 
     <link rel="icon" href="img/core-img/favicon.ico">
     <link rel="stylesheet" href="./css/add.css">
@@ -76,7 +98,7 @@
             <div class="row h-100 align-items-center">
                 <div class="col-12">
                     <div class="page-title text-center">
-                        <h2>Shop</h2>
+                        <h2><%=titlePage%></h2>
                     </div>
                 </div>
             </div>
@@ -103,17 +125,17 @@
                                     <li data-toggle="collapse" data-target="#clothing">
                                         <a href="#">clothing</a>
                                         <ul class="sub-menu collapse show" id="clothing">
-                                            <li><a href="#">All</a></li>
-                                            <li><a href="#">Bodysuits</a></li>
-                                            <li><a href="#">Dresses</a></li>
-                                            <li><a href="#">Hoodies &amp; Sweats</a></li>
-                                            <li><a href="#">Jackets &amp; Coats</a></li>
-                                            <li><a href="#">Jeans</a></li>
-                                            <li><a href="#">Pants &amp; Leggings</a></li>
-                                            <li><a href="#">Rompers &amp; Jumpsuits</a></li>
-                                            <li><a href="#">Shirts &amp; Blouses</a></li>
-                                            <li><a href="#">Shirts</a></li>
-                                            <li><a href="#">Sweaters &amp; Knits</a></li>
+                                            <li><a href="shop.asp">All</a></li>
+                                            <li><a href="shop.asp?species=Bodysuits">Bodysuits</a></li>
+                                            <li><a href="shop.asp?species=Dresses">Dresses</a></li>
+                                            <li><a href="shop.asp?species=Hoodies">Hoodies &amp; Sweats</a></li>
+                                            <li><a href="shop.asp?species=Jackets">Jackets &amp; Coats</a></li>
+                                            <li><a href="shop.asp?species=Jeans">Jeans</a></li>
+                                            <li><a href="shop.asp?species=Pants">Pants &amp; Leggings</a></li>
+                                            <li><a href="shop.asp?species=Rompers">Rompers &amp; Jumpsuits</a></li>
+                                            <li><a href="shop.asp?species=Shirts">Shirts &amp; Blouses</a></li>
+                                            <li><a href="shop.asp?species=Shirts">Shirts</a></li>
+                                            <li><a href="shop.asp?species=Sweaters">Sweaters &amp; Knits</a></li>
                                         </ul>
                                     </li>
                                     <!-- Single Item -->
@@ -223,11 +245,11 @@
                 cmdPrep.ActiveConnection = connDB
                 cmdPrep.CommandType = 1
                 cmdPrep.Prepared = True
-                ' cmdPrep.CommandText = "SELECT * FROM PRODUCT INNER JOIN IMAGEPRODUCT ON PRODUCT.ID_PRODUCT = IMAGEPRODUCT.ID_PRODUCT ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                
                 if (NOT IsEmpty(Session("ID_user"))) then
-                    cmdPrep.CommandText = "SELECT users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product join users on users.ID_user = "&Session("ID_user")&" GROUP BY users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                    cmdPrep.CommandText = "SELECT users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product join users on users.ID_user = "&Session("ID_user")&" "&whereSpecies&" GROUP BY users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 else 
-                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product "&whereSpecies&" GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 end if
                 cmdPrep.parameters.Append cmdPrep.createParameter("offset",3,1, ,offset)
                 cmdPrep.parameters.Append cmdPrep.createParameter("limit",3,1, , limit)
@@ -275,7 +297,7 @@
                                         <img src="../../resources/imgProduct/<%=Result("link1")%>" alt="">
                                         <input class="id_product" style="display: none;" value="<%=Result("ID_product")%>" >
                                         <!-- Hover Thumb -->
-                                        <img class="hover-img" src="/fashionShop/resources/imgProduct/<%=Result("link2")%>" alt="">
+                                        <img class="hover-img" src="../../resources/imgProduct/<%=Result("link2")%>" alt="">
 
                                         <!-- Product Badge -->
                                         <%

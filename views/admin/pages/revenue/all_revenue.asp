@@ -113,6 +113,34 @@ if Ceil<>Number Then
                           <button type="button" id ="btn-next" class="btn-select btn btn-outline-success btn-fw">Next</button>
                         </div>
                     </li>
+                    <li style="margin-bottom: 2em;" class="col-lg-8 nav-item d-none d-lg-block">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="statistics-details d-flex align-items-center justify-content-between">
+                                <div>
+                                    <p class="statistics-title">Monthly Sales</p>
+                                    <h3 class="monthSales rate-percentage">32.53%</h3>
+                                    <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
+                                </div>
+                                <div>
+                                    <p class="statistics-title">Monthly Earning</p>
+                                    <h3 class="monthRevenue rate-percentage">7,682</h3>
+                                    <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
+                                </div>
+                                <div>
+                                    <p class="statistics-title">Weekend Sales</p>
+                                    <h3 class="weekSales rate-percentage">68.8</h3>
+                                    <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
+                                </div>
+                                <div class="d-none d-md-block">
+                                    <p class="statistics-title">Weekend Earning</p>
+                                    <h3 class="weekRevenue rate-percentage">2m:35s</h3>
+                                    <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>

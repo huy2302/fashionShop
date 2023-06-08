@@ -26,28 +26,28 @@ Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id
                             <li><a href="./shop.asp">Shop</a>
                                 <div class="megamenu">
                                     <ul class="single-mega cn-col-4">
-                                        <li class="title">Women's Collection</li>
-                                        <li><a href="womenShop.asp">Dresses</a></li>
-                                        <li><a href="womenShop.asp">Blouses &amp; Shirts</a></li>
-                                        <li><a href="womenShop.asp">T-shirts</a></li>
-                                        <li><a href="womenShop.asp">Rompers</a></li>
-                                        <li><a href="womenShop.asp">Bras &amp; Panties</a></li>
+                                        <li class="title">Wommen's Collection</li>
+                                        <li><a href="shop.asp?species=Dresses&shop=Wommen">Dresses</a></li>
+                                        <li><a href="shop.asp?species=Jeans&shop=Wommen">Jeans</a></li>
+                                        <li><a href="shop.asp?species=Hoodies&shop=Wommen">Hoodies & Sweats</a></li>
+                                        <li><a href="shop.asp?species=Leggings&shop=Wommen">Pants & Leggings</a></li>
+                                        <li><a href="shop.asp?species=Bras&shop=Wommen">Bras & Panties</a></li>
                                     </ul>
                                     <ul class="single-mega cn-col-4">
                                         <li class="title">Men's Collection</li>
-                                        <li><a href="menShop.asp">T-Shirts</a></li>
-                                        <li><a href="menShop.asp">Polo</a></li>
-                                        <li><a href="menShop.asp">Shirts</a></li>
-                                        <li><a href="menShop.asp">Jackets</a></li>
-                                        <li><a href="menShop.asp">Trench</a></li>
+                                        <li><a href="shop.asp?species=Shirts&shop=Men">T-Shirts</a></li>
+                                        <li><a href="shop.asp?species=Polo&shop=Men">Polo</a></li>
+                                        <li><a href="shop.asp?species=Shirts&shop=Men">Shirts</a></li>
+                                        <li><a href="shop.asp?species=Jackets&shop=Men">Jackets & Coats</a></li>
+                                        <li><a href="shop.asp?species=Trench&shop=Men">Trench</a></li>
                                     </ul>
                                     <ul class="single-mega cn-col-4">
-                                        <li class="title">Kid's Collection</li>
-                                        <li><a href="kidShop.asp">Dresses</a></li>
-                                        <li><a href="kidShop.asp">Shirts</a></li>
-                                        <li><a href="kidShop.asp">T-shirts</a></li>
-                                        <li><a href="kidShop.asp">Jackets</a></li>
-                                        <li><a href="kidShop.asp">Trench</a></li>
+                                        <li class="title">Shoe's Collection</li>
+                                        <li><a href="shop.asp?species=Dresses">Dresses</a></li>
+                                        <li><a href="shop.asp?species=Dresses">Shirts</a></li>
+                                        <li><a href="shop.asp?species=Dresses">T-shirts</a></li>
+                                        <li><a href="shop.asp?species=Dresses">Jackets</a></li>
+                                        <li><a href="shop.asp?species=Dresses">Trench</a></li>
                                     </ul>
                                     <div class="single-mega cn-col-4">
                                         <img src="img/bg-img/bg-6.jpg" alt="">
@@ -55,7 +55,8 @@ Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id
                                 </div>
                             </li>
                             <li><a href="shop_sale.asp">Sale off</a></li>
-                            <li><a href="#">Pages</a>
+                            <li><a href="shop_new.asp">New Collection</a></li>
+                            <!--<li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="index.asp">Home</a></li>
                                     <li><a href="shop.asp">Shop</a></li>
@@ -68,7 +69,7 @@ Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id
                                 </ul>
                             </li>
                             <li><a href="blog.html">Blog</a></li>
-                            <li><a href="contact.html">Contact</a></li>
+                            <li><a href="contact.html">Contact</a></li>-->
                         </ul>
                     </div>
                     <!-- Nav End -->

@@ -1,6 +1,12 @@
 <!-- #include file="connect.asp" -->
 <%
 	connDB.Open()
+    function Ceil(Number)
+        Ceil = Int(Number)
+        if Ceil<>Number Then
+            Ceil = Ceil + 1
+        end if
+    end function
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +48,7 @@
                     <div class="hero-content">
                         <h6>asoss</h6>
                         <h2>New Collection</h2>
-                        <a href="#" class="btn essence-btn">view collection</a>
+                        <a href="./shop_new.asp" class="btn essence-btn">view collection</a>
                     </div>
                 </div>
             </div>
@@ -86,12 +92,21 @@
     <!-- ##### CTA Area Start ##### -->
     <div class="cta-area">
         <div class="container">
+        <%
+        Set Conn = Server.CreateObject("ADODB.Connection")
+        Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+        
+        sql = "select max(sale_percent) as sale from discount where discount.end_day > GETDATE()"
+
+        Set rs_sale = Conn.execute(sql)
+        if not rs_sale.EOF then
+        %>
             <div class="row">
                 <div class="col-12">
                     <div class="cta-content bg-img background-overlay" style="background-image: url(img/bg-img/bg-5.jpg);">
                         <div class="h-100 d-flex align-items-center justify-content-end">
                             <div class="cta--text">
-                                <h6>-60%</h6>
+                                <h6>-<%=rs_sale("sale")%>%</h6>
                                 <h2>Global Sale</h2>
                                 <a href="shop_sale.asp" class="btn essence-btn">Buy Now</a>
                             </div>
@@ -99,6 +114,9 @@
                     </div>
                 </div>
             </div>
+        <%
+        end if
+        %>
         </div>
     </div>
     <!-- ##### CTA Area End ##### -->
@@ -119,138 +137,116 @@
             <div class="row">
                 <div class="col-12">
                     <div class="popular-products-slides owl-carousel">
+                        <%
+                        Set Connn = Server.CreateObject("ADODB.Connection")
+                        Connn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
 
-                        <!-- Single Product -->
-                        <div class="single-product-wrapper">
-                            <!-- Product Image -->
-                            <div class="product-img">
-                                <img src="img/product-img/product-1.jpg" alt="">
-                                <!-- Hover Thumb -->
-                                <img class="hover-img" src="img/product-img/product-2.jpg" alt="">
-                                <!-- Favourite -->
-                                <div class="product-favourite">
-                                    <a href="#" class="favme fa fa-heart"></a>
+                        if (NOT IsEmpty(Session("ID_user"))) then
+                            sql = "SELECT users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product join users on users.ID_user = "&Session("ID_user")&" GROUP BY users.ID_user, product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2"
+                        else 
+                            sql = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2"
+                        end if
+
+                        Set Result = Connn.execute(sql)
+                        do while not Result.EOF
+                        %>
+                            <!-- Single Product -->
+                            <div class="single-product-wrapper">
+                                <!-- Product Image -->
+                                <div class="product-img">
+                                    <img src="../../resources/imgProduct/<%=Result("link1")%>" alt="">
+                                    <!-- Hover Thumb -->
+                                    <img class="hover-img" src="../../resources/imgProduct/<%=Result("link2")%>" alt="">
+                                    <!-- Favourite -->
+                                    <%
+                                        percent = CInt(Result("sale_percent"))
+
+                                        Dim currentDate
+                                        currentDate = Date()
+
+                                        Dim datee
+                                        datee = FormatDateTime(Result("end_day"),2)
+
+                                        if (CStr(datee) < CStr(currentDate)) then
+                                            percent = 0
+                                        end if
+                                        if (percent > 0) then
+                                        %>
+                                        <div class="product-badge offer-badge">
+                                            <span>-<%=percent%>%</span>
+                                        </div>
+                                        <% end if %>
+
+                                        <% if (Result("new")) then%>
+                                            <% if (percent > 0) then %>
+                                                <div class="product-badge new-badge" style="margin-top: 3em;">
+                                                    <span>New</span>
+                                                </div>
+                                            <% else %>
+                                                <div class="product-badge new-badge">
+                                                    <span>New</span>
+                                                </div>
+                                            <% end if %>
+                                        <% end if %>
+
+                                        <!-- Favourite -->
+                                        <% if (NOT IsEmpty(Session("ID_user"))) then %>
+                                        <div class="product-favourite">
+                                        <%
+                                            Set Conn = Server.CreateObject("ADODB.Connection")
+                                            Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
+                                            Dim sql 
+                                            sql = "select * from favorite where ID_user = "&Result("ID_user")&" and ID_product = "&Result("ID_product")
+                                            set rs = Conn.Execute(sql)
+
+                                            if not rs.EOF then %>
+                                            <a id="favo_<%=Result("ID_product")%>" href="#" class="favorite_btn favme fa fa-heart active "></a>
+                                        <%  else   %>
+                                            <a id="favo_<%=Result("ID_product")%>" href="#" class="favorite_btn favme fa fa-heart "></a>
+                                        <%
+                                            end if
+                                        %>
+                                        </div>
+                                        <% else %>
+                                        <div class="product-favourite">
+                                            <a href="#" class="favorite_btn favme fa fa-heart"></a>
+                                        </div>
+                                    <% end if %>
                                 </div>
-                            </div>
-                            <!-- Product Description -->
-                            <div class="product-description">
-                                <span>topshop</span>
-                                <a href="single-product-details.html">
-                                    <h6>Knot Front Mini Dress</h6>
-                                </a>
-                                <p class="product-price">$80.00</p>
+                                <!-- Product Description -->
+                                <div class="product-description">
+                                    <span><%=Result("brand")%></span>
+                                    <a href="product_ex.asp?product=<%=CInt(Result("ID_product"))%>">
+                                        <h6><%=Result("name")%></h6>
+                                    </a>
+                                    <%
+                                    dim priceSale
+                                    ' percent = CInt(Result("sale_percent"))
+                                    if (percent > 0) then 
+                                        priceSale = CInt(Result("price")) - CInt(Result("price")) * percent / 100
+                                    %>
 
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <!-- Add to Cart -->
-                                    <div class="add-to-cart-btn">
-                                        <a href="#" class="btn essence-btn">Add to Cart</a>
+                                    <p class="product-price"><span class="old-price">$<%=Result("price")%>.00</span>$<%=Ceil(priceSale)%>.00</p>
+                                    
+                                    <% else %>
+                                    <p class="product-price">$<%=Result("price")%>.00</p>
+                                    <% end if%>
+
+                                    <!-- Hover Content -->
+                                    <div class="hover-content">
+                                        <!-- Add to Cart -->
+                                        <div class="add-to-cart-btn">
+                                            <a href="product_ex.asp?product=<%=CInt(Result("ID_product"))%>" class="btn essence-btn">Shop now</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        
+                        <%
+                        Result.MoveNext
+                        loop
+                        %>
 
-                        <!-- Single Product -->
-                        <div class="single-product-wrapper">
-                            <!-- Product Image -->
-                            <div class="product-img">
-                                <img src="img/product-img/product-2.jpg" alt="">
-                                <!-- Hover Thumb -->
-                                <img class="hover-img" src="img/product-img/product-3.jpg" alt="">
-                                <!-- Favourite -->
-                                <div class="product-favourite">
-                                    <a href="#" class="favme fa fa-heart"></a>
-                                </div>
-                            </div>
-                            <!-- Product Description -->
-                            <div class="product-description">
-                                <span>topshop</span>
-                                <a href="single-product-details.html">
-                                    <h6>Poplin Displaced Wrap Dress</h6>
-                                </a>
-                                <p class="product-price">$80.00</p>
-
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <!-- Add to Cart -->
-                                    <div class="add-to-cart-btn">
-                                        <a href="#" class="btn essence-btn">Add to Cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Single Product -->
-                        <div class="single-product-wrapper">
-                            <!-- Product Image -->
-                            <div class="product-img">
-                                <img src="img/product-img/product-3.jpg" alt="">
-                                <!-- Hover Thumb -->
-                                <img class="hover-img" src="img/product-img/product-4.jpg" alt="">
-
-                                <!-- Product Badge -->
-                                <div class="product-badge offer-badge">
-                                    <span>-30%</span>
-                                </div>
-
-                                <!-- Favourite -->
-                                <div class="product-favourite">
-                                    <a href="#" class="favme fa fa-heart"></a>
-                                </div>
-                            </div>
-                            <!-- Product Description -->
-                            <div class="product-description">
-                                <span>mango</span>
-                                <a href="single-product-details.html">
-                                    <h6>PETITE Crepe Wrap Mini Dress</h6>
-                                </a>
-                                <p class="product-price"><span class="old-price">$75.00</span> $55.00</p>
-
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <!-- Add to Cart -->
-                                    <div class="add-to-cart-btn">
-                                        <a href="#" class="btn essence-btn">Add to Cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Single Product -->
-                        <div class="single-product-wrapper">
-                            <!-- Product Image -->
-                            <div class="product-img">
-                                <img src="img/product-img/product-4.jpg" alt="">
-                                <!-- Hover Thumb -->
-                                <img class="hover-img" src="img/product-img/product-5.jpg" alt="">
-
-                                <!-- Product Badge -->
-                                <div class="product-badge new-badge">
-                                    <span>New</span>
-                                </div>
-
-                                <!-- Favourite -->
-                                <div class="product-favourite">
-                                    <a href="#" class="favme fa fa-heart"></a>
-                                </div>
-                            </div>
-                            <!-- Product Description -->
-                            <div class="product-description">
-                                <span>mango</span>
-                                <a href="single-product-details.html">
-                                    <h6>PETITE Belted Jumper Dress</h6>
-                                </a>
-                                <p class="product-price">$80.00</p>
-
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <!-- Add to Cart -->
-                                    <div class="add-to-cart-btn">
-                                        <a href="#" class="btn essence-btn">Add to Cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

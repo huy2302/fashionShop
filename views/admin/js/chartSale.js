@@ -1,6 +1,11 @@
 var listData = [];
 var listDataTotal = [];
 var listDataDay = [];
+var totalWeek = 0;
+var QuantityTotalWeek = 0;
+
+var totalMonth = 0;
+var QuantityTotalMonth = 0;
 
 var getRevenue = function (data) {
     $.ajax({
@@ -16,23 +21,15 @@ var getRevenue = function (data) {
                 // console.log(Date.parse(response[0].oder_day))
                 // console.log(Date.parse(data))
                 if (data == response[0].oder_day) {
-                    var quantityInt = parseInt(response[0].quantity)
-                    // console.log(quantityInt)
+                    var quantityInt = parseInt(response[0].quantity);
 
-                    listData.push(quantityInt)
+                    console.log(quantityInt);
+                    QuantityTotalWeek = QuantityTotalWeek + quantityInt;
+                    listData.push(quantityInt);
                 } else {
-                    listData.push(0)
+                    listData.push(0);
                 }
             }
-
-            response.forEach(function (obj) {
-                if (obj.id == "-1") {
-                    return;
-                }
-                console.log()
-            });
-
-
         },
         error: function (response) {
             alert('Lỗi AJAX');
@@ -49,12 +46,12 @@ var getRevenueTotal = function (data) {
             // In ra các thứ trong tuần
             if (response[0]) {
                 if (data == response[0].oder_day) {
-                    var totalInt = parseInt(response[0].total_price)
+                    var totalInt = parseInt(response[0].total_price);
                     // console.log(totalInt)
-
-                    listDataTotal.push(totalInt)
+                    totalWeek = totalWeek + totalInt;
+                    listDataTotal.push(totalInt);
                 } else {
-                    listDataTotal.push(0)
+                    listDataTotal.push(0);
                 }
             }
 
@@ -64,8 +61,6 @@ var getRevenueTotal = function (data) {
                 }
                 console.log()
             });
-
-
         },
         error: function (response) {
             alert('Lỗi AJAX');
@@ -74,9 +69,7 @@ var getRevenueTotal = function (data) {
 }
 
 function getWeekdays(date) {
-    // var dayOfWeek = date.getDay();
     var weekdays = [];
-    // console.log()
 
     for (var i = 0; i < 7; i++) {
         var currentDate = new Date(date);
@@ -87,10 +80,40 @@ function getWeekdays(date) {
             ngay: formattedDateISO
         });
     }
-
     return weekdays;
 }
+function getMonthdays(date) {
+    var monthdays = [];
 
+    for (var i = 0; i < 30; i++) {
+        var currentDate = new Date(date);
+        currentDate.setDate(date.getDate() + i);
+        var formattedDateISO = currentDate.toISOString().split('T')[0];
+        monthdays.push({
+            day: currentDate.toLocaleDateString(undefined, { monthday: 'long' }),
+            ngay: formattedDateISO
+        });
+    }
+    return monthdays;
+}
+var renderDetails = function() {
+    var weekSales = document.querySelector('.weekSales');
+    var weekRevenue = document.querySelector('.weekRevenue');
+    var monthSales = document.querySelector('.monthSales');
+    var monthRevenue = document.querySelector('.monthRevenue');
+
+    console.log(QuantityTotalWeek);
+    console.log(totalWeek);
+
+    if (QuantityTotalWeek > 0) {
+        weekSales.innerHTML = QuantityTotalWeek;
+    } else weekSales.innerHTML = '0';
+
+    if (totalWeek > 0) {
+        weekRevenue.innerHTML = '$'+totalWeek+'.00';
+    } else weekRevenue.innerHTML = '$0.00';
+
+}
 // Sử dụng ví dụ với ngày đầu vào là '2023-05-30'
 // var inputDate = new Date('2023-05-30');
 var selectDay = document.getElementById('select_day');
@@ -99,9 +122,9 @@ selectDay.valueAsDate = new Date();
 var render = function() {
     var inputDate = new Date(selectDay.value);
     var weekdays = getWeekdays(inputDate);
+    var monthdays = getMonthdays(inputDate);
     
     for (var i = 0; i < weekdays.length; i++) {
-        // console.log(weekdays[i].ngay);
         listDataDay.push(weekdays[i].ngay);
     }
     setTimeout(() => {
@@ -109,12 +132,16 @@ var render = function() {
             getRevenue(weekdays[i].ngay);
             getRevenueTotal(weekdays[i].ngay);
         }
+
         setTimeout(() => {
+            renderDetails();
             renderChart();
             renderTotalChart();
             listData = [];
             listDataTotal = [];
             listDataDay = [];
+            totalWeek = 0;
+            QuantityTotalWeek = 0;
         }, 100);
     }, 100);
 }
@@ -228,7 +255,7 @@ var renderTotalChart = () => {
         // labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
         labels: listDataDay,
         datasets: [{
-            label: 'Revenue',
+            label: 'Revenue (Dollar - $)',
             data: listDataTotal, // data cho biểu đồ
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
