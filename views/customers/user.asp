@@ -75,6 +75,7 @@
                         <a class="action" href="login.asp">Login account.</a>
                     <% else %>
                         <a class="action" href="profile.asp">Edit profile.</a>
+                        <a class="action" href="changePass.asp">Change Password.</a>
                         <a class="action" href="purchase.asp">Purchase History.</a>
                         <a class="action logout">Sign out.</a>
                     <% end if %>
