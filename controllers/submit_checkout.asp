@@ -1,5 +1,5 @@
 <!--#include file="connect.asp"-->
-
+<!-- #include file="connectCMD.asp" --> 
 <%
 ' Check if the form has been submitted
 If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
@@ -22,8 +22,6 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
     
 
     IF (NOT IsEmpty(Session("ID_user"))) Then
-        Set Conn = Server.CreateObject("ADODB.Connection")
-        Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
         ' kiểm tra số lượng bill
         sql = "SELECT COUNT(ID_bill) AS id FROM bill"
         Set Result = Conn.execute(sql)

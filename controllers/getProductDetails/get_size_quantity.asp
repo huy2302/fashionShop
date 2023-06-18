@@ -1,8 +1,5 @@
-
+<!-- #include file="../connect.asp" --> 
 <%
-Set Conn = Server.CreateObject("ADODB.Connection")
-Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=chatgpt;User Id=sa;Password=123"
-
 
 ' size = Request.Form("size")
 ' Set RS_MauSac = Conn.Execute("SELECT * FROM mau_sac")

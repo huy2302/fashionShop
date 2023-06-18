@@ -1,11 +1,7 @@
-
+<!-- #include file="../connect.asp" --> 
 <%
 Dim orderDay
 orderDay = Request.QueryString("day")
-
-' if (not IsEmpty(Session("ID_user"))) then
-Set Conn = Server.CreateObject("ADODB.Connection")
-Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
 
 sql = "SELECT SUM(CAST(price AS DECIMAL)) AS total_price, oder_day FROM bill where oder_day = '"&orderDay&"' group by oder_day"
 
