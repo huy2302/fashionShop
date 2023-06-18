@@ -25,7 +25,7 @@
 
     offset = (Clng(page) * Clng(limit)) - Clng(limit)
 
-    strSQL = "SELECT COUNT(product.ID_product) AS count FROM product join discount on product.ID_product = discount.ID_product where discount.sale_percent > 0 and discount.end_day > GETDATE()"
+    strSQL = "SELECT COUNT(product.ID_product) AS count FROM product join discount on product.ID_product = discount.ID_product where discount.sale_percent > 0 and discount.end_day > GETDATE() - 1"
     connDB.Open()
     Set CountResult = connDB.execute(strSQL)
 
@@ -45,7 +45,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title  -->
-    <title>Essence -<%=Session("ID_user")%> Fashion Ecommerce Template</title>
+    <title>Essence - Fashion Ecommerce Template</title>
 
     <link rel="icon" href="img/core-img/favicon.ico">
     <link rel="stylesheet" href="./css/add.css">

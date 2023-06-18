@@ -5,28 +5,19 @@ Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id
 
 Dim sql
 
-' id = Request.QueryString("id")
-name = Request.QueryString("name")
-brand = Request.QueryString("brand")
-desc = Request.QueryString("desc")
-species = Request.QueryString("species")
-price = Request.QueryString("price")
+firstName = Request.QueryString("firstName")
+lastName = Request.QueryString("lastName")
+cmnd = Request.QueryString("cmnd")
+phone_number = Request.QueryString("phone_number")
+birthDay = Request.QueryString("birthDay")
+joinOn = Request.QueryString("join")
+gender = Request.QueryString("gender")
+avt = Request.QueryString("avt")
 
-name = Replace(name, "_", " ")
-brand = Replace(brand, "_", " ")
-desc = Replace(desc, "_", " ")
-species = Replace(species, "_", " ")
-species = Replace(species, "<>", "&")
-dim id
 
-sql = "insert into product values((select max(ID_product) + 1 as id from product), '"&name&"', '"&desc&"', 1, '"&species&"', '"&price&"')"
+sql = "INSERT INTO users VALUES ((select max(ID_account) as id from account), (select max(ID_account) as id from account), '"&gender&"', '"&joinOn&"', '"&avt&"', '"&firstName&"', '"&lastName&"', '"&birthDay&"', '"&phone_number&"', '"&cmnd&"')"
+
 Conn.Execute sql 
-
-sql = "insert into brand values ((select max(ID_product) as id from product), ((select max(ID_product) as id from product)), '"&brand&"')"
-Conn.Execute sql 
-
-sql = "insert into discount values ((select max(ID_product) as id from product), (select max(ID_product) as id from product), '', '', 0)"
-Conn.Execute sql
 
 ' Response.ContentType = "text/html"
 %>

@@ -519,9 +519,11 @@ Set CountResult = Nothing
           })
           addSizeColorQuantity()
           console.log(123)
-          createListImage()
-          console.log(123)
+
           addSalePercent()
+          console.log(123)
+
+          createListImage()
           console.log(123)
         })
     </script>

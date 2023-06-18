@@ -17,6 +17,8 @@
     end function
 ' trang hien tai
     page = Request.QueryString("page")
+    ID_brand = Request.QueryString("brand")
+
     limit = 9
 
     if (trim(page) = "") or (isnull(page)) then
@@ -25,7 +27,8 @@
 
     offset = (Clng(page) * Clng(limit)) - Clng(limit)
 
-    strSQL = "SELECT COUNT(ID_product) AS count FROM product"
+    strSQL = "SELECT COUNT(product.ID_product) AS count FROM product inner join brand on product.ID_product = brand.ID_product where brand.brand = (select brand.brand from brand where brand.ID_brand = "&ID_brand&")"
+
     connDB.Open()
     Set CountResult = connDB.execute(strSQL)
 
@@ -46,7 +49,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title  -->
-    <title>Essence -<%=Session("ID_user")%> Fashion Ecommerce Template</title>
+    <title>Essence - Fashion Ecommerce Template</title>
 
     <link rel="icon" href="img/core-img/favicon.ico">
     <link rel="stylesheet" href="./css/add.css">
@@ -226,7 +229,7 @@
                 cmdPrep.Prepared = True
                 ' cmdPrep.CommandText = "SELECT * FROM PRODUCT INNER JOIN IMAGEPRODUCT ON PRODUCT.ID_PRODUCT = IMAGEPRODUCT.ID_PRODUCT ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 if (NOT IsEmpty(Session("ID_user"))) then
-                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product users on users.ID_user = "&Session("ID_user")&" where brand.brand = (select brand from brand where brand.ID_brand = "&ID_brand&") GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+                    cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product inner join users on users.ID_user = "&Session("ID_user")&" where brand.brand = (select brand from brand where brand.ID_brand = "&ID_brand&") GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 else 
                     cmdPrep.CommandText = "SELECT product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 FROM product inner join discount on discount.ID_product = product.ID_product inner join brand on product.ID_product = brand.ID_product inner join imageProduct on product.ID_product = imageProduct.ID_product where brand.brand = (select brand from brand where brand.ID_brand = "&ID_brand&") GROUP BY product.name, product.ID_product, new, sale_percent, end_day, brand, price, link1, link2 ORDER BY ID_product OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
                 end if
@@ -317,7 +320,7 @@
                                             Set Conn = Server.CreateObject("ADODB.Connection")
                                             Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
                                             Dim sql 
-                                            sql = "select * from favorite where ID_user = "&Result("ID_user")&" and ID_product = "&Result("ID_product")
+                                            sql = "select * from favorite where ID_user = "&Session("ID_user")&" and ID_product = "&Result("ID_product")
                                             set rs = Conn.Execute(sql)
 
                                             if not rs.EOF then %>

@@ -1,6 +1,10 @@
 <!-- #include file="connect.asp" -->
 <%
 connDB.Open()
+if IsEmpty(Session("ID_user")) then
+    response.write "<script>alert('Please login to continue')</script>"
+    response.write "<script>window.location.href = 'user.asp'</script>"
+end if
 %>
 
 <!DOCTYPE html>

@@ -25,8 +25,8 @@ Conn.Execute sql
 sql = "insert into brand values ((select max(ID_product) as id from product), ((select max(ID_product) as id from product)), '"&brand&"')"
 Conn.Execute sql 
 
-sql = "insert into discount values ((select max(ID_product) as id from product), (select max(ID_product) as id from product), '', '', 0)"
-Conn.Execute sql
+' sql = "insert into discount values ((select max(ID_product) as id from product), (select max(ID_product) as id from product), '', '', 0)"
+' Conn.Execute sql
 
 ' Response.ContentType = "text/html"
 %>

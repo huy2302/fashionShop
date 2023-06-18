@@ -78,9 +78,9 @@ connDB.Open()
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Basic form elements</h4>
+                  <h4 class="card-title">Add Employee</h4>
                   <p class="card-description">
-                    Basic form elements
+                    Add Employee
                   </p>
                   <form class="forms-sample">
                     <div class="form-group">
@@ -121,8 +121,8 @@ connDB.Open()
                     <div class="form-group">
                       <label for="exampleSelectGender">Gender</label>
                         <select name="gender" class="form-control" id="selectGender" required>
-                          <option>Male</option>
-                          <option>Female</option>
+                          <option value="1">Male</option>
+                          <option value="2">Female</option>
                         </select>
                       </div>
                     <div class="form-group">
@@ -273,7 +273,7 @@ connDB.Open()
         
         if (successPassword == true && successForm == true) {
           var xmlhttp = new XMLHttpRequest();
-          xmlhttp.open("GET", "/fashionShop/controllers/admin/addEmployee.asp?firstName=" + firstName + "&lastName=" + lastName + "&cmnd=" + cmnd + "&phone_number=" + phone_number + "&birthDay=" + birthDay + "&join=" + join + "&gender=" + gender, true);
+          xmlhttp.open("GET", "/fashionShop/controllers/admin/addEmployee.asp?firstName=" + firstName + "&lastName=" + lastName + "&cmnd=" + cmnd + "&phone_number=" + phone_number + "&birthDay=" + birthDay + "&join=" + join + "&gender=" + gender + "&avt=" + avt, true);
           // console.log(ID_product)
           xmlhttp.send();
         }
@@ -286,9 +286,8 @@ connDB.Open()
             console.log('Tên tệp tin:', uploadedFile.name);
             
             var li = document.createElement("li");
-            // li.innerHTML = `Image ${index}: ${uploadedFile.name}`;
-            // filelist.appendChild(li);
-            filelist.innerHTML += `
+            
+            filelist.innerHTML = `
               <img class="imgUp" src="/fashionShop/resources/imgProduct/${uploadedFile.name}" >
             `
             avt = uploadedFile.name;

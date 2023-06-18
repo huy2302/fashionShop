@@ -223,16 +223,23 @@ Set Result = cmdPrep.execute
         var ID_product = document.getElementById("ID_product").value;
         var showQuantity = () => {
             var color = document.getElementById("color").value;
+            // console.log(color)
+            // console.log(ListColor[color - 1])
 
-            if (ListColor[color - 1].quantity == "0") {
-                document.getElementById('quantity_color').innerText = "Out of stock";
-                document.getElementById('quantity_color').classList.remove('inStock')
-                document.getElementById('quantity_color').classList.add('outOfStock')
-            } else {
-                document.getElementById('quantity_color').innerText = `In stock: ${ListColor[color - 1].quantity}`;
-                document.getElementById('quantity_color').classList.remove('outOfStock')
-                document.getElementById('quantity_color').classList.add('inStock')
-            }
+            ListColor.forEach(element => {
+                if (element.id_color == color) {
+                    if (element.quantity == "0") {
+                        document.getElementById('quantity_color').innerText = "Out of stock";
+                        document.getElementById('quantity_color').classList.remove('inStock')
+                        document.getElementById('quantity_color').classList.add('outOfStock')
+                    } else {
+                        document.getElementById('quantity_color').innerText = `In stock: ${element.quantity}`;
+                        document.getElementById('quantity_color').classList.remove('outOfStock')
+                        document.getElementById('quantity_color').classList.add('inStock')
+                    }
+                }
+            });
+            
             // console.log(color)
             // console.log(ListColor[color - 1])
         }
