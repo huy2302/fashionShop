@@ -1,14 +1,10 @@
-
+<!--#include file="connect.asp"-->
 <%
 
 Dim nameProduct
 nameProduct = Request.QueryString("ID_product")
 'Rest of your code here'
-
-' if (not IsEmpty(Session("ID_user"))) then
-Set Conn = Server.CreateObject("ADODB.Connection")
-Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
-
+ 
 sql = "SELECT product.*, brand, link1, sale_percent, end_day FROM product join discount on discount.ID_product = product.ID_product join brand on brand.ID_product = product.ID_product join imageProduct on imageProduct.ID_product = product.ID_product WHERE product.name LIKE '%"&nameProduct&"%'"
 
 Set result = Conn.execute(sql)

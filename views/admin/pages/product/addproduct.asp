@@ -10,7 +10,7 @@ connDB.Open()
 
 %>
 <%
-strSQL = "SELECT COUNT(ID_product) AS count FROM product"
+strSQL = "SELECT MAX(ID_product) AS count FROM product"
 Set CountResult = connDB.execute(strSQL)
 
 totalRows = CLng(CountResult("count"))
@@ -35,10 +35,7 @@ Set CountResult = Nothing
     <link rel="stylesheet" href="../../vendors/typicons/typicons.css">
     <link rel="stylesheet" href="../../vendors/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
-    <!-- endinject -->
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
-    <!-- inject:css -->
+   
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../../images/favicon.png" />
@@ -51,6 +48,11 @@ Set CountResult = Nothing
     }
     .m-10-20 {
         margin: 10px 20px;
+    }
+    .imgUp {
+        width: 5em;
+        margin-right: 1em;
+        object-fit: cover;
     }
   </style>
 
@@ -107,6 +109,7 @@ Set CountResult = Nothing
                             <option>Shirts & Blouses</option>
                             <option>Shirts</option>
                             <option>Sweaters & Knits</option>
+                            <option>Bras & Panties</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -145,27 +148,39 @@ Set CountResult = Nothing
 
                     <div class="form-group">
                       <label>File upload</label>
-                      <input type="file" name="img[]" class="file-upload-default">
+                      <input type="file" name="img" class="file-upload-default">
                       <div class="input-group col-xs-12">
-                        <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image" required>
+                        <input type="file" class="form-control file-upload-info" name="file1" placeholder="Upload Image" required style="padding-bottom: 26px" onchange="handleFileUpload(this)">
                         <span class="input-group-append">
                             <%
-                            Dim uploader
-                            Set uploader = new AspUploader
-                            uploader.MaxSizeKB = 10240
-                            uploader.Name = "myuploader"
-                            uploader.MultipleFilesUpload = true
-                            uploader.AllowedFileExtensions = "*.jpg,*.png"
-                            uploader.SaveDirectory = "/fashionShop/resources/imgProduct"
-                            uploader.InsertText = "Upload" 
+                            ' Dim uploader
+                            ' Set uploader = new AspUploader
+                            ' uploader.MaxSizeKB = 10240
+                            ' uploader.Name = "myuploader"
+                            ' uploader.MultipleFilesUpload = true
+                            ' uploader.AllowedFileExtensions = "*.jpg,*.png"
+                            ' uploader.SaveDirectory = "/fashionShop/resources/imgProduct"
+                            ' uploader.InsertText = "Upload"
+
+                            ' response.write (uploader.GetString())   
                             %>
                             
-                            <%=uploader.GetString() %>
+                            <%
+                              ' Dim uploader
+                              ' Set uploader=new AspUploader
+                              ' uploader.MaxSizeKB=10240 
+                              ' uploader.Name="myuploader" 
+                              ' uploader.InsertText="Upload File (Max 10M)"
+                              ' uploader.MultipleFilesUpload=true
+
+                              ' response.write (uploader.GetString())  
+                            %>
                         </span>
                       </div>
                     </div>
                     
-                    <ol id="filelist">
+                    <ol id="filelist" style="display: flex;">
+                      
                     </ol>	
 
                     <div class="form-group">
@@ -210,53 +225,75 @@ Set CountResult = Nothing
 
     <!-- AJAX uploader -->
     <script type="text/javascript">
-      var handlerurl='ajax-multiplefiles-handler.asp'
+      // var handlerurl='ajax-multiplefiles-handler.asp'
+      const submitBtn = document.querySelector('.submitAdd');
+
     </script>
     <script type="text/javascript">
-    var listImage = []
-    function CuteWebUI_AjaxUploader_OnPostback()
-    {
-      var uploader = document.getElementById("myuploader");
-      var guidlist = uploader.value;
   
-      //Send Request
-      var xh;
-      if (window.XMLHttpRequest)
-        xh = new window.XMLHttpRequest();
-      else
-        xh = new ActiveXObject("Microsoft.XMLHTTP");
+    // function CuteWebUI_AjaxUploader_OnPostback()
+    // {
+    //   var uploader = document.getElementById("myuploader");
+    //   var guidlist = uploader.value;
+  
+    //   //Send Request
+    //   var xh;
+    //   if (window.XMLHttpRequest)
+    //     xh = new window.XMLHttpRequest();
+    //   else
+    //     xh = new ActiveXObject("Microsoft.XMLHTTP");
       
-      xh.open("POST", handlerurl, false, null, null);
-      xh.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
-      xh.send("guidlist=" + guidlist);
+    //   xh.open("POST", handlerurl, false, null, null);
+    //   xh.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+    //   xh.send("guidlist=" + guidlist);
   
-      //call uploader to clear the client state
-      uploader.reset();
+    //   //call uploader to clear the client state
+    //   uploader.reset();
   
-      if (xh.status != 200)
-      {
-        alert("http error " + xh.status);
-        setTimeout(function() { document.write(xh.responseText); }, 10);
-        return;
-      } 
+    //   if (xh.status != 200)
+    //   {
+    //     alert("http error " + xh.status);
+    //     setTimeout(function() { document.write(xh.responseText); }, 10);
+    //     return;
+    //   } 
 
-      var filelist = document.getElementById("filelist");
+    //   var filelist = document.getElementById("filelist");
   
-      var list = eval(xh.responseText); //get JSON objects
-      //Process Result:
-      for (var i = 0; i < list.length; i++)
-      {
-        console.log(list[i].FileName)
-        var item = list[i];
-        var msg = "Processed: " + list[i].FileName;
+    //   var list = eval(xh.responseText); //get JSON objects
+    //   //Process Result:
+    //   for (var i = 0; i < list.length; i++)
+    //   {
+    //     console.log(list[i].FileName)
+    //     var item = list[i];
+    //     var msg = "Processed: " + list[i].FileName;
+    //     var li = document.createElement("li");
+    //     li.innerHTML = msg;
+    //     filelist.appendChild(li);
+    //     listImage.push(list[i].FileName);
+    //   }
+    // }
+    var listImage = [];
+    var objListImage = [];
+    var index = 1;
+    var filelist = document.getElementById("filelist");
+    function handleFileUpload(input) {
+      const uploadedFile = input.files[0];
+
+      if (uploadedFile) {
+        listImage.push(uploadedFile.name)
+        console.log('Tên tệp tin:', uploadedFile.name);
+        
         var li = document.createElement("li");
-        li.innerHTML = msg;
-        filelist.appendChild(li);
-        listImage.push("/fashionShop/resources/imgProduct/" + list[i].FileName);
+        // li.innerHTML = `Image ${index}: ${uploadedFile.name}`;
+        // filelist.appendChild(li);
+        filelist.innerHTML += `
+          <img class="imgUp" src="/fashionShop/resources/imgProduct/${uploadedFile.name}" >
+        `
+        index++;
+      } else {
+        console.log('Chưa có tệp tin nào được tải lên.');
       }
     }
-    var objListImage = []
-    
     const createListImage = () => {
       if (listImage.length >= 4) {
         objListImage.push({
@@ -266,12 +303,27 @@ Set CountResult = Nothing
           link3: listImage[2],
           link4: listImage[3]
         })
-
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "/fashionShop/controllers/admin/addImageProduct.asp?id=" + objListImage[0].id_product + "&link1=" + objListImage[0].link1 + "&link2="+objListImage[0].link2+"&link3="+ objListImage[0].link3 + "&link4=" + objListImage[0].link4, true);
-        // console.log(ID_product)
-        xmlhttp.send();
+      } else if (listImage.length == 3){
+        objListImage.push({
+          id_product: <%=totalRows + 1%>,
+          link1: listImage[0],
+          link2: listImage[1],
+          link3: listImage[2],
+          link4: ''
+        })
+      } else if (listImage.length == 2) {
+        objListImage.push({
+          id_product: <%=totalRows + 1%>,
+          link1: listImage[0],
+          link2: listImage[1],
+          link3: '',
+          link4: ''
+        })
       }
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("GET", "/fashionShop/controllers/admin/addImageProduct.asp?id=" + objListImage[0].id_product + "&link1=" + objListImage[0].link1 + "&link2="+objListImage[0].link2+"&link3="+ objListImage[0].link3 + "&link4=" + objListImage[0].link4, true);
+      
+      xmlhttp.send();
     }
 
     </script>
@@ -286,80 +338,83 @@ Set CountResult = Nothing
 
         var delColorBtns
         var colorBlock
-        var idColor
+        var idColor = []
         var arrayProduct = []
+        var colorExists = []
         
         // Click thêm color
         addColorBtn.addEventListener('click', () => {
             const selectedOption = addColorInput.options[addColorInput.selectedIndex];
+            if (!colorExists.includes(selectedOption.text)) {
+                colorExists.push(selectedOption.text);
+                console.log(true)
 
-            if (addColorInput.value == '') {
-                alert('Please enter the color of the product!');
-            } else {
                 const str = selectedOption.text
                 const strUpperCase = str.charAt(0).toUpperCase() + str.slice(1);
                 addSize.innerHTML += `
                 <div class="form-group color-block" style="border: 1px solid #0003; padding: 5px;">
-                  <label class="color-size-name" style="min-width: 10em;" for="exampleInputPassword4">${strUpperCase}</label>
-                  <a class="del-color-btn" style="padding: 10px; float: right; cursor: pointer;"><i class="mdi mdi-delete-forever"></i></a>
-                  <input class="input-id_color" style="display: none;" type="number" value="${selectedOption.value}">
-                  <div class="col-md-6">
+                    <label class="color-size-name" style="min-width: 10em;" for="exampleInputPassword4">${strUpperCase}</label>
+                    <a class="del-color-btn" style="padding: 10px; float: right; cursor: pointer;"><i class="mdi mdi-delete-forever"></i></a>
+                    <input class="input-id_color" style="display: none;" type="number" value="${selectedOption.value}">
+                    <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3 col-form-label" style="padding-top: 0;">S</label>
-                      <div class="col-sm-9">
-                        <input class="quantityColor${selectedOption.value}" name="quantityS" placeholder="Enter quantity"  type="number" class="form-control">
-                      </div>
+                        <label class="col-sm-3 col-form-label" style="padding-top: 0;">S</label>
+                        <div class="col-sm-9">
+                            <input class="quantityColor${selectedOption.value}" name="quantityS" placeholder="Enter quantity"  type="number" class="form-control">
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group row">
-                      <label class="col-sm-3 col-form-label" style="padding-top: 0;">M</label>
-                      <div class="col-sm-9">
-                        <input class="quantityColor${selectedOption.value}" name="quantityM" placeholder="Enter quantity"  type="number" class="form-control">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group row">
-                      <label class="col-sm-3 col-form-label" style="padding-top: 0;">L</label>
-                      <div class="col-sm-9">
-                        <input class="quantityColor${selectedOption.value}" name="quantityL" placeholder="Enter quantity"  type="number" class="form-control">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group row">
-                      <label class="col-sm-3 col-form-label" style="padding-top: 0;">XL</label>
-                      <div class="col-sm-9">
-                        <input class="quantityColor${selectedOption.value}" name="quantityXL" placeholder="Enter quantity"  type="number" class="form-control">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group row">
-                      <label class="col-sm-3 col-form-label" style="padding-top: 0;">XXL</label>
-                      <div class="col-sm-9">
-                        <input class="quantityColor${selectedOption.value}" name="quantityXXL" placeholder="Enter quantity"  type="number" class="form-control">
-                      </div>
-                    </div>
-                  </div>
                 </div>
-                `
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" style="padding-top: 0;">M</label>
+                        <div class="col-sm-9">
+                            <input class="quantityColor${selectedOption.value}" name="quantityM" placeholder="Enter quantity"  type="number" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" style="padding-top: 0;">L</label>
+                        <div class="col-sm-9">
+                            <input class="quantityColor${selectedOption.value}" name="quantityL" placeholder="Enter quantity"  type="number" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" style="padding-top: 0;">XL</label>
+                        <div class="col-sm-9">
+                            <input class="quantityColor${selectedOption.value}" name="quantityXL" placeholder="Enter quantity"  type="number" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label" style="padding-top: 0;">XXL</label>
+                        <div class="col-sm-9">
+                            <input class="quantityColor${selectedOption.value}" name="quantityXXL" placeholder="Enter quantity"  type="number" class="form-control">
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                `;
+                delColorBtns = document.querySelectorAll('.del-color-btn');
+                colorBlock = document.querySelectorAll('.color-block');
+                idColor = document.querySelectorAll('.input-id_color');
+                delColorBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    colorBlock[index].remove();
+                })
+                })
+            } else {
+                alert("Màu đã tồn tại")
             }
-            delColorBtns = document.querySelectorAll('.del-color-btn');
-            colorBlock = document.querySelectorAll('.color-block');
-            idColor = document.querySelectorAll('.input-id_color');
-            delColorBtns.forEach((btn, index) => {
-              btn.addEventListener('click', () => {
-                colorBlock[index].remove();
-              })
-            })
         })
 
-        const uploaderButton = document.querySelector('#myuploaderButton');
-        uploaderButton.classList.add('file-upload-browse')
-        uploaderButton.classList.add('btn')
-        uploaderButton.classList.add('btn-primary')
+        // const uploaderButton = document.querySelector('#myuploaderButton');
+        // uploaderButton.classList.add('file-upload-browse')
+        // uploaderButton.classList.add('btn')
+        // uploaderButton.classList.add('btn-primary')
 
         const checkQuantity = (quantity, element, id_size) => {
           if (quantity > 0 && typeof(parseInt(quantity)) == 'number') {
@@ -409,12 +464,14 @@ Set CountResult = Nothing
         }
         // add size & color & quantity
         const addSizeColorQuantity = () => {
-          arrayProduct.forEach((product) => {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/fashionShop/controllers/admin/addQuantity.asp?id_product=" + <%=totalRows + 1%> + "&id_size=" + product.id_size + "&id_color=" + product.id_color + "&quantity=" + product.quantity, true);
-            // console.log(ID_product)
-            xmlhttp.send();
-          })
+          if (arrayProduct.length > 0) {
+            arrayProduct.forEach((product) => {
+              var xmlhttp = new XMLHttpRequest();
+              xmlhttp.open("GET", "/fashionShop/controllers/admin/addQuantity.asp?id_product=" + <%=totalRows + 1%> + "&id_size=" + product.id_size + "&id_color=" + product.id_color + "&quantity=" + product.quantity, true);
+              // console.log(ID_product)
+              xmlhttp.send();
+            })
+          }
         }
         // add salePercent
         const addSalePercent = () => {
@@ -430,18 +487,17 @@ Set CountResult = Nothing
 
             if (salePercent == '') {
                 const salePercentValue = 0;
-                postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                postSalePercent("1", startDay, endDay, salePercentValue);
             } else {
                 salePercentValue = salePercent;
                 if (startDay != '' & endDay != '') {
-                    alert('Please select a discount start and end date');
+                    postSalePercent("1", startDay, endDay, salePercentValue);
                 } else {
-                    postSalePercent(<%=totalRows + 1%>, startDay, endDay, salePercentValue);
+                    alert('Please select a discount start and end date');
                 }
             }
         }
         // click add số lượng vào mảng số lượng
-        const submitBtn = document.querySelector('.submitAdd');
         submitBtn.addEventListener('click', () => {
           checkEmptyForm()
           idColor.forEach((e, index) => {
@@ -462,7 +518,13 @@ Set CountResult = Nothing
             checkQuantity(quantityXXL, e, id_size)
           })
           addSizeColorQuantity()
+          console.log(123)
+
+          addSalePercent()
+          console.log(123)
+
           createListImage()
+          console.log(123)
         })
     </script>
 

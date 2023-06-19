@@ -45,6 +45,8 @@
           <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/product/allproduct.asp">All products</a></li>
           <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/product/addproduct.asp">Add product</a></li>
           <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/product/saleProduct.asp">Sale product</a></li>
+          <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/product/addSaleCampaign.asp">Create a discount campaign</a></li>
+          <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/product/allCampaign.asp">All Campaign</a></li>
         </ul>
       </div>
     </li>

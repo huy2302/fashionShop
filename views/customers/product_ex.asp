@@ -51,6 +51,32 @@ Set Result = cmdPrep.execute
         select {
             display: block !important;
         }
+        #quantity_color {
+            margin: 0;
+            
+            margin-top: -1em;
+            padding: 10px 50px;
+            font-weight: 500;
+            font-size: 1.1em;
+            margin-bottom: 1em;
+            display: inline-table;
+            border-bottom: 2px solid;
+            border-top: 2px solid;
+            /* border: 2px solid; */
+        }
+        .inStock {
+            color: #5BA21D;
+        }
+        .outOfStock {
+            color: #CF2425;
+        }
+        .owl-carousel .owl-item img {
+            object-fit: cover;
+            display: block;
+            width: 100%;
+            height: 74em;
+            -webkit-transform-style: preserve-3d;
+        }
     </style>
 </head>
 
@@ -60,7 +86,7 @@ Set Result = cmdPrep.execute
     <!-- #include file="header.asp" -->
 
     <!-- ##### Header Area End ##### -->
-
+    <input id="ID_user" type="hidden" name="" value="<%=Session("ID_user")%>">
     <input id="ID_product" type="text" value="<%=ID_product%>" style="display: none;">
 
     <!-- #include file="cart.asp" -->
@@ -100,7 +126,7 @@ Set Result = cmdPrep.execute
             <form class="cart-form clearfix" method="">
                 <!-- Select Box -->
                 <div class="select-box d-flex mt-50 mb-30">
-                    <select id="size" name="size" class="selectColor mr-5" onclick="getColors()">
+                    <select id="size" name="size" class="selectColor mr-5" onchange="getColors()">
                     <%
                         sql = "select product.ID_product, size, size.ID_size from product_size_color p inner join product on product.ID_product = p.ID_product inner join size on size.ID_size = p.ID_size where product.ID_product = "&ID_product&" group by product.ID_product, size, size.ID_size"
                         Set RS_Size = connDB.Execute(sql)
@@ -113,13 +139,11 @@ Set Result = cmdPrep.execute
                         loop
                     %>
                     </select>
-                    <select id="color" name="color" class="selectColor" >
-                        <!--<option value="value">Color: Black</option>
-                        <option value="value">Color: White</option>
-                        <option value="value">Color: Red</option>
-                        <option value="value">Color: Purple</option>-->
+                    <select id="color" name="color" class="selectColor" onchange="showQuantity()">
+
                     </select>
                 </div>
+                <p id="quantity_color">con hang</p>
                 <!-- Cart & Favourite Box -->
                 <div class="cart-fav-box d-flex align-items-center">
                     <!-- Cart -->
@@ -162,26 +186,69 @@ Set Result = cmdPrep.execute
 
     <!-- call AJAX to get the color and quantity corresponding to the size -->
     <script>
-        window.addEventListener('load', getColors);
-        var ID_product = document.getElementById("ID_product").value;
-
-        // get color, quantity when select size
-        function getColors() {
+        var ListColor = []
+        var getColors = function (){
             var size = document.getElementById("size").value;
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("color").innerHTML = this.responseText;
-                // document.querySelecter(".list").innerHTML = this.responseText;
+            var ID_product = document.getElementById("ID_product").value;
+            $.ajax({
+                url: `/fashionShop/controllers/getProductDetails/getcolor.asp?id=${ID_product}&size=${size}`,
+                // data: data,
+                dataType: 'json',
+                success: function (response) {
+                    // console.log(response)
+                    ListColor = response
+                    document.getElementById('color').innerHTML = "";
+                    response.forEach(element => {
+                        if (element.id == "-1") {
+                            return;
+                        }
+                        // console.log(element.id)
+                        document.getElementById('color').innerHTML += `
+                        <option value='${element.id_color}'>${element.color}</option>
+                        `;
+                    });
+                    if (response[0].quantity == "0") {
+                        document.getElementById('quantity_color').innerText = "Out of stock";
+                        document.getElementById('quantity_color').classList.add('outOfStock')
+                    } else {
+                        document.getElementById('quantity_color').innerText = `In stock: ${response[0].quantity}`;
+                        document.getElementById('quantity_color').classList.add('inStock')
+                    }
+                },
+                error: function (response){
+                    alert('Lỗi AJAX');
                 }
-            };
-            xmlhttp.open("GET", "/fashionShop/controllers/getProductDetails/getcolor.asp?id=" + ID_product + "&size=" + size, true);
-            xmlhttp.send();
+            });
         }
+        var ID_product = document.getElementById("ID_product").value;
+        var showQuantity = () => {
+            var color = document.getElementById("color").value;
+            // console.log(color)
+            // console.log(ListColor[color - 1])
 
+            ListColor.forEach(element => {
+                if (element.id_color == color) {
+                    if (element.quantity == "0") {
+                        document.getElementById('quantity_color').innerText = "Out of stock";
+                        document.getElementById('quantity_color').classList.remove('inStock')
+                        document.getElementById('quantity_color').classList.add('outOfStock')
+                    } else {
+                        document.getElementById('quantity_color').innerText = `In stock: ${element.quantity}`;
+                        document.getElementById('quantity_color').classList.remove('outOfStock')
+                        document.getElementById('quantity_color').classList.add('inStock')
+                    }
+                }
+            });
+            
+            // console.log(color)
+            // console.log(ListColor[color - 1])
+        }
+        // auto load size đầu tiên
+        window.addEventListener('load', getColors);
         // update favorite
         var favoriteBtn = document.querySelector(".favorite_btn");
         favoriteBtn.addEventListener('click', function() {
+            // alert("hehe")
             var stringID = favoriteBtn.id    
             var id = stringID.charAt(stringID.length - 1)
             console.log(id)
@@ -203,34 +270,45 @@ Set Result = cmdPrep.execute
         var addCartBtn = document.querySelector("#add_btn");
         var sizeProduct = document.querySelector("#size");
         var colorProduct = document.querySelector("#color");
+        var user = document.getElementById('ID_user')
         // var quantity_number = 0;
         const addToCart = function(e) {
             e.preventDefault();
-            console.log("addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value)
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/fashionShop/controllers/addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value, true);
-            // console.log(ID_product)
-            xmlhttp.send();
-
-            setTimeout(() => {
-                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", "/fashionShop/controllers/getQuantityCart.asp", true);
-                
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        var status = xhr.status;
-                        if (status === 0 || (status >= 200 && status < 400)) {
-                            console.log("Success" + xhr.responseText);
-                            spanQuantityCart.innerHTML = xhr.responseText;
-                            cartQuantity.innerHTML = xhr.responseText;
-                        } else {
-                            console.log("Error" + xhr.responseText);
-                        }
-                    }
-                };
-                xhr.send();
-            }, 300);
-           
+            if (user.value != '') {
+                if (document.getElementById('quantity_color').classList.contains('inStock')) {
+                    console.log("addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value)
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open("GET", "/fashionShop/controllers/addCart.asp?id=" + ID_product +"&size="+sizeProduct.value+"&color="+colorProduct.value, true);
+                    // console.log(ID_product)
+                    xmlhttp.send();
+        
+                    setTimeout(() => {
+                         var xhr = new XMLHttpRequest();
+                        xhr.open("GET", "/fashionShop/controllers/getQuantityCart.asp", true);
+                        
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                var status = xhr.status;
+                                if (status === 0 || (status >= 200 && status < 400)) {
+                                    console.log("Success" + xhr.responseText);
+                                    spanQuantityCart.innerHTML = xhr.responseText;
+                                    cartQuantity.innerHTML = xhr.responseText;
+                                } else {
+                                    console.log("Error" + xhr.responseText);
+                                }
+                            }
+                        };
+                        xhr.send();
+                    }, 300);
+                } else {
+                    alert("This product is out of stock, please choose another product.");
+                }
+            } else {
+                let text = "Please login to continue shopping.";
+                if (confirm(text) == true) {
+                    window.location.href="./login.asp"
+                }
+            }
         }
         addCartBtn.addEventListener("click", addToCart)
 

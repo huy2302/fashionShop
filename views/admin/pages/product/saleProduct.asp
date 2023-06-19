@@ -177,7 +177,8 @@ if Ceil<>Number Then
                                 %>
                             </td>
                             <td>
-                                <a href="/fashionShop/controllers/admin/endSale.asp?id=<%=Result("id_product")%>" class="btn btn-secondary end_btn">End Sale</a>
+                                <!-- <a id='<%=Result("id_product")%>' href="/fashionShop/controllers/admin/endSale.asp?id=<%=Result("id_product")%>" class="btn btn-secondary end_btn">End Sale</a> -->
+                                <a id='<%=Result("id_product")%>' class="btn btn-secondary end_btn">End Sale</a>
                             </td>
                             </tr>
                             <%
@@ -209,7 +210,17 @@ if Ceil<>Number Then
   </div>
     <!-- container-scroller -->
     <!-- #include file="../../js/mainJs.asp" -->
-
+  <script>
+    var endSaleBtns = document.querySelectorAll('.end_btn');
+    endSaleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        let text = "Confirm to stop selling this product?";
+        if (confirm(text) == true) {
+            window.location.href=`/fashionShop/controllers/admin/endSale.asp?id=${btn.id}`
+        }
+      })
+    })
+  </script>
 </body>
 
 </html>

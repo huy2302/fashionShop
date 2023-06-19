@@ -25,7 +25,7 @@
 
     offset = (Clng(page) * Clng(limit)) - Clng(limit)
 
-    strSQL = "SELECT COUNT(ID_product) AS count FROM product"
+    strSQL = "SELECT COUNT(product.ID_product) AS count FROM product join discount on product.ID_product = discount.ID_product where discount.sale_percent > 0 and discount.end_day > GETDATE() - 1"
     connDB.Open()
     Set CountResult = connDB.execute(strSQL)
 
@@ -45,7 +45,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Title  -->
-    <title>Essence -<%=Session("ID_user")%> Fashion Ecommerce Template</title>
+    <title>Essence - Fashion Ecommerce Template</title>
 
     <link rel="icon" href="img/core-img/favicon.ico">
     <link rel="stylesheet" href="./css/add.css">
@@ -103,17 +103,17 @@
                                     <li data-toggle="collapse" data-target="#clothing">
                                         <a href="#">clothing</a>
                                         <ul class="sub-menu collapse show" id="clothing">
-                                            <li><a href="#">All</a></li>
-                                            <li><a href="#">Bodysuits</a></li>
-                                            <li><a href="#">Dresses</a></li>
-                                            <li><a href="#">Hoodies &amp; Sweats</a></li>
-                                            <li><a href="#">Jackets &amp; Coats</a></li>
-                                            <li><a href="#">Jeans</a></li>
-                                            <li><a href="#">Pants &amp; Leggings</a></li>
-                                            <li><a href="#">Rompers &amp; Jumpsuits</a></li>
-                                            <li><a href="#">Shirts &amp; Blouses</a></li>
-                                            <li><a href="#">Shirts</a></li>
-                                            <li><a href="#">Sweaters &amp; Knits</a></li>
+                                            <li><a href="shop.asp">All</a></li>
+                                            <li><a href="shop.asp?species=Bodysuits">Bodysuits</a></li>
+                                            <li><a href="shop.asp?species=Dresses">Dresses</a></li>
+                                            <li><a href="shop.asp?species=Hoodies">Hoodies &amp; Sweats</a></li>
+                                            <li><a href="shop.asp?species=Jackets">Jackets &amp; Coats</a></li>
+                                            <li><a href="shop.asp?species=Jeans">Jeans</a></li>
+                                            <li><a href="shop.asp?species=Pants">Pants &amp; Leggings</a></li>
+                                            <li><a href="shop.asp?species=Rompers">Rompers &amp; Jumpsuits</a></li>
+                                            <li><a href="shop.asp?species=Shirts">Shirts &amp; Blouses</a></li>
+                                            <li><a href="shop.asp?species=Shirts">Shirts</a></li>
+                                            <li><a href="shop.asp?species=Sweaters">Sweaters &amp; Knits</a></li>
                                         </ul>
                                     </li>
                                     <!-- Single Item -->

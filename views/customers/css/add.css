@@ -136,3 +136,10 @@
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 }
+.logout {
+    color: #0009ff !important;
+    cursor: pointer;
+}
+.logout:hover {
+    color: #000 !important;
+}

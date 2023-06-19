@@ -23,7 +23,7 @@ If (NOT isnull(email) AND NOT isnull(password) AND TRIM(email)<>"" AND TRIM(pass
     If not result.EOF Then
         ' dang nhap thanh cong
         Session("ID_user")=result("ID_user")
-        Session("Success")="Login Successfully"
+        Session("Success")="Login Successfully!"
         Response.redirect("./index.asp")
     Else
         ' dang nhap ko thanh cong

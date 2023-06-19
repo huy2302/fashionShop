@@ -1,0 +1,124 @@
+.list-purchase {
+    width: 100%;
+}
+.single-purchase {
+    width: 100%;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #000;
+    padding-bottom: 2em;
+
+    .purchase-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 1em;
+        margin-bottom: 1.5em;
+        border-bottom: 1px solid #ccccffc2;
+
+        h4 {
+            font-size: 25px;
+            font-weight: 500;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        p {
+            font-size: 16px;
+            margin: 0;
+            letter-spacing: 0.4px;
+            
+            font-weight: 100;
+        }
+        .delivery_status-success {
+            color: #26aa99;
+        }
+        .delivery_status-process {
+            color: #ff4700;
+        }
+    }
+    .purchase-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1em;
+        margin-bottom: 1.5em;
+        border-bottom: 1px solid #ccccffc2;
+
+        div img {
+            width: 12em;
+        }
+        .content {
+            margin-left: 2em;
+            h3 {
+                font-weight: 400;
+            }
+            p {
+                
+            }
+        }
+        .purchase-price {
+            display: flex;
+            
+            p {
+                margin: 0;
+                font-size: 2em;
+                color: #ee4d2d;
+                font-weight: 100;
+                letter-spacing: 0.5px;
+            }
+        }
+    }
+    .purchase-end {
+
+        .total {
+            display: flex;
+            flex-direction: row-reverse;
+            p {
+                color: #000;
+                font-size: 20px;
+                font-weight: 100;
+                letter-spacing: 1px;
+                margin: 0;
+
+                span {
+                    font-size: 1.5em;
+                    color: #ee4d2d;
+                }
+            }
+        }
+        .desc {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            p {
+                margin: 0;
+                letter-spacing: 1px;
+                span {
+                    border-bottom: 1px solid;
+                }
+            }
+            .buyAgain-btn {
+                border: none;
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 2px;
+                padding: 1em 3em;
+                letter-spacing: 1px;
+                outline: none;
+                cursor: pointer;
+                color: #000;
+                font-size: 14px;
+                font-weight: 400;
+
+                -webkit-transition: none; 
+                transition: none; 
+                text-decoration: none; 
+                outline: none; 
+
+                &:hover {
+                    background: rgb(208 208 208 / 24%);
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,5 @@
 <!--#include file="connect.asp"-->
+<!--#include file="connectCMD.asp"-->
 
 <%    
     'Lay ve IDProduct
@@ -20,9 +21,6 @@
         Set Result = cmdPrep.execute 
         Response.write "<br>"
 
-            Set Conn = Server.CreateObject("ADODB.Connection")
-            Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
-            
             If Result.EOF then
                 sql = "insert into cart (ID_user, ID_product, ID_size, ID_color, quantity, price) values ("&Session("ID_user")&", "&ID_product&", "&ID_size&", "&ID_color&", 1, (select price from product where ID_product = "&ID_product&"))"
                 Conn.Execute sql

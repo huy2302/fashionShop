@@ -40,17 +40,14 @@ connDB.Open()
 </style>
 <body>
   <div class="container-scroller"> 
-    <!-- partial:partials/_navbar.html -->
 
       <!-- #include file="../../partials/_header.asp" --> 
 
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_settings-panel.html -->
 
         <!-- #include file="../../partials/_settings-panel.asp" -->
 
-        <!-- partial -->
 
         <!-- #include file="../../partials/_sidebar.asp" -->
 
@@ -70,16 +67,25 @@ connDB.Open()
                             User
                           </th>
                           <th>
-                            First name
+                            ID 
+                          </th>
+                          <th>
+                            Full name
+                          </th>
+                          <th>
+                            Identity Card
                           </th>
                           <th>
                             Birthday
                           </th>
                           <th>
-                            Amount
+                            Join on
                           </th>
                           <th>
-                            Join on
+                            Phone Number
+                          </th>
+                          <th>
+                            Action
                           </th>
                         </tr>
                       </thead>
@@ -89,7 +95,7 @@ connDB.Open()
                         cmdPrep.ActiveConnection = connDB
                         cmdPrep.CommandType = 1
                         cmdPrep.Prepared = True
-                        cmdPrep.CommandText = "select CONCAT(users.firstName, ' ', users.lastName) as fullName, birthday, joindate from users"
+                        cmdPrep.CommandText = "select CONCAT(users.firstName, ' ', users.lastName) as fullName, birthday, ID_user, joindate, phone_number, cmnd from users"
 
                         Set Result = cmdPrep.execute
                         do while not Result.EOF
@@ -99,7 +105,13 @@ connDB.Open()
                             <img src="../../images/faces/face1.jpg" alt="image"/>
                           </td>
                           <td>
+                            <%=Result("ID_user")%>
+                          </td>
+                          <td>
                             <%=Result("fullName")%>
+                          </td>
+                          <td>
+                            <%=Result("cmnd")%>
                           </td>
                           <td>
                             <!--<div class="progress">
@@ -108,10 +120,14 @@ connDB.Open()
                             <%=Result("birthday")%>
                           </td>
                           <td>
-                            23$
+                            <%=Result("joindate")%>
                           </td>
                           <td>
-                            <%=Result("joindate")%>
+                            <%=Result("phone_number")%>
+                          </td>
+                          <td>
+                            <a href="editEmployee.asp?id=<%=Result("ID_user")%>" class="btn btn-secondary">Edit</a>
+                            <a id='<%=Result("ID_user")%>' class="btn btn-danger btn-delete">Delete</a>
                           </td>
                         </tr>
                         <%

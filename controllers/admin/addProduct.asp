@@ -1,11 +1,8 @@
-
+<!-- #include file="../connect.asp" --> 
 <%
-Set Conn = Server.CreateObject("ADODB.Connection")
-Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
-
 Dim sql
 
-id = Request.QueryString("id")
+' id = Request.QueryString("id")
 name = Request.QueryString("name")
 brand = Request.QueryString("brand")
 desc = Request.QueryString("desc")
@@ -17,19 +14,18 @@ brand = Replace(brand, "_", " ")
 desc = Replace(desc, "_", " ")
 species = Replace(species, "_", " ")
 species = Replace(species, "<>", "&")
+dim id
 
-Response.write "id="&id&" name="&name&" desc="&desc&" brand="&brand&" species="&species&" price="&price
-
-sql = "insert into product values("&id&", '"&name&"', '"&desc&"', 1, '"&species&"', '"&price&"')"
+sql = "insert into product values((select max(ID_product) + 1 as id from product), '"&name&"', '"&desc&"', 1, '"&species&"', '"&price&"')"
 Conn.Execute sql 
 
-sql = "insert into brand values ("&id&", "&id&", '"&brand&"')"
+sql = "insert into brand values ((select max(ID_product) as id from product), ((select max(ID_product) as id from product)), '"&brand&"')"
 Conn.Execute sql 
 
-sql = "insert into discount values ("&id&", "&id&", '', '', 0)"
-Conn.Execute sql
+' sql = "insert into discount values ((select max(ID_product) as id from product), (select max(ID_product) as id from product), '', '', 0)"
+' Conn.Execute sql
 
-Response.ContentType = "text/html"
+' Response.ContentType = "text/html"
 %>
 
 

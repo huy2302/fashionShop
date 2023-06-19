@@ -1,8 +1,5 @@
-
-<%
-Set Conn = Server.CreateObject("ADODB.Connection")
-Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
-
+<!--#include file="connect.asp"-->
+<% 
 Dim sql
 ' favorite_note = 1 => favorite checked
 ' favorite_note = 0 => favorite unchecked
