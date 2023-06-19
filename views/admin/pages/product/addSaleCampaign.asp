@@ -1,22 +1,20 @@
 <!-- #include file="aspuploader/include_aspuploader.asp" -->
 
-<% 'code here
-Dim connDB
-set connDB = Server.CreateObject("ADODB.Connection")
-Dim strConnection
-strConnection = "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
-connDB.ConnectionString = strConnection
-connDB.Open()
-
-%>
 <%
-strSQL = "SELECT MAX(ID_product) AS count FROM product"
-Set CountResult = connDB.execute(strSQL)
+Set Conn = Server.CreateObject("ADODB.Connection")
+Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
 
-totalRows = CLng(CountResult("count"))
+sqlCount = "select max(ID_campaign) + 1 as id from campaign"
+rsCount = Conn.Execute(sqlCount)
 
-Set CountResult = Nothing
-' lay ve tong so trang
+ID_campaign = rsCount("id")
+
+if not IsNull(ID_campaign) then 
+    ' response.write ID_campaign 
+else 
+    ID_campaign = 1
+    ' response.write ID_campaign
+end if
 %>
 
   <!DOCTYPE html>
@@ -162,6 +160,7 @@ Set CountResult = Nothing
     </div>
     <!-- container-scroller -->
     <!-- #include file="../../js/mainJs.asp" -->
+    
     <script>
         var getTotal = function (){
             $.ajax({
@@ -230,7 +229,7 @@ Set CountResult = Nothing
                 listChecked.forEach(element => {
                     // add bảng campaign
                     var xmlhttp = new XMLHttpRequest();
-                    xmlhttp.open("GET", "/fashionShop/controllers/admin/addCampaign.asp?name=" + CampaignName + "&desc="+description + "&ID_product="+element, true);
+                    xmlhttp.open("GET", "/fashionShop/controllers/admin/addCampaign.asp?id=<%=ID_campaign%>&name=" + CampaignName + "&desc="+description + "&ID_product="+element + "&start="+startDay + "&end="+endDay + "&sale="+salePercent, true);
                     
                     xmlhttp.send();
                     
