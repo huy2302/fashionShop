@@ -288,7 +288,7 @@ connDB.Open()
             var li = document.createElement("li");
             
             filelist.innerHTML = `
-              <img class="imgUp" src="/fashionShop/resources/imgProduct/${uploadedFile.name}" >
+              <img class="imgUp" src="/fashionShop/resources/imgUser/${uploadedFile.name}" >
             `
             avt = uploadedFile.name;
           } else {

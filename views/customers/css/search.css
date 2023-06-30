@@ -17,15 +17,15 @@
     transition: showLoginModal 0.3s cubic-bezier(0.71, 0.12, 1, 1);
 }
 .list_search {
-    width: 85%;
-    flex-wrap: nowrap;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    width: 51em;
     margin: 0 auto;
+    overflow-x: scroll;
+    display: -webkit-inline-box;
 }
 .list_search li {
-    width: 32%;
+    width: 28%;
+    margin: le;
+    margin-left: 1em;
 }
 .list_search h3 {
     font-size: 2em;

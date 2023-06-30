@@ -1,3 +1,4 @@
+
 (function($) {
   'use strict';
   $(function() {
@@ -366,6 +367,7 @@
       bar.text.style.fontSize = '0rem';
       bar.animate(.34); // Number from 0.0 to 1.0
     }
+    
     if ($("#marketingOverview").length) {
       var marketingOverviewChart = document.getElementById("marketingOverview").getContext('2d');
       var marketingOverviewData = {
@@ -550,90 +552,117 @@
       });
       document.getElementById('marketing-overview-legend').innerHTML = marketingOverviewDark.generateLegend();
     }
-    if ($("#doughnutChart").length) {
-      var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
-      var doughnutPieData = {
-        datasets: [{
-          data: [40, 20, 30, 10],
-          backgroundColor: [
-            "#1F3BB3",
-            "#FDD0C7",
-            "#52CDFF",
-            "#81DADA"
-          ],
-          borderColor: [
-            "#1F3BB3",
-            "#FDD0C7",
-            "#52CDFF",
-            "#81DADA"
-          ],
-        }],
-  
-        // These labels appear in the legend and in the tooltips when hovering different arcs
-        labels: [
-          'Total',
-          'Net',
-          'Gross',
-          'AVG',
-        ]
-      };
-      var doughnutPieOptions = {
-        cutoutPercentage: 50,
-        animationEasing: "easeOutBounce",
-        animateRotate: true,
-        animateScale: false,
-        responsive: true,
-        maintainAspectRatio: true,
-        showScale: true,
-        legend: false,
-        legendCallback: function (chart) {
-          var text = [];
-          text.push('<div class="chartjs-legend"><ul class="justify-content-center">');
-          for (var i = 0; i < chart.data.datasets[0].data.length; i++) {
-            text.push('<li><span style="background-color:' + chart.data.datasets[0].backgroundColor[i] + '">');
-            text.push('</span>');
-            if (chart.data.labels[i]) {
-              text.push(chart.data.labels[i]);
-            }
-            text.push('</li>');
-          }
-          text.push('</div></ul>');
-          return text.join("");
-        },
-        
-        layout: {
-          padding: {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
-          }
-        },
-        tooltips: {
-          callbacks: {
-            title: function(tooltipItem, data) {
-              return data['labels'][tooltipItem[0]['index']];
-            },
-            label: function(tooltipItem, data) {
-              return data['datasets'][0]['data'][tooltipItem['index']];
-            }
-          },
-            
-          backgroundColor: '#fff',
-          titleFontSize: 14,
-          titleFontColor: '#0B0F32',
-          bodyFontColor: '#737F8B',
-          bodyFontSize: 11,
-          displayColors: false
-        }
-      };
-      var doughnutChart = new Chart(doughnutChartCanvas, {
-        type: 'doughnut',
-        data: doughnutPieData,
-        options: doughnutPieOptions
-      });
-      document.getElementById('doughnut-chart-legend').innerHTML = doughnutChart.generateLegend();
+    
+    var dataUserNumber = {
+        last30days: 0,
+        last60days: 0,
+        total: 0
     }
+    var getUserNumber = function () {
+        $.ajax({
+            url: '/fashionShop/controllers/admin/getUserNumber.asp',
+            dataType: 'json',
+            success: function (response) {
+              dataUserNumber.last30days = parseInt(response[0].users_last_30_days)
+              dataUserNumber.last60days = parseInt(response[0].users_last_60_days)
+              dataUserNumber.total = parseInt(response[0].users_all_days)
+              
+              if ($("#doughnutChart").length) {
+      
+                var doughnutChartCanvas = $("#doughnutChart").get(0).getContext("2d");
+                var doughnutPieData = {
+                  datasets: [{
+                    data: [
+                      dataUserNumber.total,
+                      dataUserNumber.last30days,
+                      dataUserNumber.last60days
+                    ],
+                    backgroundColor: [
+                      "#1F3BB3",
+                      "#FDD0C7",
+                      "#52CDFF"
+                    ],
+                    borderColor: [
+                      "#1F3BB3",
+                      "#FDD0C7",
+                      "#52CDFF"
+                    ],
+                  }],
+            
+                  // These labels appear in the legend and in the tooltips when hovering different arcs
+                  labels: [
+                    'Total',
+                    'This Month',
+                    'Last Month'
+                  ]
+                };
+                var doughnutPieOptions = {
+                  cutoutPercentage: 50,
+                  animationEasing: "easeOutBounce",
+                  animateRotate: true,
+                  animateScale: false,
+                  responsive: true,
+                  maintainAspectRatio: true,
+                  showScale: true,
+                  legend: false,
+                  legendCallback: function (chart) {
+                    var text = [];
+                    text.push('<div class="chartjs-legend"><ul class="justify-content-center">');
+                    for (var i = 0; i < chart.data.datasets[0].data.length; i++) {
+                      text.push('<li><span style="background-color:' + chart.data.datasets[0].backgroundColor[i] + '">');
+                      text.push('</span>');
+                      if (chart.data.labels[i]) {
+                        text.push(chart.data.labels[i]);
+                      }
+                      text.push('</li>');
+                    }
+                    text.push('</div></ul>');
+                    return text.join("");
+                  },
+                  
+                  layout: {
+                    padding: {
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0
+                    }
+                  },
+                  tooltips: {
+                    callbacks: {
+                      title: function(tooltipItem, data) {
+                        return data['labels'][tooltipItem[0]['index']];
+                      },
+                      label: function(tooltipItem, data) {
+                        return data['datasets'][0]['data'][tooltipItem['index']];
+                      }
+                    },
+                      
+                    backgroundColor: '#fff',
+                    titleFontSize: 14,
+                    titleFontColor: '#0B0F32',
+                    bodyFontColor: '#737F8B',
+                    bodyFontSize: 11,
+                    displayColors: false
+                  }
+                };
+                var doughnutChart = new Chart(doughnutChartCanvas, {
+                  type: 'doughnut',
+                  data: doughnutPieData,
+                  options: doughnutPieOptions
+                });
+                document.getElementById('doughnut-chart-legend').innerHTML = doughnutChart.generateLegend();
+              }
+
+              console.log(dataUserNumber)
+            },
+            error: function (response) {
+                alert('Lỗi AJAX');
+            }
+        });
+    }
+    getUserNumber()
+    
     if ($("#leaveReport").length) {
       var leaveReportChart = document.getElementById("leaveReport").getContext('2d');
       var leaveReportData = {

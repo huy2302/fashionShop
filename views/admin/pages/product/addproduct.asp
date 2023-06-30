@@ -1,4 +1,3 @@
-<!-- #include file="aspuploader/include_aspuploader.asp" -->
 
 <% 'code here
 Dim connDB

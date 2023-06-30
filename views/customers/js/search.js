@@ -38,7 +38,7 @@ var getSeacrh = function (data){
                     <h3>No product name ${data} could be found</h3>
                 `
             }
-            response.slice(0, 3).forEach(function(obj) {
+            response.forEach(function(obj) {
                 if (obj.id == "-1") {
                     return;
                 }

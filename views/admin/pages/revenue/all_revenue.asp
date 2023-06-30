@@ -65,6 +65,7 @@ if Ceil<>Number Then
     <link rel="stylesheet" href="../../css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="../../images/favicon.png" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
   </head>
   <style>
     .swal2-confirm.swal2-styled {
@@ -144,16 +145,18 @@ if Ceil<>Number Then
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                            <h4 class="card-title">Number of Orders</h4>
-                            <canvas id="areaChart" width="381" height="190" style="display: block; height: 152px; width: 305px;" class="chartjs-render-monitor"></canvas>
+                                <h4 class="card-title">Number of Orders</h4>
+                                <canvas id="areaChart" width="381" height="190" style="display: block; height: 152px; width: 305px;" class="chartjs-render-monitor"></canvas>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-                            <h4 class="card-title">Revenue</h4>
-                            <canvas id="areaChartTotal" width="381" height="190" style="display: block; height: 152px; width: 305px;" class="chartjs-render-monitor"></canvas>
+                                <h4 class="card-title">Revenue</h4>
+                                <!--<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                                -->
+                                <<canvas id="areaChartTotal" width="381" height="190" style="display: block; height: 152px; width: 305px;" class="chartjs-render-monitor"></canvas>
                             </div>
                         </div>
                     </div>
@@ -188,6 +191,32 @@ if Ceil<>Number Then
     <!-- <script src="../../js/chart.js"></script> -->
     <script src="../../js/chartSale.js"></script>
     <script src="path-to/node_modules/chart.js/dist/Chart.min.js"></script>
+    <script>
+        // const xValues = [100,200,300,400,500,600,700,800,900,1000];
+
+        // new Chart("myChart", {
+        // type: "line",
+        // data: {
+        //     labels: xValues,
+        //     datasets: [{ 
+        //         data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
+        //         borderColor: "red",
+        //         fill: false
+        //     }, { 
+        //         data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
+        //         borderColor: "green",
+        //         fill: false
+        //     }, { 
+        //         data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
+        //         borderColor: "blue",
+        //         fill: false
+        //     }]
+        // },
+        // options: {
+        //     legend: {display: false}
+        // }
+        // });
+    </script>
 </body>
 
 </html>

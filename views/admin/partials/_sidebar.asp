@@ -1,7 +1,7 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link" href="index.html">
+      <a class="nav-link" href="../../index.asp">
         <i class="mdi mdi-grid-large menu-icon"></i>
         <span class="menu-title">Dashboard</span>
       </a>
@@ -9,7 +9,7 @@
     <li class="nav-item nav-category">User Manager</li>
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#admin" aria-expanded="false" aria-controls="ui-basic">
-        <i class="menu-icon mdi mdi-floor-plan"></i>
+        <i class="menu-icon mdi mdi-account-box"></i>
         <span class="menu-title">Admin</span>
         <i class="menu-arrow"></i> 
       </a>
@@ -22,7 +22,7 @@
     </li>
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#user" aria-expanded="false" aria-controls="ui-basic">
-        <i class="menu-icon mdi mdi-floor-plan"></i>
+        <i class="menu-icon mdi mdi-account-box"></i>
         <span class="menu-title">User</span>
         <i class="menu-arrow"></i> 
       </a>
@@ -36,7 +36,7 @@
     <li class="nav-item nav-category">Product</li>
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#product" aria-expanded="false" aria-controls="ui-basic">
-        <i class="menu-icon mdi mdi-floor-plan"></i>
+        <i class="menu-icon mdi mdi-briefcase-check"></i>
         <span class="menu-title">Products</span>
         <i class="menu-arrow"></i> 
       </a>
@@ -53,13 +53,14 @@
     <li class="nav-item nav-category">Sales</li>
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="ui-basic">
-        <i class="menu-icon mdi mdi-floor-plan"></i>
+        <i class="menu-icon mdi mdi-chart-areaspline"></i>
         <span class="menu-title">Revenue</span>
         <i class="menu-arrow"></i> 
       </a>
       <div class="collapse" id="sales">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/revenue/all_revenue.asp">Total revenue</a></li>
+          <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/revenue/all_revenue.asp">Sales Chart</a></li>
+          <li class="nav-item"> <a class="nav-link" href="/fashionshop/views/admin/pages/revenue/allBill.asp">Order List</a></li>
         </ul>
       </div>
     </li>

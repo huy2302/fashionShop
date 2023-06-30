@@ -90,7 +90,7 @@ connDB.Open()
                                 cmdPrep.ActiveConnection = connDB
                                 cmdPrep.CommandType = 1
                                 cmdPrep.Prepared = True
-                                cmdPrep.CommandText = "select ID_campaign, nameCampaign, description, status, start_day, end_day, sale_percent from campaign group by ID_campaign, nameCampaign, description, status, start_day, end_day, sale_percent"
+                                cmdPrep.CommandText = "SELECT ID_campaign, nameCampaign, description, status, start_day, end_day, sale_percent, CASE WHEN end_day >= GETDATE() THEN 'Active' ELSE 'Expired' END AS end_sale FROM campaign GROUP BY ID_campaign, nameCampaign, description, status, start_day, end_day, sale_percent;"
 
                                 Set Result = cmdPrep.execute
                                 do while not Result.EOF
@@ -109,24 +109,25 @@ connDB.Open()
                                         </td>
                                         <td>
                                             <% 
-                                            Dim currentDate
-                                            currentDate = Date()
-
-                                            Dim datee
-                                            datee = FormatDateTime(Result("end_day"),2)
-
-                                            if (CStr(datee) < CStr(currentDate)) then
+                                            if (Result("end_sale") = "Expired") then
                                                 classStatus = "badge-success"
-                                                status = Result("status")
-                                            else 
+                                                status = "Completed"
+                                            end if
+                                            if (Result("end_sale") = "Active") then
                                                 classStatus = "badge-warning"
-                                                status = Result("status")
+                                                status = "In progress"
                                             end if
                                             %>
                                             <label class="badge <%=classStatus%>"><%=status%></label>
                                         </td>
                                         <td>
+                                            <% 
+                                            if (Result("end_sale") = "Active") then
+                                            %>
                                             <a id="<%=Result("ID_campaign")%>" class="btn btn-secondary end_btn">End Sale</a>
+                                            <%
+                                            end if
+                                            %>
                                         </td>
                                     </tr>
                                 <%

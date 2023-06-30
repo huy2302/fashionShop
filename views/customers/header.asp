@@ -56,20 +56,6 @@ Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id
                             </li>
                             <li><a href="shop_sale.asp">Sale off</a></li>
                             <li><a href="shop_new.asp">New Collection</a></li>
-                            <!--<li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="index.asp">Home</a></li>
-                                    <li><a href="shop.asp">Shop</a></li>
-                                    <li><a href="single-product-details.html">Product Details</a></li>
-                                    <li><a href="checkout.html">Checkout</a></li>
-                                    <li><a href="blog.html">Blog</a></li>
-                                    <li><a href="single-blog.html">Single Blog</a></li>
-                                    <li><a href="regular-page.html">Regular Page</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="blog.html">Blog</a></li>
-                            <li><a href="contact.html">Contact</a></li>-->
                         </ul>
                     </div>
                     <!-- Nav End -->

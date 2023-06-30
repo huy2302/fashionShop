@@ -1,4 +1,3 @@
-<!-- #include file="aspuploader/include_aspuploader.asp" -->
 
 <%
 Set Conn = Server.CreateObject("ADODB.Connection")

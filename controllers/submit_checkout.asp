@@ -108,7 +108,7 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
             end if
             
             ' insert vào bảng bill_details
-            sql_cart = "select * from cart"
+            sql_cart = "select * from cart where ID_user = "&Session("ID_user")
             Set Result_cart = Conn.execute(sql_cart)
             dim sale_percent
             do while not Result_cart.EOF 

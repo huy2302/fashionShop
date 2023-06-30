@@ -17,9 +17,6 @@ var getRevenue = function (data) {
             // In ra các thứ trong tuần
             if (response[0]) {
 
-                // console.log(data)
-                // console.log(Date.parse(response[0].oder_day))
-                // console.log(Date.parse(data))
                 if (data == response[0].oder_day) {
                     var quantityInt = parseInt(response[0].quantity);
 
@@ -87,7 +84,7 @@ function getMonthdays(date) {
 
     for (var i = 0; i < 30; i++) {
         var currentDate = new Date(date);
-        currentDate.setDate(date.getDate() + i);
+        currentDate.setDate(date.getDate() - i);
         var formattedDateISO = currentDate.toISOString().split('T')[0];
         monthdays.push({
             day: currentDate.toLocaleDateString(undefined, { monthday: 'long' }),
@@ -99,11 +96,6 @@ function getMonthdays(date) {
 var renderDetails = function() {
     var weekSales = document.querySelector('.weekSales');
     var weekRevenue = document.querySelector('.weekRevenue');
-    var monthSales = document.querySelector('.monthSales');
-    var monthRevenue = document.querySelector('.monthRevenue');
-
-    console.log(QuantityTotalWeek);
-    console.log(totalWeek);
 
     if (QuantityTotalWeek > 0) {
         weekSales.innerHTML = QuantityTotalWeek;
@@ -117,7 +109,10 @@ var renderDetails = function() {
 // Sử dụng ví dụ với ngày đầu vào là '2023-05-30'
 // var inputDate = new Date('2023-05-30');
 var selectDay = document.getElementById('select_day');
-selectDay.valueAsDate = new Date();
+// lấy ra 7 ngày trước ngày hiện tại
+var currentDate = new Date();
+selectDay.valueAsDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+
 
 var render = function() {
     var inputDate = new Date(selectDay.value);
@@ -259,4 +254,30 @@ var renderTotalChart = () => {
             options: areaOptions
         });
     }
+}
+const xValues = [100,200,300,400,500,600,700,800,900,1000];
+
+const renderNewChart = () => {
+    new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{ 
+                data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
+                borderColor: "red",
+                fill: false
+            }, { 
+                data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
+                borderColor: "green",
+                fill: false
+            }, { 
+                data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
+                borderColor: "blue",
+                fill: false
+            }]
+        },
+        options: {
+            legend: {display: false}
+        }
+    });
 }

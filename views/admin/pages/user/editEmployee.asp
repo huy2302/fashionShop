@@ -254,7 +254,7 @@ ID_employeeEdit = Request.QueryString("id")
         var nameAvt = document.querySelector('.nameAvt');
         var filelist = document.getElementById("filelist");
         filelist.innerHTML = `
-        <img class="imgUp" src="/fashionShop/resources/imgProduct/${nameAvt.value}" >
+        <img class="imgUp" src="/fashionShop/resources/imgUser/${nameAvt.value}" >
         `
         var avt = nameAvt.value;
 
@@ -292,7 +292,7 @@ ID_employeeEdit = Request.QueryString("id")
                 var li = document.createElement("li");
                 
                 filelist.innerHTML = `
-                <img class="imgUp" src="/fashionShop/resources/imgProduct/${uploadedFile.name}" >
+                <img class="imgUp" src="/fashionShop/resources/imgUser/${uploadedFile.name}" >
                 `
                 avt = uploadedFile.name;
             } else {
