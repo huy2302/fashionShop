@@ -261,16 +261,7 @@ end if
     <script src="js/classy-nav.min.js"></script>
     <!-- Active js -->
     <script src="js/active.js"></script>
-    <script>
-        const postSalePercent = (id, start, end, sale) => {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/fashionShop/controllers/admin/addSalePercent.asp?id_product=" + id + "&start=" + start + "&end=" + end + "&sale=" + sale, true);
-            // console.log(ID_product)
-            xmlhttp.send();
-        }
-
-        postSalePercent();
-    </script>
+    
 
 </body> 
 

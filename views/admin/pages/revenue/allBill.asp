@@ -67,10 +67,7 @@ connDB.Open()
                     <div class="card">
                         <div class="card">
                             <div class="card-body">
-                            <h4 class="card-title">Hoverable Table</h4>
-                            <p class="card-description">
-                                Add class <code>.table-hover</code>
-                            </p>
+                            <h4 class="card-title">Order List</h4>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                 <thead>
@@ -92,7 +89,7 @@ connDB.Open()
                                 cmdPrep.ActiveConnection = connDB
                                 cmdPrep.CommandType = 1
                                 cmdPrep.Prepared = True
-                                cmdPrep.CommandText = "select * from bill"
+                                cmdPrep.CommandText = "select * from bill order by bill.oder_day desc"
 
                                 Set Result = cmdPrep.execute
                                 do while not Result.EOF

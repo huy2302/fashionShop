@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chuyển đổi HTML thành PDF hoặc PNG hoặc JPG</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.3/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+
+</head>
+<body>
+    <!-- Đoạn HTML bạn muốn chuyển đổi -->
+    <div id="myHtml">
+        <h1>Đây là nội dung HTML</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+
+    <!-- Button Save -->
+    <button onclick="saveAsPDF()">Lưu thành PDF</button>
+    <button onclick="saveAsPNG()">Lưu thành PNG</button>
+    <button onclick="saveAsJPG()">Lưu thành JPG</button>
+
+    <script>
+        // Hàm chuyển đổi và lưu thành PNG
+        function saveAsPNG() {
+            html2canvas(document.getElementById('myHtml')).then(function(canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var link = document.createElement('a');
+                link.href = imgData;
+                link.download = 'file.png';
+                link.click();
+            });
+        }
+
+        // Hàm chuyển đổi và lưu thành JPG
+        function saveAsJPG() {
+            html2canvas(document.getElementById('myHtml')).then(function(canvas) {
+                var imgData = canvas.toDataURL('image/jpeg');
+                var link = document.createElement('a');
+                link.href = imgData;
+                link.download = 'file.jpg';
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

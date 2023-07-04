@@ -118,23 +118,14 @@ if Ceil<>Number Then
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="statistics-details d-flex align-items-center justify-content-between">
+                                
                                 <div>
-                                    <p class="statistics-title">Monthly Sales</p>
-                                    <h3 class="monthSales rate-percentage">32.53%</h3>
-                                    <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
-                                </div>
-                                <div>
-                                    <p class="statistics-title">Monthly Earning</p>
-                                    <h3 class="monthRevenue rate-percentage">7,682</h3>
-                                    <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
-                                </div>
-                                <div>
-                                    <p class="statistics-title">Weekend Sales</p>
+                                    <p class="statistics-title">Orders for The Week</p>
                                     <h3 class="weekSales rate-percentage">68.8</h3>
                                     <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
                                 </div>
                                 <div class="d-none d-md-block">
-                                    <p class="statistics-title">Weekend Earning</p>
+                                    <p class="statistics-title">Amount of The Week</p>
                                     <h3 class="weekRevenue rate-percentage">2m:35s</h3>
                                     <!--<p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-0.5%</span></p>-->
                                 </div>

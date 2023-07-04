@@ -106,6 +106,9 @@ if Ceil<>Number Then
                         <thead>
                           <tr>
                             <th>
+                              STT
+                            </th>
+                            <th>
                               Product
                             </th>
                             <th>
@@ -136,9 +139,15 @@ if Ceil<>Number Then
                           cmdPrep.parameters.Append cmdPrep.createParameter("limit",3,1, , limit)
 
                           Set Result = cmdPrep.execute
+                          dim STT
+                          STT = 1
                           do while not Result.EOF
                           %>
                           <tr>
+                            <td>
+                              <%=STT%>
+                              <% STT = STT + 1 %>
+                            </td>
                             <td class="py-1">
                               <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="image"/>
                             </td>

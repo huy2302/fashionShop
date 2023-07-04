@@ -8,7 +8,7 @@
     ' true
     Dim sql
     ' sql = "select * from account where email= ? and password= ?"
-    sql = "select ID_user, firstName, role, email, password from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
+    sql = "select ID_user, firstName, CONCAT(firstName, ' ', lastName) as fullName, role, email, password, avatar from account acc join users u on u.ID_account = acc.ID_account where acc.email = ? and acc.password = ? and acc.role = 0"
     Dim cmdPrep
     set cmdPrep = Server.CreateObject("ADODB.Command")
     connDB.Open()
@@ -25,6 +25,9 @@
         ' dang nhap thanh cong
         Session("ID_employee")=result("ID_user")
         Session("employee_name")=result("firstName")
+        Session("avatar")=result("avatar")
+        Session("fullName")=result("fullName")
+        Session("email")=result("email")
         Session("Success")="Login Successfully"
         Response.redirect("../../index.asp")
     Else
@@ -85,23 +88,7 @@ End if
                 <div class="mt-3">
                   <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" type="submit">SIGN IN</button>
                 </div>
-                <div class="my-2 d-flex justify-content-between align-items-center">
-                  <div class="form-check">
-                    <label class="form-check-label text-muted">
-                      <input type="checkbox" class="form-check-input">
-                      Keep me signed in
-                    </label>
-                  </div>
-                  <a href="#" class="auth-link text-black">Forgot password?</a>
-                </div>
-                <div class="mb-2">
-                  <button type="button" class="btn btn-block btn-facebook auth-form-btn">
-                    <i class="ti-facebook me-2"></i>Connect using facebook
-                  </button>
-                </div>
-                <div class="text-center mt-4 fw-light">
-                  Don't have an account? <a href="register.html" class="text-primary">Create</a>
-                </div>
+                
               </form>
             </div>
           </div>

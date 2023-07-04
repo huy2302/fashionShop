@@ -140,7 +140,10 @@ var render = function() {
         }, 100);
     }, 100);
 }
-render()
+setTimeout(function() {
+    // Gọi hàm render() ở đây
+    render();
+}, 1000);
 selectDay.onchange = render
 var btnPrev = document.getElementById("btn-prev");
 var btnNext = document.getElementById("btn-next");

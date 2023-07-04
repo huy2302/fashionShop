@@ -280,16 +280,6 @@
                                         <!-- Product Badge -->
                                         <%
                                         percent = CInt(Result("sale_percent"))
-
-                                        Dim currentDate
-                                        currentDate = Date()
-
-                                        Dim datee
-                                        datee = FormatDateTime(Result("end_day"),2)
-
-                                        if (CStr(datee) < CStr(currentDate)) then
-                                            percent = 0
-                                        end if
                                         if (percent > 0) then
                                         %>
                                         <div class="product-badge offer-badge">

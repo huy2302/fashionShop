@@ -52,7 +52,8 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
         Do while not ResultCart.EOF
 
             Do while not ResultQuantity.EOF
-                if ((ResultCart("ID_product")) = ResultQuantity("ID_product") and ResultCart("ID_product") = ResultQuantity("ID_product") and ResultCart("ID_product") = ResultQuantity("ID_product")) then
+
+                if ((ResultCart("ID_product")) = ResultQuantity("ID_product") and ResultCart("ID_size") = ResultQuantity("ID_size") and ResultCart("ID_color") = ResultQuantity("ID_color")) then
                     ID_productS = ResultQuantity("ID_product")
                     ID_sizeS = ResultQuantity("ID_size")
                     ID_colorS = ResultQuantity("ID_color")
@@ -76,6 +77,8 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
                         statusOrder = "Failed"
                         allowOrder = false
                         Response.write "This product is currently out of stock, your order will be recorded. When we update the item, we will deliver the order to you. We apologize for this inconvenience."
+                        Response.write ID_productS&"-"&ID_sizeS&"-"&ID_colorS&"-"&ResultQuantity("quantity")
+                        ' Response.write "<script>window.location.href = '/fashionShop/views/customers/shop.asp'</script>"
                     end if
                     ' update số lượng còn lại vào bảng product_size_color
                     if (overLimitOrder = true) then 
@@ -121,13 +124,18 @@ If Request.ServerVariables("REQUEST_METHOD") = "POST" Then
             loop
 
             ' insert vào bảng address
-            sql_address = "insert into address values ("&Session("ID_user")&", '"&city&"', '"&province&"', '"&district&"', '"&address&"')"
+            sql_address = "insert into address values ("&Session("ID_user")&", (SELECT MAX(ID_bill) AS id FROM bill), '"&city&"', '"&province&"', '"&district&"', '"&address&"')"
             Conn.Execute sql_address
 
             ' tạo 1 tài khoản cho khách hàng nếu khách hàng tick chọn
             ' sql_insert = "insert into "
+            sql_bill_suc = "select MAX(ID_bill) as ID_bill from bill"
+            Set Result_bill = Conn.execute(sql_bill_suc)
+
+            Session("ID_bill") = Result_bill("ID_bill")
+
             Response.write "<script>alert(""Your order is successful, you will be redirected to the product page."")</script>"
-            Response.write "<script>window.location.href = '/fashionShop/views/customers/shop.asp'</script>"
+            Response.write "<script>window.location.href = '/fashionShop/views/customers/bill.asp?ID_bill="&Session("ID_bill")&"'</script>"
         else 
             Response.write "<script>alert(""The product you ordered does not exist or has been deleted. Order failed!"")</script>"
         end if

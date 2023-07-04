@@ -1,0 +1,172 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html {
+      width: 100%;
+      height: 100%;
+    }
+    
+    body {
+      background: linear-gradient(45deg, rgba(255, 255, 255, 0.922) 0%, rgb(226, 232, 232) 100%);
+      /* background-image:url('C:/fashionShop/views/customers/img/bg-img/bg-1.jpg') ; */
+      color: rgba(0, 0, 0, 0.6);
+      font-family: "Roboto", sans-serif;
+      font-size: 14px;
+      line-height: 1.6em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .overlay, .form-panel.one:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      background: rgba(0, 0, 0, 0.8);
+      width: 100%;
+      height: 100%;
+    }
+    
+    .form {
+      z-index: 15;
+      position: relative;
+      background: #ffffff;
+      width: 600px;
+      border-radius: 4px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      margin: 100px auto 10px;
+      overflow: hidden;
+    }
+   
+    .form-group {
+      display: flex;
+      margin: 0 0 20px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      flex-direction: row;
+    }
+    .form-group:last-child {
+      margin: 0;
+    }
+    .form-group label {
+      display: block;
+      margin: 0 0 10px;
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    .form-group label {
+      color: #4285f4;
+      
+    }
+    .form-group input {
+      outline: none;
+      display: block;
+      background: rgba(131, 119, 119, 0.144);
+      width: 100%;
+      border: 0;
+      border-radius: 4px;
+      box-sizing: border-box;
+      padding: 12px 20px;
+      color: rgba(0, 0, 0, 0.6);
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: 500;
+      line-height: inherit;
+      transition: 0.3s ease;
+    }
+    .form-group input:focus {
+      color: rgba(0, 0, 0, 0.8);
+    }
+    .form-group input {
+      color: rgba(112, 86, 86, 0.242)
+    }
+    .form-group button {
+      outline: none;
+      background: #0315ff;
+      width: 100%;
+      border: 0;
+      border-radius: 4px;
+      padding: 12px 20px;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: 500;
+      line-height: inherit;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  
+    .form-group button:hover{
+      background-color: #dc0345;
+    }
+  
+    .form-group .form-remember {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .form-group .form-remember input[type=checkbox] {
+      display: inline-block;
+      width: auto;
+      margin: 0 10px 0 0;
+    }
+    .form-group .form-recovery {
+      color: #4285f4;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .form-panel {
+      padding: 50px calc(5% + 60px) 50px 60px;
+      z-index: 5;
+      top: 0;
+      left: 95%;
+      background:#ffffff;
+      width: 100%;
+      cursor: pointer;
+    } 
+  
+    .form-header {
+      margin: 0 0 40px;
+    }
+    .form-header h1 {
+      padding: 4px 0;
+      color: #4285f4;
+      font-size: 24px;
+      font-weight: 700;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 40;
+    }
+    
+    
+    .pen-footer a .material-icons {
+      width: 12px;
+      margin: 0 5px;
+      vertical-align: middle;
+      font-size: 12px;
+    }
+    
+    .cp-fab {
+      background: #ffffff !important;
+      color: #4285f4 !important;
+    }
+  
+    .notify-error{
+      text-align: center;
+      padding: 8px 16px ;
+      font-size: 20px;
+      background-color: #0315ff;
+      color: white;
+      width: 100%;
+  
+    }
+
+    

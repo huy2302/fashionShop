@@ -33,12 +33,9 @@ connDB.Open()
 </head>
 <style>
   .swal2-confirm.swal2-styled {
-      background-color: rgb(48, 133, 214) !important;
-      color: #fff !important;
-      font-weight: 400 !important;
-  }
-  .table td img {
-      object-fit: cover;
+    background-color: rgb(48, 133, 214) !important;
+    color: #fff !important;
+    font-weight: 400 !important;
   }
 </style>
 <body>
@@ -66,9 +63,6 @@ connDB.Open()
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>
-                            STT
-                          </th>
                           <th>
                             User
                           </th>
@@ -101,20 +95,14 @@ connDB.Open()
                         cmdPrep.ActiveConnection = connDB
                         cmdPrep.CommandType = 1
                         cmdPrep.Prepared = True
-                        cmdPrep.CommandText = "select CONCAT(users.firstName, ' ', users.lastName) as fullName, birthday, ID_user, joindate, phone_number, cmnd, avatar from users join account on account.ID_account = users.ID_account where account.role = 0"
+                        cmdPrep.CommandText = "select CONCAT(users.firstName, ' ', users.lastName) as fullName, birthday, avatar, ID_user, joindate, phone_number, cmnd from users inner join account on account.ID_account = users.ID_account where account.role = 1"
 
                         Set Result = cmdPrep.execute
-                        dim STT
-                        STT = 1
                         do while not Result.EOF
                         %>
                         <tr>
-                          <td>
-                            <%=STT%>
-                            <% STT = STT + 1 %>
-                          </td>
                           <td class="py-1">
-                            <img src="../../../../resources/imgUser/<%=Result("avatar")%>" alt="image"/>
+                            <img style="object-fit: cover;" src="/fashionShop/resources/imgUser/<%=Result("avatar")%>" alt="image"/>
                           </td>
                           <td>
                             <%=Result("ID_user")%>
@@ -138,7 +126,7 @@ connDB.Open()
                             <%=Result("phone_number")%>
                           </td>
                           <td>
-                            <a href="editEmployee.asp?id=<%=Result("ID_user")%>" class="btn btn-secondary">Edit</a>
+                            <a href="edituser.asp?id=<%=Result("ID_user")%>" class="btn btn-secondary">Edit</a>
                             <a id='<%=Result("ID_user")%>' class="btn btn-danger btn-delete">Delete</a>
                           </td>
                         </tr>
@@ -172,5 +160,4 @@ connDB.Open()
     <!-- #include file="../../js/mainJs.asp" -->
 
 </body>
-
 </html>

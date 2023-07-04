@@ -299,7 +299,13 @@ connDB.Open()
       submitBtn.addEventListener('click', (e) => {
         e.preventDefault();
         addAccount();
-        addUser();
+        setTimeout(() => {
+            addUser();
+        }, 200);
+        setTimeout(() => {
+            alert("Successful account registration, you will be redirected to the login page.")
+            window.location.href = './alluser.asp'
+        }, 500);
       })
     </script>
 </body>

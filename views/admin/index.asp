@@ -41,6 +41,17 @@
   .rate-percentage {
     text-align: center;
   }
+  .w-20 {
+    width: 17%;
+    /* padding: 0 1em; */
+    text-align: left;
+    /* border-right: 0.5px solid #ccc; */
+    /* margin: 0 1em; */
+  }
+  .home-tab .statistics-details .rate-percentage {
+    display: unset;
+  }
+
 </style>
 <body>
   <div class="container-scroller"> 
@@ -87,64 +98,55 @@
                   <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
                     <div class="row">
                       <div class="col-sm-12">
-                        <div class="statistics-details d-flex align-items-center justify-content-between">
-                          <div>
+                        <div class="statistics-details d-flex align-items-flex-start ">
+                          <div class="w-20">
                             <%
                             sql = "select count(product.ID_product) as count from product"
                             resultCount = Conn.execute(sql)
                             %>
                             <p class="statistics-title">Total Products</p>
                             <h3 class="rate-percentage"><%=resultCount("count")%></h3>
+                            
                           </div>
-                          <div>
+                          <div class="w-20">
                             <%
                             sql = "select count(product.ID_product) as count from product inner join discount on product.ID_product = discount.ID_product where discount.sale_percent > 0 and discount.end_day > getdate() - 1"
                             resultSale = Conn.execute(sql)
                             %>
-                            <p class="statistics-title">Total Number of Products on Sale</p>
+                            <p class="statistics-title">Products on Sale</p>
                             <h3 class="rate-percentage"><%=resultSale("count")%></h3>
+                            
                           </div>
-                          <div>
+                          <div class="w-20">
                             <%
-                            sql = "SELECT count(ID_bill) as count FROM bill WHERE oder_day >= DATEADD(day, -7, GETDATE()) AND oder_day <= GETDATE()"
-                            resultBillWeek = Conn.execute(sql)
+                            sql = "select SUM(quantity) as quantity from billDetails"
+                            resultSale = Conn.execute(sql)
                             %>
-                            <p class="statistics-title">Number of Orders for The Week</p>
-                            <h3 class="rate-percentage"><%=resultBillWeek("count")%></h3>
+                            <p class="statistics-title">Products Sold</p>
+                            <h3 class="rate-percentage"><%=resultSale("quantity")%></h3>
+                            
                           </div>
-                          <div>
+                          <div class="w-20">
                             <%
-                            sql = "SELECT SUM(CAST(price AS decimal)) as price FROM bill WHERE oder_day >= DATEADD(day, -7, GETDATE()) AND oder_day <= GETDATE()"
-                            resultPriceWeek = Conn.execute(sql)
+                            sql = "select COUNT(ID_account) as quantity from account where role = 0"
+                            resultSale = Conn.execute(sql)
                             %>
-                            <p class="statistics-title">Sales Revenue for The Week</p>
-                            <h3 class="rate-percentage">$<%=resultPriceWeek("price")%>.00</h3>
+                            <p class="statistics-title">Employees</p>
+                            <h3 class="rate-percentage"><%=resultSale("quantity")%></h3>
+                            
                           </div>
-                          <div class="d-none d-md-block">
+                          <div class="w-20">
                             <%
-                            sql = "SELECT count(ID_bill) as count FROM bill WHERE oder_day >= DATEADD(day, -30, GETDATE()) AND oder_day <= GETDATE()"
-                            resultBillMonth = Conn.execute(sql)
+                            sql = "select COUNT(ID_account) as quantity from account where role = 1"
+                            resultSale = Conn.execute(sql)
                             %>
-                            <p class="statistics-title">Number of Orders for The Month</p>
-                            <h3 class="rate-percentage"><%=resultBillMonth("count")%></h3>
+                            <p class="statistics-title">Users</p>
+                            <h3 class="rate-percentage"><%=resultSale("quantity")%></h3>
+                            
                           </div>
-                          <div class="d-none d-md-block">
+                          <div class="w-20">
                             <%
-                            sql = "SELECT SUM(CAST(price AS decimal)) as price FROM bill WHERE oder_day >= DATEADD(day, -30, GETDATE()) AND oder_day <= GETDATE()"
-                            resultPriceMonth = Conn.execute(sql)
-                            %>
-                            <p class="statistics-title">Number of Orders for The Month</p>
-                            <h3 class="rate-percentage">$<%=resultPriceMonth("price")%>.00</h3>
-                          </div>
-                        </div>
-                      </div>
-                    </div> 
-                    <div class="row">
-                      <div class="col-sm-12">
-                        <div class="statistics-details d-flex align-items-center justify-content-between">
-                          <div>
-                            <%
-                            sql = "SELECT COUNT(CASE WHEN joindate > DATEADD(DAY, -30, GETDATE()) THEN ID_user END) AS users_last_30_days, COUNT(CASE WHEN joindate < DATEADD(DAY, -30, GETDATE()) THEN ID_user END) AS users_last_60_days,	COUNT(joindate) AS users_all_days FROM [shop].[dbo].[users] where joindate > GETDATE() - 60 and joindate < GETDATE()"
+                            sql = "SELECT COUNT(CASE WHEN joindate > DATEADD(DAY, -30, GETDATE()) THEN ID_user END) AS users_last_30_days, COUNT(CASE WHEN joindate < DATEADD(DAY, -30, GETDATE()) THEN ID_user END) AS users_last_60_days,	COUNT(joindate) AS users_all_days FROM [shop].[dbo].[users] join account on account.ID_account = users.ID_account where joindate > GETDATE() - 60 and joindate < GETDATE() and account.role = 1"
                             rsUserNumber = Conn.execute(sql)
 
                             Dim thisMonth, lastMonth, percentNumber, roundedPercent
@@ -152,99 +154,207 @@
                             thisMonth = CInt(rsUserNumber("users_last_30_days"))
                             lastMonth = CInt(rsUserNumber("users_last_60_days"))
 
-                            percentNumber = thisMonth / lastMonth
+                            if (lastMonth = 0) then 
+                              percentNumber = 0
+                            else 
+                              percentNumber = thisMonth / lastMonth * 100
+                            end if
                             roundedPercent = round(percentNumber, 1)
                             %>
-                            <p style="justify-content: center;" class="statistics-title">New Users of The Month</p>
+                            <p  class="statistics-title">New Users of The Month</p>
                             <h3 class="rate-percentage"><%=thisMonth%></h3>
                             <%
                             if (thisMonth >= lastMonth) then 
                             %>
-                            <p style="justify-content: center;" class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
+                            <p  class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
                             <% end if %>
                             <%
                             if (thisMonth < lastMonth) then 
                             %>
-                            <p style="justify-content: center;" class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
+                            <p  class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
                             <% end if %>
                           </div>
                         </div>
                       </div>
                     </div> 
-                    <!--<div class="row">
-                      <div class="col-lg-8 d-flex flex-column">
-                        <div class="row flex-grow">
-                          <div class="col-12 col-lg-4 col-lg-12 grid-margin stretch-card">
-                            <div class="card card-rounded">
-                              <div class="card-body">
-                                <div class="d-sm-flex justify-content-between align-items-start">
-                                  <div>
-                                   <h4 class="card-title card-title-dash">Performance Line Chart</h4>
-                                   <h5 class="card-subtitle card-subtitle-dash">Lorem Ipsum is simply dummy text of the printing</h5>
-                                  </div>
-                                  <div id="performance-line-legend"></div>
-                                </div>
-                                <div class="chartjs-wrapper mt-5">
-                                  <canvas id="performaneLine"></canvas>
-                                </div>
-                              </div>
-                            </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="statistics-details d-flex align-items-flex-start ">
+                          <div class="w-20">
+                            <%
+                            sql = "SELECT COUNT(CASE WHEN oder_day > DATEADD(DAY, -7, GETDATE()) THEN ID_user END) AS order_last_7_days, COUNT(CASE WHEN oder_day < DATEADD(DAY, -7, GETDATE()) THEN ID_user END) AS order_last_14_days, COUNT(oder_day) AS order_all_days FROM bill where oder_day > GETDATE() - 14 and oder_day < GETDATE()"
+                            resultBillWeek = Conn.execute(sql)
+
+                            thisMonth = CInt(resultBillWeek("order_last_7_days"))
+                            lastMonth = CInt(resultBillWeek("order_last_14_days"))
+
+                            if (lastMonth = 0) then 
+                              percentNumber = 0
+                            else 
+                              percentNumber = thisMonth / lastMonth * 100
+                            end if
+                            roundedPercent = round(percentNumber, 1)
+                            %>
+                            <p  class="statistics-title">Orders for The Week</p>
+                            <h3 class="rate-percentage"><%=thisMonth%></h3>
+                            <%
+                            if (thisMonth >= lastMonth) then 
+                            %>
+                            <p  class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                            <%
+                            if (thisMonth < lastMonth) then 
+                            %>
+                            <p  class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                          </div>
+
+                          <div class="w-20">
+                            <%
+                            sql = "SELECT SUM(CASE WHEN oder_day > DATEADD(DAY, -7, GETDATE()) THEN CAST(quantity AS decimal) END) AS order_last_7_days, SUM(CASE WHEN oder_day < DATEADD(DAY, -7, GETDATE()) THEN CAST(quantity AS decimal) END) AS order_last_14_days FROM bill join billDetails on bill.ID_bill = billDetails.ID_bill where oder_day > GETDATE() - 14 and oder_day < GETDATE()"
+                            resultQuantityWeek = Conn.execute(sql)
+
+                            thisMonth = CInt(resultQuantityWeek("order_last_7_days"))
+                            lastMonth = CInt(resultQuantityWeek("order_last_14_days"))
+
+                            if (lastMonth = 0) then 
+                              percentNumber = 0
+                            else 
+                              percentNumber = thisMonth / lastMonth * 100
+                            end if
+                            roundedPercent = round(percentNumber, 1)
+                            %>
+                            <p  class="statistics-title">Week Sold Products</p>
+                            <h3 class="rate-percentage"><%=thisMonth%></h3>
+                            <%
+                            if (thisMonth >= lastMonth) then 
+                            %>
+                            <p  class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                            <%
+                            if (thisMonth < lastMonth) then 
+                            %>
+                            <p  class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                          </div>
+
+                          <div class="w-20">
+                            <%
+                            sql = "SELECT SUM(CASE WHEN oder_day > DATEADD(DAY, -7, GETDATE()) THEN CAST(price AS decimal) else 0 end) as order_last_7_days, SUM(CASE WHEN oder_day < DATEADD(DAY, -7, GETDATE()) THEN CAST(price AS decimal) end) as order_last_14_days FROM bill WHERE oder_day > GETDATE() - 14 and oder_day < GETDATE()"
+                            resultPriceWeek = Conn.execute(sql)
+                            thisMonth = CInt(resultPriceWeek("order_last_7_days"))
+                            lastMonth = CInt(resultPriceWeek("order_last_14_days"))
+
+                            if (lastMonth = 0) then 
+                              percentNumber = 0
+                            else 
+                              percentNumber = thisMonth / lastMonth * 100
+                            end if
+                            roundedPercent = round(percentNumber, 1)
+                            %>
+                            <p  class="statistics-title">Amount of The Week</p>
+                            <h3 class="rate-percentage">$<%=thisMonth%>.00</h3>
+                            <%
+                            if (thisMonth >= lastMonth) then 
+                            %>
+                            <p  class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                            <%
+                            if (thisMonth < lastMonth) then 
+                            %>
+                            <p  class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                          </div>
+                          <div class="d-none d-md-block w-20">
+                            <%
+                            sql = "SELECT COUNT(CASE WHEN oder_day > DATEADD(DAY, -30, GETDATE()) THEN ID_user END) AS order_last_30_days, COUNT(CASE WHEN oder_day < DATEADD(DAY, -30, GETDATE()) THEN ID_user END) AS order_last_60_days, COUNT(oder_day) AS order_all_days FROM bill where oder_day > GETDATE() - 60 and oder_day < GETDATE()"
+                            resultBillMonth = Conn.execute(sql)
+
+                            thisMonth = CInt(resultBillMonth("order_last_30_days"))
+                            lastMonth = CInt(resultBillMonth("order_last_60_days"))
+
+                            if (lastMonth = 0) then 
+                              percentNumber = 0
+                            else 
+                              percentNumber = thisMonth / lastMonth * 100
+                            end if
+                            roundedPercent = round(percentNumber, 1)
+                            %>
+                            <p  class="statistics-title">Orders for The Month</p>
+                            <h3 class="rate-percentage"><%=thisMonth%></h3>
+                            <%
+                            if (thisMonth >= lastMonth) then 
+                            %>
+                            <p  class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                            <%
+                            if (thisMonth < lastMonth) then 
+                            %>
+                            <p  class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                          </div>
+
+                          <div class="w-20">
+                            <%
+                            sql = "SELECT SUM(CASE WHEN oder_day > DATEADD(DAY, -30, GETDATE()) THEN CAST(quantity AS decimal) END) AS order_last_30_days, SUM(CASE WHEN oder_day < DATEADD(DAY, -30, GETDATE()) THEN CAST(quantity AS decimal) END) AS order_last_60_days FROM bill join billDetails on bill.ID_bill = billDetails.ID_bill where oder_day > GETDATE() - 60 and oder_day < GETDATE()"
+                            resultQuantityMonth = Conn.execute(sql)
+
+                            thisMonth = CInt(resultQuantityMonth("order_last_30_days"))
+                            lastMonth = CInt(resultQuantityMonth("order_last_60_days"))
+
+                            if (lastMonth = 0) then 
+                              percentNumber = 0
+                            else 
+                              percentNumber = thisMonth / lastMonth * 100
+                            end if
+                            roundedPercent = round(percentNumber, 1)
+                            %>
+                            <p  class="statistics-title">Month Sold Products</p>
+                            <h3 class="rate-percentage"><%=thisMonth%></h3>
+                            <%
+                            if (thisMonth >= lastMonth) then 
+                            %>
+                            <p  class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                            <%
+                            if (thisMonth < lastMonth) then 
+                            %>
+                            <p  class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                          </div>
+
+                          <div class="d-none d-md-block w-20">
+                            <%
+                            sql = "SELECT SUM(CASE WHEN oder_day > DATEADD(DAY, -30, GETDATE()) THEN CAST(price AS decimal) end) as order_last_30_days, SUM(CASE WHEN oder_day < DATEADD(DAY, -30, GETDATE()) THEN CAST(price AS decimal) end) as order_last_60_days FROM bill WHERE oder_day >= DATEADD(day, -60, GETDATE()) or oder_day <= GETDATE()"
+                            resultPriceMonth = Conn.execute(sql)
+
+                            thisMonth = CInt(resultPriceMonth("order_last_30_days"))
+                            lastMonth = CInt(resultPriceMonth("order_last_60_days"))
+
+                            if (lastMonth = 0) then 
+                              percentNumber = 0
+                            else 
+                              percentNumber = thisMonth / lastMonth * 100
+                            end if
+                            roundedPercent = round(percentNumber, 1)
+                            %>
+                            <p  class="statistics-title">Amount of The Month</p>
+                            <h3 class="rate-percentage">$<%=thisMonth%>.00</h3>
+                            <%
+                            if (thisMonth >= lastMonth) then 
+                            %>
+                            <p  class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+<%=roundedPercent%>%</span></p>
+                            <% end if %>
+                            <%
+                            if (thisMonth < lastMonth) then 
+                            %>
+                            <p  class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>-<%=roundedPercent%>%</span></p>
+                            <% end if %>
                           </div>
                         </div>
                       </div>
-                      <div class="col-lg-4 d-flex flex-column">
-                        <div class="row flex-grow">
-                          <div class="col-md-6 col-lg-12 grid-margin stretch-card">
-                            <div class="card bg-primary card-rounded">
-                              <div class="card-body pb-0">
-                                <h4 class="card-title card-title-dash text-white mb-4">Status Summary</h4>
-                                <div class="row">
-                                  <div class="col-sm-4">
-                                    <p class="status-summary-ight-white mb-1">Closed Value</p>
-                                    <h2 class="text-info">357</h2>
-                                  </div>
-                                  <div class="col-sm-8">
-                                    <div class="status-summary-chart-wrapper pb-4">
-                                      <canvas id="status-summary"></canvas>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-6 col-lg-12 grid-margin stretch-card">
-                            <div class="card card-rounded">
-                              <div class="card-body">
-                                <div class="row">
-                                  <div class="col-sm-6">
-                                    <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
-                                      <div class="circle-progress-width">
-                                        <div id="totalVisitors" class="progressbar-js-circle pr-2"></div>
-                                      </div>
-                                      <div>
-                                        <p class="text-small mb-2">Total Visitors</p>
-                                        <h4 class="mb-0 fw-bold">26.80%</h4>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-sm-6">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                      <div class="circle-progress-width">
-                                        <div id="visitperday" class="progressbar-js-circle pr-2"></div>
-                                      </div>
-                                      <div>
-                                        <p class="text-small mb-2">Visits per day</p>
-                                        <h4 class="mb-0 fw-bold">9065</h4>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>-->
+                    </div>
+
                     <div class="row">
                       <div class="col-lg-8 d-flex flex-column">
                         <div class="row flex-grow">
@@ -253,29 +363,18 @@
                               <div class="card-body">
                                 <div class="d-sm-flex justify-content-between align-items-start">
                                   <div>
-                                    <h4 class="card-title card-title-dash">Market Overview</h4>
-                                   <p class="card-subtitle card-subtitle-dash">Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                                   <h4 class="card-title card-title-dash">Performance Line Chart</h4>
+                                   <h5 class="card-subtitle card-subtitle-dash">Lorem Ipsum is simply dummy text of the printing</h5>
                                   </div>
+                                  <div id="performance-line-legend"><div class="chartjs-legend"><ul><li><span style="background-color:#1F3BB3"></span>This week</li><li><span style="background-color:#52CDFF"></span>Last week</li></ul></div></div>
+                                </div>
+                                <div class="chartjs-wrapper mt-5"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
                                   <div>
-                                    <div class="dropdown">
-                                      <button class="btn btn-secondary dropdown-toggle toggle-dark btn-lg mb-0 me-0" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> This month </button>
-                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                                        <h6 class="dropdown-header">Settings</h6>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Separated link</a>
-                                      </div>
-                                    </div>
+                                    <canvas id="myChart"></canvas>
                                   </div>
-                                </div>
-                                <div class="d-sm-flex align-items-center mt-1 justify-content-between">
-                                  <div class="d-sm-flex align-items-center mt-4 justify-content-between"><h2 class="me-2 fw-bold">$36,2531.00</h2><h4 class="me-2">USD</h4><h4 class="text-success">(+1.37%)</h4></div>
-                                  <div class="me-3"><div id="marketing-overview-legend"></div></div>
-                                </div>
-                                <div class="chartjs-bar-wrapper mt-3">
-                                  <canvas id="marketingOverview"></canvas>
+
+                                  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                  
                                 </div>
                               </div>
                             </div>
@@ -591,6 +690,8 @@
   <!-- Custom js for this page-->
   <script src="js/dashboard.js"></script>
   <script src="js/Chart.roundedBarCharts.js"></script>
+  <script src="./js/aGetTotalWeek.js"></script>
+
   <!-- End custom js for this page-->
 </body>
 

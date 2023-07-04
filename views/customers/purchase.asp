@@ -76,7 +76,7 @@
                     Set Conn = Server.CreateObject("ADODB.Connection")
                     Conn.Open "Provider=SQLOLEDB.1;Data Source=huydevtr\SQLASP;Database=shop;User Id=sa;Password=123"
 
-                    sql = "select billDetails.ID_product, billDetails.ID_color, billDetails.ID_size, billDetails.price, billDetails.species, sale_percent, oder_day, product.name, brand, size, color, billDetails.quantity, bill.delivery_day, link1 from billDetails join bill on billDetails.ID_bill = bill.ID_bill join product on billDetails.ID_product = product.ID_product join brand on billDetails.ID_product = brand.ID_product join size on billDetails.ID_size = size.ID_size join color on billDetails.ID_color = color.ID_color join imageProduct on imageProduct.ID_product = product.ID_product join users on bill.ID_user = users.ID_user where users.ID_user = "&Session("ID_user")&" order by bill.oder_day desc"
+                    sql = "select bill.ID_bill, billDetails.ID_product, billDetails.ID_color, billDetails.ID_size, billDetails.price, billDetails.species, sale_percent, oder_day, product.name, brand, size, color, billDetails.quantity, bill.delivery_day, link1 from billDetails join bill on billDetails.ID_bill = bill.ID_bill join product on billDetails.ID_product = product.ID_product join brand on billDetails.ID_product = brand.ID_product join size on billDetails.ID_size = size.ID_size join color on billDetails.ID_color = color.ID_color join imageProduct on imageProduct.ID_product = product.ID_product join users on bill.ID_user = users.ID_user where users.ID_user = "&Session("ID_user")&" order by bill.oder_day desc"
 
                     Set Result = Conn.execute(sql)
                     if not Result.EOF then 
@@ -92,7 +92,7 @@
                                     <p class="delivery_status-success"><i class="fa-solid fa-truck-fast"></i> Order has been successfully delivered</p>
                                 <% end if %>
                             </div>
-                            <a href="./product_ex.asp?product=<%=Result("ID_product")%>" class="purchase-content">
+                            <a href="./bill.asp?ID_bill=<%=Result("ID_bill")%>" class="purchase-content">
                                 <div style="display: flex;">
                                     <div class="img">
                                         <img src="/fashionShop/resources/imgProduct/<%=Result("link1")%>" alt="">

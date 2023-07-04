@@ -21,7 +21,7 @@
     end function
 ' trang hien tai
     page = Request.QueryString("page")
-    limit = 9
+    limit = 6
 
     if (trim(page) = "") or (isnull(page)) then
         page = 1

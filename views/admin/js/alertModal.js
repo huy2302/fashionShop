@@ -9,7 +9,7 @@ $(document).on('click', '#link', function(e) {
   })
       .then((result) => {
           if (result.value) {
-              window.location = './logout.asp';
+              window.location = '/fashionShop/views/admin/logout.asp';
           } else if (result.dismiss === 'cancel') {
               swal(
                 'Cancelled',
